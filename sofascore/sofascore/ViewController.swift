@@ -1,11 +1,12 @@
 //
 //  ViewController.swift
-//  SofascoreApp
+//  sofascore
 //
-//  Created by Benjamin on 02.03.2026..
+//  Created by Benjamin on 04.03.2026..
 //
 
 import UIKit
+import SnapKit
 
 class ViewController: UIViewController {
 
