@@ -6,15 +6,8 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		B70E210A7A2C3CCD6DD64D8A /* Pods_SofascoreApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F56EE0072CC105295FFB834 /* Pods_SofascoreApp.framework */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
-		0F56EE0072CC105295FFB834 /* Pods_SofascoreApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SofascoreApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		54451E0ED475D2128E52146B /* Pods-SofascoreApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SofascoreApp.debug.xcconfig"; path = "Target Support Files/Pods-SofascoreApp/Pods-SofascoreApp.debug.xcconfig"; sourceTree = "<group>"; };
 		87CAD6A32F5627CB00896043 /* SofascoreApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SofascoreApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		B1AA3920BCCB0808D96A48C2 /* Pods-SofascoreApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SofascoreApp.release.xcconfig"; path = "Target Support Files/Pods-SofascoreApp/Pods-SofascoreApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -43,7 +36,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B70E210A7A2C3CCD6DD64D8A /* Pods_SofascoreApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,8 +47,6 @@
 			children = (
 				87CAD6A52F5627CB00896043 /* SofascoreApp */,
 				87CAD6A42F5627CB00896043 /* Products */,
-				E60AEC8B8F8A258E9A7CEB8A /* Pods */,
-				D70C62BDB5A2AB3D58A5712D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -68,24 +58,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		D70C62BDB5A2AB3D58A5712D /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				0F56EE0072CC105295FFB834 /* Pods_SofascoreApp.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		E60AEC8B8F8A258E9A7CEB8A /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				54451E0ED475D2128E52146B /* Pods-SofascoreApp.debug.xcconfig */,
-				B1AA3920BCCB0808D96A48C2 /* Pods-SofascoreApp.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -93,11 +65,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 87CAD6B62F5627CC00896043 /* Build configuration list for PBXNativeTarget "SofascoreApp" */;
 			buildPhases = (
-				5467E8E756758A8D13842B5E /* [CP] Check Pods Manifest.lock */,
 				87CAD69F2F5627CB00896043 /* Sources */,
 				87CAD6A02F5627CB00896043 /* Frameworks */,
 				87CAD6A12F5627CB00896043 /* Resources */,
-				2DCDF3A8787BBC2BC3B099AE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -107,6 +77,8 @@
 				87CAD6A52F5627CB00896043 /* SofascoreApp */,
 			);
 			name = SofascoreApp;
+			packageProductDependencies = (
+			);
 			productName = SofascoreApp;
 			productReference = 87CAD6A32F5627CB00896043 /* SofascoreApp.app */;
 			productType = "com.apple.product-type.application";
@@ -155,48 +127,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		2DCDF3A8787BBC2BC3B099AE /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SofascoreApp/Pods-SofascoreApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SofascoreApp/Pods-SofascoreApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SofascoreApp/Pods-SofascoreApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5467E8E756758A8D13842B5E /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SofascoreApp-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		87CAD69F2F5627CB00896043 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -210,7 +140,6 @@
 /* Begin XCBuildConfiguration section */
 		87CAD6B72F5627CC00896043 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 54451E0ED475D2128E52146B /* Pods-SofascoreApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -242,7 +171,6 @@
 		};
 		87CAD6B82F5627CC00896043 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B1AA3920BCCB0808D96A48C2 /* Pods-SofascoreApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
