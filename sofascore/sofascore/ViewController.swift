@@ -1,8 +1,8 @@
 //
 //  ViewController.swift
-//  sofascore
+//  Sofascore
 //
-//  Created by Benjamin on 04.03.2026..
+//  Created by Benjamin on 05.03.2026..
 //
 
 import UIKit

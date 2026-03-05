@@ -6,54 +6,59 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		879C60E02F5A37B500BD2FD7 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 879C60DF2F5A37B500BD2FD7 /* SnapKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		87CAD6A32F5627CB00896043 /* SofascoreApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SofascoreApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		879C60C62F5A375700BD2FD7 /* Sofascore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sofascore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		87CAD6B52F5627CC00896043 /* Exceptions for "SofascoreApp" folder in "SofascoreApp" target */ = {
+		879C60D82F5A375800BD2FD7 /* Exceptions for "Sofascore" folder in "Sofascore" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 87CAD6A22F5627CB00896043 /* SofascoreApp */;
+			target = 879C60C52F5A375700BD2FD7 /* Sofascore */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		87CAD6A52F5627CB00896043 /* SofascoreApp */ = {
+		879C60C82F5A375700BD2FD7 /* Sofascore */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				87CAD6B52F5627CC00896043 /* Exceptions for "SofascoreApp" folder in "SofascoreApp" target */,
+				879C60D82F5A375800BD2FD7 /* Exceptions for "Sofascore" folder in "Sofascore" target */,
 			);
-			path = SofascoreApp;
+			path = Sofascore;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		87CAD6A02F5627CB00896043 /* Frameworks */ = {
+		879C60C32F5A375700BD2FD7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				879C60E02F5A37B500BD2FD7 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		87CAD69A2F5627CA00896043 = {
+		879C60BD2F5A375700BD2FD7 = {
 			isa = PBXGroup;
 			children = (
-				87CAD6A52F5627CB00896043 /* SofascoreApp */,
-				87CAD6A42F5627CB00896043 /* Products */,
+				879C60C82F5A375700BD2FD7 /* Sofascore */,
+				879C60C72F5A375700BD2FD7 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		87CAD6A42F5627CB00896043 /* Products */ = {
+		879C60C72F5A375700BD2FD7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				87CAD6A32F5627CB00896043 /* SofascoreApp.app */,
+				879C60C62F5A375700BD2FD7 /* Sofascore.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,64 +66,68 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		87CAD6A22F5627CB00896043 /* SofascoreApp */ = {
+		879C60C52F5A375700BD2FD7 /* Sofascore */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 87CAD6B62F5627CC00896043 /* Build configuration list for PBXNativeTarget "SofascoreApp" */;
+			buildConfigurationList = 879C60D92F5A375800BD2FD7 /* Build configuration list for PBXNativeTarget "Sofascore" */;
 			buildPhases = (
-				87CAD69F2F5627CB00896043 /* Sources */,
-				87CAD6A02F5627CB00896043 /* Frameworks */,
-				87CAD6A12F5627CB00896043 /* Resources */,
+				879C60C22F5A375700BD2FD7 /* Sources */,
+				879C60C32F5A375700BD2FD7 /* Frameworks */,
+				879C60C42F5A375700BD2FD7 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				87CAD6A52F5627CB00896043 /* SofascoreApp */,
+				879C60C82F5A375700BD2FD7 /* Sofascore */,
 			);
-			name = SofascoreApp;
+			name = Sofascore;
 			packageProductDependencies = (
+				879C60DF2F5A37B500BD2FD7 /* SnapKit */,
 			);
-			productName = SofascoreApp;
-			productReference = 87CAD6A32F5627CB00896043 /* SofascoreApp.app */;
+			productName = Sofascore;
+			productReference = 879C60C62F5A375700BD2FD7 /* Sofascore.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		87CAD69B2F5627CA00896043 /* Project object */ = {
+		879C60BE2F5A375700BD2FD7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2620;
-				LastUpgradeCheck = 2620;
+				LastSwiftUpdateCheck = 2630;
+				LastUpgradeCheck = 2630;
 				TargetAttributes = {
-					87CAD6A22F5627CB00896043 = {
-						CreatedOnToolsVersion = 26.2;
+					879C60C52F5A375700BD2FD7 = {
+						CreatedOnToolsVersion = 26.3;
 					};
 				};
 			};
-			buildConfigurationList = 87CAD69E2F5627CA00896043 /* Build configuration list for PBXProject "SofascoreApp" */;
+			buildConfigurationList = 879C60C12F5A375700BD2FD7 /* Build configuration list for PBXProject "Sofascore" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 87CAD69A2F5627CA00896043;
+			mainGroup = 879C60BD2F5A375700BD2FD7;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				879C60DE2F5A37B500BD2FD7 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 87CAD6A42F5627CB00896043 /* Products */;
+			productRefGroup = 879C60C72F5A375700BD2FD7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				87CAD6A22F5627CB00896043 /* SofascoreApp */,
+				879C60C52F5A375700BD2FD7 /* Sofascore */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		87CAD6A12F5627CB00896043 /* Resources */ = {
+		879C60C42F5A375700BD2FD7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -128,7 +137,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		87CAD69F2F5627CB00896043 /* Sources */ = {
+		879C60C22F5A375700BD2FD7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -138,7 +147,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		87CAD6B72F5627CC00896043 /* Debug */ = {
+		879C60DA2F5A375800BD2FD7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -146,7 +155,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SofascoreApp/Info.plist;
+				INFOPLIST_FILE = Sofascore/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -157,7 +166,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = HR.Sabo.SofascoreApp;
+				PRODUCT_BUNDLE_IDENTIFIER = HR.Sabo.Sofascore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -169,7 +178,7 @@
 			};
 			name = Debug;
 		};
-		87CAD6B82F5627CC00896043 /* Release */ = {
+		879C60DB2F5A375800BD2FD7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -177,7 +186,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SofascoreApp/Info.plist;
+				INFOPLIST_FILE = Sofascore/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -188,7 +197,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = HR.Sabo.SofascoreApp;
+				PRODUCT_BUNDLE_IDENTIFIER = HR.Sabo.Sofascore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -200,7 +209,7 @@
 			};
 			name = Release;
 		};
-		87CAD6B92F5627CC00896043 /* Debug */ = {
+		879C60DC2F5A375800BD2FD7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -263,7 +272,7 @@
 			};
 			name = Debug;
 		};
-		87CAD6BA2F5627CC00896043 /* Release */ = {
+		879C60DD2F5A375800BD2FD7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -322,25 +331,44 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		87CAD69E2F5627CA00896043 /* Build configuration list for PBXProject "SofascoreApp" */ = {
+		879C60C12F5A375700BD2FD7 /* Build configuration list for PBXProject "Sofascore" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				87CAD6B92F5627CC00896043 /* Debug */,
-				87CAD6BA2F5627CC00896043 /* Release */,
+				879C60DC2F5A375800BD2FD7 /* Debug */,
+				879C60DD2F5A375800BD2FD7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		87CAD6B62F5627CC00896043 /* Build configuration list for PBXNativeTarget "SofascoreApp" */ = {
+		879C60D92F5A375800BD2FD7 /* Build configuration list for PBXNativeTarget "Sofascore" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				87CAD6B72F5627CC00896043 /* Debug */,
-				87CAD6B82F5627CC00896043 /* Release */,
+				879C60DA2F5A375800BD2FD7 /* Debug */,
+				879C60DB2F5A375800BD2FD7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		879C60DE2F5A37B500BD2FD7 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		879C60DF2F5A37B500BD2FD7 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 879C60DE2F5A37B500BD2FD7 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 87CAD69B2F5627CA00896043 /* Project object */;
+	rootObject = 879C60BE2F5A375700BD2FD7 /* Project object */;
 }
