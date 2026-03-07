@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  SofascoreApp
+//  Sofascore
 //
-//  Created by Benjamin on 02.03.2026..
+//  Created by Benjamin on 05.03.2026..
 //
 
 import UIKit
