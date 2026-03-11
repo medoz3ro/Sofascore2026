@@ -41,35 +41,39 @@ class LeagueView: UIView {
     
     private func setupUI() {
         addSubview(logoImage)
-        logoImage.snp.makeConstraints { (make) in
+        addSubview(country)
+        addSubview(pointerImage)
+        addSubview(name)
+        
+        logoImage.snp.makeConstraints { make in
             make.size.equalTo(32)
             make.leading.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
         }
         
-        addSubview(country)
+        country.numberOfLines = 1
         country.font = AppFont.bold(size: 16)
-        country.snp.makeConstraints { (make) in
+        country.snp.makeConstraints { make in
             make.leading.equalTo(logoImage.snp.trailing).offset(32)
             make.centerY.equalToSuperview()
         }
         
-        
-        addSubview(pointerImage)
-        pointerImage.image = UIImage(named: "pointer_right")?.withRenderingMode(.alwaysTemplate)
-        pointerImage.tintColor = .white
-        pointerImage.snp.makeConstraints { (make) in
+        pointerImage.image = UIImage(named: AppStrings.League.pointerIcon)?.withRenderingMode(.alwaysTemplate)
+        pointerImage.tintColor = AppColors.grayText
+        pointerImage.snp.makeConstraints { make in
             make.leading.equalTo(country.snp.trailing).offset(16)
             make.centerY.equalToSuperview()
             make.size.equalTo(24)
         }
         
-        addSubview(name)
+        name.numberOfLines = 1
+        name.tintColor = AppColors.grayText
         name.font = AppFont.regular(size: 16)
-        name.snp.makeConstraints { (make) in
+        name.snp.makeConstraints { make in
             make.leading.equalTo(pointerImage.snp.trailing).offset(16)
             make.centerY.equalToSuperview()
         }
+        
     }
 }
 
