@@ -101,16 +101,18 @@ class MatchView: UIView{
         }
         
         startTimestamp.textAlignment = .center
-        startTimestamp.font = AppFont.micro(size: 16)
+        startTimestamp.font = AppFont.micro(size: 14)
         startTimestamp.snp.makeConstraints { make in
+            make.height.equalTo(16)
             make.leading.equalToSuperview()
             make.width.equalTo(56)
             make.centerY.equalTo(homeTeam)
         }
         
         status.textAlignment = .center
-        status.font = AppFont.micro(size: 16)
+        status.font = AppFont.micro(size: 14)
         status.snp.makeConstraints { make in
+            make.height.equalTo(16)
             make.leading.equalToSuperview()
             make.width.equalTo(56)
             make.centerY.equalTo(awayTeam)
