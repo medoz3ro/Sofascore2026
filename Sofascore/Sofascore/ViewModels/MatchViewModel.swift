@@ -1,22 +1,14 @@
-//
-//  MatchViewModel.swift
-//  Sofascore
-//
-//  Created by Benjamin on 11.03.2026..
-//
-
 import SnapKit
 import SofaAcademic
 import UIKit
-
 
 struct MatchViewModel {
     let homeTeamName: String
     let awayTeamName: String
     let homeTeamNameColor: UIColor
     let awayTeamNameColor: UIColor
-    let homeTeamLogoUrl: String?
-    let awayTeamLogoUrl: String?
+    let homeTeamLogo: UIImage?
+    let awayTeamLogo: UIImage?
     let homeScore: String?
     let awayScore: String?
     let homeScoreColor: UIColor
@@ -27,72 +19,68 @@ struct MatchViewModel {
     let startTimeColor: UIColor
     let statusColor: UIColor
     
-    init(event: Event) {
+    init(event: Event, homeTeamLogo: UIImage?, awayTeamLogo: UIImage?) {
+        self.homeTeamLogo = homeTeamLogo
+        self.awayTeamLogo = awayTeamLogo
         homeTeamName = event.homeTeam.name
         awayTeamName = event.awayTeam.name
-        homeTeamLogoUrl = event.homeTeam.logoUrl
-        awayTeamLogoUrl = event.awayTeam.logoUrl
         homeScore = event.homeScore.map { "\($0)" }
         awayScore = event.awayScore.map { "\($0)" }
         
-        if event.status == .inProgress {
-            homeTeamNameColor = .black
-            awayTeamNameColor = .black
-            homeScoreColor = AppColors.liveRed
-            awayScoreColor = AppColors.liveRed
-        }else if event.status == .finished {
-            if (event.homeScore ?? 0) < (event.awayScore ?? 0) {
-                homeTeamNameColor = AppColors.grayText
-                awayTeamNameColor = .black
-                homeScoreColor = AppColors.grayText
-                awayScoreColor = .black
-            } else if (event.homeScore ?? 0) > (event.awayScore ?? 0) {
-                homeTeamNameColor = .black
-                awayTeamNameColor = AppColors.grayText
-                homeScoreColor = .black
-                awayScoreColor = AppColors.grayText
-            } else {
-                homeTeamNameColor = .black
-                awayTeamNameColor = .black
-                homeScoreColor = .black
-                awayScoreColor = .black
-            }
-        } else {
-            homeTeamNameColor = .black
-            awayTeamNameColor = .black
-            homeScoreColor = .black
-            awayScoreColor = .black
-        }
+        time = Self.formatTime(from: event.startTimestamp)
+        status = Self.formatStatus(for: event)
         
-        let date = Date(timeIntervalSince1970: TimeInterval(event.startTimestamp))
+        let colors = Self.resolveTeamColors(for: event)
+        homeTeamNameColor = colors.homeTeamNameColor
+        awayTeamNameColor = colors.awayTeamNameColor
+        homeScoreColor = colors.homeScoreColor
+        awayScoreColor = colors.awayScoreColor
+        
+        let statusColor = Self.resolveStatusColor(for: event)
+        self.statusColor = statusColor
+        self.startTimeColor = statusColor
+        self.scoreColor = statusColor
+    }
+    
+    private static func formatTime(from timestamp: Int) -> String {
+        let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
         let formatter = DateFormatter()
-        formatter.dateFormat = AppStrings.Match.timeFormat
-        time = formatter.string(from: date)
-        
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: date)
+    }
+    
+    private static func formatStatus(for event: Event) -> String {
         switch event.status {
-        case .notStarted: status = AppStrings.Match.notStarted
+        case .notStarted: return "-"
         case .inProgress:
             let elapsed = Int((Date().timeIntervalSince1970 - Double(event.startTimestamp)) / 60)
-            status = "\(elapsed)'"
-        case .halftime: status = AppStrings.Match.halftime
-        case .finished: status = AppStrings.Match.finished
+            return "\(elapsed)'"
+        case .halftime: return "HT"
+        case .finished: return "FT"
         }
-        
+    }
+    
+    private static func resolveStatusColor(for event: Event) -> UIColor {
+        switch event.status {
+        case .inProgress: return .liveRed
+        default: return .onSurfaceLv2
+        }
+    }
+    
+    private static func resolveTeamColors(for event: Event) -> (homeTeamNameColor: UIColor, awayTeamNameColor: UIColor, homeScoreColor: UIColor, awayScoreColor: UIColor) {
         switch event.status {
         case .inProgress:
-            scoreColor = AppColors.liveRed
-            statusColor = AppColors.liveRed
-            startTimeColor = AppColors.liveRed
+            return (.onSurfaceLv1, .onSurfaceLv1, .liveRed, .liveRed)
         case .finished:
-            scoreColor = .gray
-            statusColor = .gray
-            startTimeColor = .gray
+            if (event.homeScore ?? 0) < (event.awayScore ?? 0) {
+                return (.onSurfaceLv2, .onSurfaceLv1, .onSurfaceLv2, .onSurfaceLv1)
+            } else if (event.homeScore ?? 0) > (event.awayScore ?? 0) {
+                return (.onSurfaceLv1, .onSurfaceLv2, .onSurfaceLv1, .onSurfaceLv2)
+            } else {
+                return (.onSurfaceLv1, .onSurfaceLv1, .onSurfaceLv1, .onSurfaceLv1)
+            }
         default:
-            scoreColor = .gray
-            statusColor = .gray
-            startTimeColor = .gray
+            return (.onSurfaceLv1, .onSurfaceLv1, .onSurfaceLv1, .onSurfaceLv1)
         }
     }
 }
-
-

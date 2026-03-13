@@ -1,13 +1,6 @@
-//
-//  AppFont.swift
-//  Sofascore
-//
-//  Created by Benjamin on 10.03.2026..
-//
-
 import UIKit
 
-enum AppFont {
+extension UIFont{
     static func regular(size: CGFloat) -> UIFont {
         return UIFont(name: "Roboto", size: size) ?? .systemFont(ofSize: size)
     }

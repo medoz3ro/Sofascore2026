@@ -1,142 +1,122 @@
-//
-//   MatchView.swift
-//  Sofascore
-//
-//  Created by Benjamin on 10.03.2026..
-//
 import UIKit
 import SnapKit
 import SofaAcademic
 
-class MatchView: UIView{
-    private let homeTeam : UILabel = UILabel()
+class MatchView: BaseView{
+    private let homeTeamLabel: UILabel = UILabel()
+    private let awayTeamLabel: UILabel = UILabel()
+    private let statusLabel: UILabel = UILabel()
+    private let startTimestampLabel: UILabel = UILabel()
+    private let homeScoreLabel: UILabel = UILabel()
+    private let awayScoreLabel: UILabel = UILabel()
     private let homeTeamLogo : UIImageView = UIImageView()
-    private let awayTeam : UILabel = UILabel()
     private let awayTeamLogo : UIImageView = UIImageView()
-    private let status : UILabel = UILabel()
-    private let startTimestamp : UILabel = UILabel()
-    private let homeScore : UILabel = UILabel()
-    private let awayScore : UILabel = UILabel()
     private let divider: UIView = UIView()
     
-    
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
+    override func addViews() {
+        addSubview(startTimestampLabel)
+        addSubview(statusLabel)
+        addSubview(divider)
+        addSubview(homeTeamLogo)
+        addSubview(homeTeamLabel)
+        addSubview(awayTeamLogo)
+        addSubview(awayTeamLabel)
+        addSubview(homeScoreLabel)
+        addSubview(awayScoreLabel)
     }
     
-    required init?(coder: NSCoder) { fatalError() }
+    
+    
+    override func styleViews() {
+        homeTeamLabel.numberOfLines = 1
+        homeTeamLabel.font = .regular(size: 14)
+        
+        awayTeamLabel.numberOfLines = 1
+        awayTeamLabel.font = .regular(size: 14)
+        
+        startTimestampLabel.textAlignment = .center
+        startTimestampLabel.font = .micro(size: 12)
+        
+        statusLabel.textAlignment = .center
+        statusLabel.font = .micro(size: 12)
+        
+        homeScoreLabel.font = .regular(size: 14)
+        awayScoreLabel.font = .regular(size: 14)
+        
+        divider.backgroundColor = .onSurfaceLv2
+    }
+    
+    override func setupConstraints() {
+        startTimestampLabel.snp.makeConstraints { make in
+            make.height.equalTo(16)
+            make.leading.equalToSuperview().inset(4)
+            make.width.equalTo(56)
+            make.centerY.equalTo(homeTeamLabel)
+        }
+        
+        statusLabel.snp.makeConstraints { make in
+            make.height.equalTo(16)
+            make.leading.equalToSuperview().inset(4)
+            make.width.equalTo(56)
+            make.centerY.equalTo(awayTeamLabel)
+        }
+        
+        divider.snp.makeConstraints { make in
+            make.width.equalTo(1)
+            make.top.bottom.equalToSuperview().inset(8)
+            make.leading.equalTo(startTimestampLabel.snp.trailing).offset(4)
+        }
+        
+        homeTeamLogo.snp.makeConstraints { make in
+            make.leading.equalTo(divider.snp.trailing).offset(16)
+            make.centerY.equalTo(homeTeamLabel)
+            make.size.equalTo(16)
+        }
+        
+        homeTeamLabel.snp.makeConstraints { make in
+            make.leading.equalTo(homeTeamLogo.snp.trailing).offset(8)
+            make.top.equalToSuperview().offset(10)
+        }
+        
+        awayTeamLogo.snp.makeConstraints { make in
+            make.leading.equalTo(divider.snp.trailing).offset(16)
+            make.centerY.equalTo(awayTeamLabel)
+            make.size.equalTo(16)
+        }
+        
+        awayTeamLabel.snp.makeConstraints { make in
+            make.leading.equalTo(awayTeamLogo.snp.trailing).offset(8)
+            make.top.equalTo(homeTeamLabel.snp.bottom).offset(4)
+            make.bottom.equalToSuperview().inset(10)
+        }
+        
+        homeScoreLabel.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(16)
+            make.centerY.equalTo(homeTeamLabel)
+        }
+        
+        awayScoreLabel.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(16)
+            make.centerY.equalTo(awayTeamLabel)
+        }
+    }
+    
     
     
     func configure(with viewModel: MatchViewModel) {
-        homeTeam.text = viewModel.homeTeamName
-        awayTeam.text = viewModel.awayTeamName
-        homeScore.text = viewModel.homeScore
-        awayScore.text = viewModel.awayScore
-        startTimestamp.text = viewModel.time
-        status.text = viewModel.status
-        homeScore.textColor = viewModel.homeScoreColor
-        awayScore.textColor = viewModel.awayScoreColor
-        homeTeam.textColor = viewModel.homeTeamNameColor
-        awayTeam.textColor = viewModel.awayTeamNameColor
-        startTimestamp.textColor = viewModel.startTimeColor
-        status.textColor = viewModel.statusColor
-        
-        if let urlString = viewModel.homeTeamLogoUrl, let url = URL(string: urlString) {
-            URLSession.shared.dataTask(with: url) { data, _, _ in
-                guard let data = data, let image = UIImage(data: data) else { return }
-                DispatchQueue.main.async { self.homeTeamLogo.image = image }
-            }.resume()
-        }
-        
-        if let urlString = viewModel.awayTeamLogoUrl, let url = URL(string: urlString) {
-            URLSession.shared.dataTask(with: url) { data, _, _ in
-                guard let data = data, let image = UIImage(data: data) else { return }
-                DispatchQueue.main.async { self.awayTeamLogo.image = image }
-            }.resume()
-        }
-        
+        homeTeamLabel.text = viewModel.homeTeamName
+        awayTeamLabel.text = viewModel.awayTeamName
+        homeScoreLabel.text = viewModel.homeScore
+        awayScoreLabel.text = viewModel.awayScore
+        startTimestampLabel.text = viewModel.time
+        statusLabel.text = viewModel.status
+        homeScoreLabel.textColor = viewModel.homeScoreColor
+        awayScoreLabel.textColor = viewModel.awayScoreColor
+        homeTeamLabel.textColor = viewModel.homeTeamNameColor
+        awayTeamLabel.textColor = viewModel.awayTeamNameColor
+        startTimestampLabel.textColor = viewModel.startTimeColor
+        statusLabel.textColor = viewModel.statusColor
+        homeTeamLogo.image = viewModel.homeTeamLogo
+        awayTeamLogo.image = viewModel.awayTeamLogo
     }
-    
-    
-    private func setupUI() {
-        
-        addSubview(startTimestamp)
-        addSubview(status)
-        addSubview(divider)
-        addSubview(homeTeamLogo)
-        addSubview(homeTeam)
-        addSubview(awayTeamLogo)
-        addSubview(awayTeam)
-        addSubview(homeScore)
-        addSubview(awayScore)
-        
-        homeTeam.numberOfLines = 1
-        homeTeam.font = AppFont.regular(size: 16)
-        homeTeamLogo.snp.makeConstraints { make in
-            make.leading.equalTo(divider.snp.trailing).offset(16)
-            make.centerY.equalTo(homeTeam)
-            make.size.equalTo(16)
-            
-        }
-        homeTeam.snp.makeConstraints { make in
-            make.leading.equalTo(homeTeamLogo.snp.trailing).offset(8)
-            make.top.equalToSuperview().offset(4)
-        }
-        
-        awayTeam.numberOfLines = 1
-        awayTeam.font = AppFont.regular(size: 16)
-        awayTeam.snp.makeConstraints { make in
-            make.top.equalTo(homeTeam.snp.bottom).offset(8)
-            make.bottom.equalToSuperview().inset(4)
-        }
-        awayTeamLogo.snp.makeConstraints { make in
-            make.leading.equalTo(divider.snp.trailing).offset(16)
-            make.centerY.equalTo(awayTeam)
-            make.size.equalTo(16)
-        }
-        awayTeam.snp.makeConstraints { make in
-            make.leading.equalTo(awayTeamLogo.snp.trailing).offset(8)
-        }
-        
-        startTimestamp.textAlignment = .center
-        startTimestamp.font = AppFont.micro(size: 14)
-        startTimestamp.snp.makeConstraints { make in
-            make.height.equalTo(16)
-            make.leading.equalToSuperview()
-            make.width.equalTo(56)
-            make.centerY.equalTo(homeTeam)
-        }
-        
-        status.textAlignment = .center
-        status.font = AppFont.micro(size: 14)
-        status.snp.makeConstraints { make in
-            make.height.equalTo(16)
-            make.leading.equalToSuperview()
-            make.width.equalTo(56)
-            make.centerY.equalTo(awayTeam)
-        }
-        
-        divider.backgroundColor = .gray
-        divider.snp.makeConstraints { make in
-            make.width.equalTo(1)
-            make.height.equalToSuperview().multipliedBy(0.7)
-            make.leading.equalTo(startTimestamp.snp.trailing).offset(16)
-            make.centerY.equalToSuperview()
-        }
-        
-        homeScore.font = AppFont.regular(size: 16)
-        homeScore.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(16)
-            make.centerY.equalTo(homeTeam)
-        }
-        
-        awayScore.font = AppFont.regular(size: 16)
-        awayScore.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(16)
-            make.centerY.equalTo(awayTeam)
-        }
-    }
-    
 }
