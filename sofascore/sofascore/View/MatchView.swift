@@ -25,13 +25,9 @@ class MatchView: BaseView{
         addSubview(awayScoreLabel)
     }
     
-    
-    
     override func styleViews() {
-        homeTeamLabel.numberOfLines = 1
         homeTeamLabel.font = .regular(size: 14)
         
-        awayTeamLabel.numberOfLines = 1
         awayTeamLabel.font = .regular(size: 14)
         
         startTimestampLabel.textAlignment = .center
@@ -43,7 +39,7 @@ class MatchView: BaseView{
         homeScoreLabel.font = .regular(size: 14)
         awayScoreLabel.font = .regular(size: 14)
         
-        divider.backgroundColor = .onSurfaceLv2
+        divider.backgroundColor = .onSurfaceLv4
     }
     
     override func setupConstraints() {
@@ -101,22 +97,20 @@ class MatchView: BaseView{
         }
     }
     
-    
-    
     func configure(with viewModel: MatchViewModel) {
-        homeTeamLabel.text = viewModel.homeTeamName
-        awayTeamLabel.text = viewModel.awayTeamName
-        homeScoreLabel.text = viewModel.homeScore
-        awayScoreLabel.text = viewModel.awayScore
+        homeTeamLabel.text = viewModel.homeTeamViewModel.name
+        awayTeamLabel.text = viewModel.awayTeamViewModel.name
+        homeScoreLabel.text = viewModel.homeTeamViewModel.score
+        awayScoreLabel.text = viewModel.awayTeamViewModel.score
         startTimestampLabel.text = viewModel.time
         statusLabel.text = viewModel.status
-        homeScoreLabel.textColor = viewModel.homeScoreColor
-        awayScoreLabel.textColor = viewModel.awayScoreColor
-        homeTeamLabel.textColor = viewModel.homeTeamNameColor
-        awayTeamLabel.textColor = viewModel.awayTeamNameColor
+        homeScoreLabel.textColor = viewModel.homeTeamViewModel.scoreColor
+        awayScoreLabel.textColor = viewModel.awayTeamViewModel.scoreColor
+        homeTeamLabel.textColor = viewModel.homeTeamViewModel.nameColor
+        awayTeamLabel.textColor = viewModel.awayTeamViewModel.nameColor
         startTimestampLabel.textColor = viewModel.startTimeColor
         statusLabel.textColor = viewModel.statusColor
-        homeTeamLogo.image = viewModel.homeTeamLogo
-        awayTeamLogo.image = viewModel.awayTeamLogo
+        homeTeamLogo.image = viewModel.homeTeamViewModel.logo
+        awayTeamLogo.image = viewModel.awayTeamViewModel.logo
     }
 }

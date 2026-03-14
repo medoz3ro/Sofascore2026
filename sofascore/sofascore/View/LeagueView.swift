@@ -2,14 +2,11 @@ import UIKit
 import SnapKit
 import SofaAcademic
 
-
 class LeagueView: BaseView {
     private let nameLabel: UILabel = UILabel()
     private let countryLabel: UILabel = UILabel()
     private let logoImage: UIImageView = UIImageView()
-    
     private let pointerImage: UIImageView = UIImageView()
-    
     
     override func addViews() {
         addSubview(logoImage)
@@ -19,11 +16,9 @@ class LeagueView: BaseView {
     }
     
     override func styleViews() {
-        countryLabel.numberOfLines = 1
         countryLabel.textColor = .onSurfaceLv1
         countryLabel.font = .bold(size: 14)
         
-        nameLabel.numberOfLines = 1
         nameLabel.textColor = .onSurfaceLv2
         nameLabel.font = .regular(size: 14)
         
@@ -43,7 +38,6 @@ class LeagueView: BaseView {
             make.centerY.equalToSuperview()
         }
         
-        
         pointerImage.snp.makeConstraints { make in
             make.leading.equalTo(countryLabel.snp.trailing)
             make.centerY.equalToSuperview()
@@ -54,7 +48,6 @@ class LeagueView: BaseView {
             make.leading.equalTo(pointerImage.snp.trailing)
             make.centerY.equalToSuperview()
         }
-        
     }
     
     func configure(with viewModel: LeagueViewModel) {
@@ -63,7 +56,3 @@ class LeagueView: BaseView {
         logoImage.image = viewModel.logo
     }
 }
-
-
-
-

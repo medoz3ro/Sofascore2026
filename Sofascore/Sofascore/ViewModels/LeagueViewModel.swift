@@ -1,7 +1,6 @@
 import UIKit
 import SofaAcademic
 
-
 struct LeagueViewModel {
     let name: String
     let country: String
@@ -13,5 +12,3 @@ struct LeagueViewModel {
         self.logo = logo
     }
 }
-
-
