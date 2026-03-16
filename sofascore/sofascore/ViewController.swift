@@ -11,12 +11,11 @@ class ViewController: UIViewController, BaseViewProtocol {
         addViews()
         styleViews()
         setupConstraints()
-        
+        loadData()
+    }
+    func loadData() {
         let dataSource = Homework2DataSource()
         let league = dataSource.laLigaLeague()
-        
-        let leagueViewModel = LeagueViewModel(league: league, logo: nil)
-        leagueView.configure(with: leagueViewModel)
         
         Task {
             var leagueLogo: UIImage? = nil

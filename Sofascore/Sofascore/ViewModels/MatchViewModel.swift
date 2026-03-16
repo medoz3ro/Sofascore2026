@@ -6,11 +6,10 @@ struct TeamViewModel {
     let name: String
     let logo: UIImage?
     let score: String
-    let nameColor: UIColor
-    let scoreColor: UIColor
+    let colors: TeamColors
 }
 
-private struct TeamColors {
+struct TeamColors {
     let nameColor: UIColor
     let scoreColor: UIColor
 }
@@ -38,15 +37,14 @@ struct MatchViewModel {
             name: event.homeTeam.name,
             logo: homeTeamLogo,
             score: event.homeScore.map { "\($0)" } ?? "",
-            nameColor: colors.home.nameColor,
-            scoreColor: colors.home.scoreColor
+            colors: colors.home
         )
+        
         awayTeamViewModel = TeamViewModel(
             name: event.awayTeam.name,
             logo: awayTeamLogo,
             score: event.awayScore.map { "\($0)" } ?? "",
-            nameColor: colors.home.nameColor,
-            scoreColor: colors.home.scoreColor
+            colors: colors.away
         )
     }
     

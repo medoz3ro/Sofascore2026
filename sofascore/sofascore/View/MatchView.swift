@@ -104,10 +104,10 @@ class MatchView: BaseView{
         awayScoreLabel.text = viewModel.awayTeamViewModel.score
         startTimestampLabel.text = viewModel.time
         statusLabel.text = viewModel.status
-        homeScoreLabel.textColor = viewModel.homeTeamViewModel.scoreColor
-        awayScoreLabel.textColor = viewModel.awayTeamViewModel.scoreColor
-        homeTeamLabel.textColor = viewModel.homeTeamViewModel.nameColor
-        awayTeamLabel.textColor = viewModel.awayTeamViewModel.nameColor
+        homeTeamLabel.textColor = viewModel.homeTeamViewModel.colors.nameColor
+        homeScoreLabel.textColor = viewModel.homeTeamViewModel.colors.scoreColor
+        awayTeamLabel.textColor = viewModel.awayTeamViewModel.colors.nameColor
+        awayScoreLabel.textColor = viewModel.awayTeamViewModel.colors.scoreColor
         startTimestampLabel.textColor = viewModel.startTimeColor
         statusLabel.textColor = viewModel.statusColor
         homeTeamLogo.image = viewModel.homeTeamViewModel.logo
