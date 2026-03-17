@@ -30,18 +30,18 @@ class SportTabView: BaseView {
     }
 
     override func setupConstraints() {
-        contentStackView.snp.makeConstraints { (make) in
+        contentStackView.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
 
-        iconImageView.snp.makeConstraints { (make) in
+        iconImageView.snp.makeConstraints { make in
             make.size.equalTo(16)
         }
-        titleLabel.snp.makeConstraints { (make) in
+        titleLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
         }
 
-        selectionIndicator.snp.makeConstraints { (make) in
+        selectionIndicator.snp.makeConstraints { make in
             make.width.equalTo(102)
             make.height.equalTo(4)
             make.bottom.equalToSuperview()

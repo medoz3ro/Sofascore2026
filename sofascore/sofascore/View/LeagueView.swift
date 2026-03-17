@@ -16,6 +16,7 @@ class LeagueView: BaseView {
     }
 
     override func styleViews() {
+        backgroundColor = .white
         countryLabel.textColor = .onSurfaceLv1
         countryLabel.font = .bold(size: 14)
 

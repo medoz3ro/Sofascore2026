@@ -35,7 +35,7 @@ class SportSelectorView: BaseView {
             sportTabs.append(tab)
         }
     }
-    
+
     private func selectTab(_ selected: SportTabView) {
         sportTabs.forEach { tab in
             tab.setSelected(tab == selected)
