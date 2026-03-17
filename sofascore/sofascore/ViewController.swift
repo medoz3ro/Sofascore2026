@@ -11,6 +11,7 @@ nonisolated enum Item: Hashable, Sendable {
 }
 
 class ViewController: UIViewController, BaseViewProtocol {
+    private let statusBarView = UIView()
     private let sportSelectorView = SportSelectorView()
     private let collectionView = UICollectionView(
         frame: .zero,
@@ -60,12 +61,15 @@ class ViewController: UIViewController, BaseViewProtocol {
     }
 
     func addViews() {
+        view.addSubview(statusBarView)
         view.addSubview(sportSelectorView)
         view.addSubview(collectionView)
     }
 
     func styleViews() {
         view.backgroundColor = .systemBackground
+
+        statusBarView.backgroundColor = .primaryDefault
 
         collectionView.register(
             MatchCell.self,
@@ -79,9 +83,9 @@ class ViewController: UIViewController, BaseViewProtocol {
         )
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width, height: 56)
+        layout.itemSize = CGSize(width: view.bounds.width, height: 56)
         layout.headerReferenceSize = CGSize(
-            width: UIScreen.main.bounds.width,
+            width: view.bounds.width,
             height: 56
         )
         layout.sectionHeadersPinToVisibleBounds = true
@@ -89,11 +93,19 @@ class ViewController: UIViewController, BaseViewProtocol {
     }
 
     func setupConstraints() {
+        statusBarView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(48)
+        }
+
         sportSelectorView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.top.equalTo(statusBarView.snp.bottom)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(48)
         }
+
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(sportSelectorView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()

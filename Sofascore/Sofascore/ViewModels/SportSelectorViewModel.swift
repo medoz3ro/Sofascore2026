@@ -20,7 +20,7 @@ struct SportSelectorViewModel {
                 icon: UIImage(named: "americanFootball_icon"),
                 title: "Am. Football",
                 isSelected: false
-            ),
+            )
         ])
     }
 }
