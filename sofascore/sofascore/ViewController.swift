@@ -11,7 +11,6 @@ nonisolated enum Item: Hashable, Sendable {
 }
 
 class ViewController: UIViewController, BaseViewProtocol {
-    private var matchViewModels: [Int: MatchViewModel] = [:]
     private let safeAreaBackgroundView = UIView()
     private let statusBarView = StatusBarView()
     private let sportSelectorView = SportSelectorView()
@@ -19,10 +18,10 @@ class ViewController: UIViewController, BaseViewProtocol {
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
     )
+    private var matchViewModels: [Int: MatchViewModel] = [:]
     private var events: [Event] = []
     private var eventsById: [Int: Event] = [:]
     private var leagues: [Int: League] = [:]
-
     private var diffableDataSource:
         UICollectionViewDiffableDataSource<Section, Item>?
 
@@ -38,6 +37,7 @@ class ViewController: UIViewController, BaseViewProtocol {
 
     func setupBinding() {
         sportSelectorView.onSportSelected = { index in
+            // TODO: load data for selected sport
         }
     }
 

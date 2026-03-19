@@ -6,14 +6,18 @@ class SportSelectorView: BaseView {
     var onSportSelected: ((Int) -> Void)?
     private var sportTabs: [SportTabView] = []
     private let stackView = UIStackView()
+    private let selectionIndicator = UIView()
 
     override func addViews() {
         addSubview(stackView)
+        addSubview(selectionIndicator)
     }
 
     override func styleViews() {
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
+
+        selectionIndicator.backgroundColor = .white
     }
 
     override func setupConstraints() {
@@ -35,11 +39,26 @@ class SportSelectorView: BaseView {
             stackView.addArrangedSubview(tab)
             sportTabs.append(tab)
         }
+
+        if let firstTab = sportTabs.first {
+            selectionIndicator.snp.remakeConstraints { make in
+                make.width.equalTo(102)
+                make.height.equalTo(4)
+                make.bottom.equalToSuperview()
+                make.centerX.equalTo(firstTab)
+            }
+        }
     }
 
     private func selectTab(_ selected: SportTabView) {
-        sportTabs.forEach { tab in
-            tab.setSelected(tab == selected)
+        UIView.animate(withDuration: 0.3) {
+            self.selectionIndicator.snp.remakeConstraints { make in
+                make.width.equalTo(102)
+                make.height.equalTo(4)
+                make.bottom.equalToSuperview()
+                make.centerX.equalTo(selected)
+            }
+            self.layoutIfNeeded()
         }
     }
 
