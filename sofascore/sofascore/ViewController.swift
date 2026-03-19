@@ -11,7 +11,8 @@ nonisolated enum Item: Hashable, Sendable {
 }
 
 class ViewController: UIViewController, BaseViewProtocol {
-    private let statusBarView = UIView()
+    private let safeAreaBackgroundView = UIView()
+    private let statusBarView = StatusBarView()
     private let sportSelectorView = SportSelectorView()
     private let collectionView = UICollectionView(
         frame: .zero,
@@ -61,6 +62,7 @@ class ViewController: UIViewController, BaseViewProtocol {
     }
 
     func addViews() {
+        view.addSubview(safeAreaBackgroundView)
         view.addSubview(statusBarView)
         view.addSubview(sportSelectorView)
         view.addSubview(collectionView)
@@ -68,8 +70,8 @@ class ViewController: UIViewController, BaseViewProtocol {
 
     func styleViews() {
         view.backgroundColor = .systemBackground
-
-        statusBarView.backgroundColor = .primaryDefault
+        
+        safeAreaBackgroundView.backgroundColor = .primaryDefault
 
         collectionView.register(
             MatchCell.self,
@@ -89,14 +91,19 @@ class ViewController: UIViewController, BaseViewProtocol {
             height: 56
         )
         layout.sectionHeadersPinToVisibleBounds = true
+        layout.minimumLineSpacing = 0
         collectionView.collectionViewLayout = layout
     }
 
     func setupConstraints() {
-        statusBarView.snp.makeConstraints { make in
+        safeAreaBackgroundView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.top.leading.trailing.equalToSuperview()
+        }
+
+        statusBarView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.trailing.equalToSuperview()
             make.height.equalTo(48)
         }
 

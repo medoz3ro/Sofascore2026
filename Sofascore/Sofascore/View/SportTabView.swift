@@ -26,19 +26,17 @@ class SportTabView: BaseView {
         titleLabel.textColor = .white
 
         selectionIndicator.backgroundColor = .white
-
     }
 
     override func setupConstraints() {
         contentStackView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().inset(4)
+            make.bottom.equalTo(selectionIndicator.snp.top).offset(-4)
         }
 
         iconImageView.snp.makeConstraints { make in
             make.size.equalTo(16)
-        }
-        titleLabel.snp.makeConstraints { make in
-            make.height.equalTo(16)
         }
 
         selectionIndicator.snp.makeConstraints { make in
