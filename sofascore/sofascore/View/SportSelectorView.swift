@@ -3,6 +3,7 @@ import SofaAcademic
 import UIKit
 
 class SportSelectorView: BaseView {
+    var onSportSelected: ((Int) -> Void)?
     private var sportTabs: [SportTabView] = []
     private let stackView = UIStackView()
 
@@ -45,5 +46,8 @@ class SportSelectorView: BaseView {
     @objc private func tabTapped(_ gesture: UITapGestureRecognizer) {
         guard let tab = gesture.view as? SportTabView else { return }
         selectTab(tab)
+        if let index = sportTabs.firstIndex(of: tab) {
+            onSportSelected?(index)
+        }
     }
 }

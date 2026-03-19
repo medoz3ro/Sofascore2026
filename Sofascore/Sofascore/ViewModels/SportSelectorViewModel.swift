@@ -8,19 +8,19 @@ struct SportSelectorViewModel {
         SportSelectorViewModel(sports: [
             SportTabViewModel(
                 icon: UIImage(named: "football_icon"),
-                title: "Football",
+                title: .football,
                 isSelected: true
             ),
             SportTabViewModel(
                 icon: UIImage(named: "basketball_icon"),
-                title: "Basketball",
+                title: .basketball,
                 isSelected: false
             ),
             SportTabViewModel(
                 icon: UIImage(named: "americanFootball_icon"),
-                title: "Am. Football",
+                title: .americanFootball,
                 isSelected: false
-            )
+            ),
         ])
     }
 }

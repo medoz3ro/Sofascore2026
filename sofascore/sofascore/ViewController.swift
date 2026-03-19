@@ -11,6 +11,7 @@ nonisolated enum Item: Hashable, Sendable {
 }
 
 class ViewController: UIViewController, BaseViewProtocol {
+    private var matchViewModels: [Int: MatchViewModel] = [:]
     private let safeAreaBackgroundView = UIView()
     private let statusBarView = StatusBarView()
     private let sportSelectorView = SportSelectorView()
@@ -19,6 +20,7 @@ class ViewController: UIViewController, BaseViewProtocol {
         collectionViewLayout: UICollectionViewFlowLayout()
     )
     private var events: [Event] = []
+    private var eventsById: [Int: Event] = [:]
     private var leagues: [Int: League] = [:]
 
     private var diffableDataSource:
@@ -30,14 +32,22 @@ class ViewController: UIViewController, BaseViewProtocol {
         styleViews()
         setupConstraints()
         setupDataSource()
+        setupBinding()
         loadData()
+    }
+
+    func setupBinding() {
+        sportSelectorView.onSportSelected = { index in
+        }
     }
 
     func loadData() {
         sportSelectorView.configure(with: .defaultSports())
         let dataSource = Homework3DataSource()
 
-        events = dataSource.events()
+        events = dataSource.events().filter { $0.league != nil }
+        events.forEach { eventsById[$0.id] = $0 }
+
         let grouped = Dictionary(grouping: events, by: { $0.league?.id ?? 0 })
 
         grouped.forEach { leagueId, leagueEvents in
@@ -46,7 +56,11 @@ class ViewController: UIViewController, BaseViewProtocol {
             }
         }
 
-        applySnapshot(grouped: grouped)
+        Task { [weak self] in
+            guard let self else { return }
+            await self.loadMatchViewModels(for: events)
+            self.applySnapshot(grouped: grouped)
+        }
     }
 
     private func applySnapshot(grouped: [Int: [Event]]) {
@@ -70,7 +84,7 @@ class ViewController: UIViewController, BaseViewProtocol {
 
     func styleViews() {
         view.backgroundColor = .systemBackground
-        
+
         safeAreaBackgroundView.backgroundColor = .primaryDefault
 
         collectionView.register(
@@ -119,6 +133,22 @@ class ViewController: UIViewController, BaseViewProtocol {
         }
     }
 
+    private func loadMatchViewModels(for events: [Event]) async {
+        for event in events {
+            let homeImage = await downloadImage(
+                from: event.homeTeam.logoUrl ?? ""
+            )
+            let awayImage = await downloadImage(
+                from: event.awayTeam.logoUrl ?? ""
+            )
+            matchViewModels[event.id] = MatchViewModel(
+                event: event,
+                homeTeamLogo: homeImage,
+                awayTeamLogo: awayImage
+            )
+        }
+    }
+
     private func setupDataSource() {
         diffableDataSource = UICollectionViewDiffableDataSource<Section, Item>(
             collectionView: collectionView
@@ -132,28 +162,8 @@ class ViewController: UIViewController, BaseViewProtocol {
 
             switch item {
             case .match(let id):
-                if let event = self.events.first(where: { $0.id == id }) {
-                    let viewModel = MatchViewModel(
-                        event: event,
-                        homeTeamLogo: nil,
-                        awayTeamLogo: nil
-                    )
+                if let viewModel = self.matchViewModels[id] {
                     cell.configure(with: viewModel)
-
-                    Task {
-                        let homeImage = await self.downloadImage(
-                            from: event.homeTeam.logoUrl ?? ""
-                        )
-                        let awayImage = await self.downloadImage(
-                            from: event.awayTeam.logoUrl ?? ""
-                        )
-                        let updatedViewModel = MatchViewModel(
-                            event: event,
-                            homeTeamLogo: homeImage,
-                            awayTeamLogo: awayImage
-                        )
-                        cell.configure(with: updatedViewModel)
-                    }
                 }
             }
             return cell
@@ -179,7 +189,8 @@ class ViewController: UIViewController, BaseViewProtocol {
                 let viewModel = LeagueViewModel(league: league, logo: nil)
                 header.configure(with: viewModel)
 
-                Task {
+                Task { [weak self] in
+                    guard let self else { return }
                     let logo = await self.downloadImage(
                         from: league.logoUrl ?? ""
                     )
@@ -193,6 +204,7 @@ class ViewController: UIViewController, BaseViewProtocol {
             return header
         }
     }
+
     private func downloadImage(from urlString: String) async -> UIImage? {
         guard let url = URL(string: urlString) else { return nil }
         guard let (data, _) = try? await URLSession.shared.data(from: url)
