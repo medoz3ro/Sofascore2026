@@ -1,11 +1,11 @@
-import UIKit
 import SofaAcademic
+import UIKit
 
 struct LeagueViewModel {
     let name: String
     let country: String
     let logo: UIImage?
-    
+
     init(league: League, logo: UIImage?) {
         name = league.name
         country = league.country?.name ?? ""
