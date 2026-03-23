@@ -26,7 +26,7 @@ class SportTabView: BaseView {
 
     override func setupConstraints() {
         contentStackView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(8)
             make.top.equalToSuperview().inset(4)
             make.bottom.equalToSuperview().inset(8)
         }

@@ -26,6 +26,15 @@ class SportSelectorView: BaseView {
         }
     }
 
+    private func moveIndicator(to tab: SportTabView) {
+        selectionIndicator.snp.remakeConstraints { make in
+            make.width.equalTo(102)
+            make.height.equalTo(4)
+            make.bottom.equalToSuperview()
+            make.centerX.equalTo(tab)
+        }
+    }
+
     func configure(with viewModel: SportSelectorViewModel) {
         viewModel.sports.forEach { sport in
             let tab = SportTabView()
@@ -41,23 +50,13 @@ class SportSelectorView: BaseView {
         }
 
         if let firstTab = sportTabs.first {
-            selectionIndicator.snp.remakeConstraints { make in
-                make.width.equalTo(102)
-                make.height.equalTo(4)
-                make.bottom.equalToSuperview()
-                make.centerX.equalTo(firstTab)
-            }
+            moveIndicator(to: firstTab)
         }
     }
 
     private func selectTab(_ selected: SportTabView) {
         UIView.animate(withDuration: 0.3) {
-            self.selectionIndicator.snp.remakeConstraints { make in
-                make.width.equalTo(102)
-                make.height.equalTo(4)
-                make.bottom.equalToSuperview()
-                make.centerX.equalTo(selected)
-            }
+            self.moveIndicator(to: selected)
             self.layoutIfNeeded()
         }
     }

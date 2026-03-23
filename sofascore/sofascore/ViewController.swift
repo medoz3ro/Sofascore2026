@@ -18,8 +18,8 @@ class ViewController: UIViewController, BaseViewProtocol {
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
     )
+    private var leagueViewModels: [Int: LeagueViewModel] = [:]
     private var matchViewModels: [Int: MatchViewModel] = [:]
-    private var events: [Event] = []
     private var eventsById: [Int: Event] = [:]
     private var leagues: [Int: League] = [:]
     private var diffableDataSource:
@@ -45,7 +45,7 @@ class ViewController: UIViewController, BaseViewProtocol {
         sportSelectorView.configure(with: .defaultSports())
         let dataSource = Homework3DataSource()
 
-        events = dataSource.events().filter { $0.league != nil }
+        let events = dataSource.events().filter { $0.league != nil }
         events.forEach { eventsById[$0.id] = $0 }
 
         let grouped = Dictionary(grouping: events, by: { $0.league?.id ?? 0 })
@@ -58,6 +58,7 @@ class ViewController: UIViewController, BaseViewProtocol {
 
         Task { [weak self] in
             guard let self else { return }
+            await self.loadLeagueViewModels()
             await self.loadMatchViewModels(for: events)
             self.applySnapshot(grouped: grouped)
         }
@@ -118,18 +119,26 @@ class ViewController: UIViewController, BaseViewProtocol {
         statusBarView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(48)
         }
 
         sportSelectorView.snp.makeConstraints { make in
             make.top.equalTo(statusBarView.snp.bottom)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(48)
         }
 
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(sportSelectorView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
+        }
+    }
+
+    private func loadLeagueViewModels() async {
+        for (leagueId, league) in leagues {
+            let logo = await downloadImage(from: league.logoUrl ?? "")
+            leagueViewModels[leagueId] = LeagueViewModel(
+                league: league,
+                logo: logo
+            )
         }
     }
 
@@ -184,22 +193,9 @@ class ViewController: UIViewController, BaseViewProtocol {
             if let section = self.diffableDataSource?.snapshot()
                 .sectionIdentifiers[indexPath.section],
                 case .league(let leagueId) = section,
-                let league = self.leagues[leagueId]
+                let viewModel = self.leagueViewModels[leagueId]
             {
-                let viewModel = LeagueViewModel(league: league, logo: nil)
                 header.configure(with: viewModel)
-
-                Task { [weak self] in
-                    guard let self else { return }
-                    let logo = await self.downloadImage(
-                        from: league.logoUrl ?? ""
-                    )
-                    let updatedViewModel = LeagueViewModel(
-                        league: league,
-                        logo: logo
-                    )
-                    header.configure(with: updatedViewModel)
-                }
             }
             return header
         }

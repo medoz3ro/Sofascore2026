@@ -27,9 +27,9 @@ struct MatchViewModel {
         status = Self.formatStatus(for: event)
 
         let statusColor = Self.resolveStatusColor(for: event)
-        self.statusColor = statusColor
-        self.startTimeColor = statusColor
-        self.scoreColor = statusColor
+        self.statusColor = Self.resolveStatusColor(for: event)
+        self.startTimeColor = .onSurfaceLv2
+        self.scoreColor = Self.resolveStatusColor(for: event)
         let colors = Self.resolveTeamColors(for: event)
 
         homeTeamViewModel = TeamViewModel(
