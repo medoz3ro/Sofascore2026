@@ -1,0 +1,60 @@
+import SnapKit
+import SofaAcademic
+import UIKit
+
+class ThemeOptionView: BaseView {
+    var onTapped: (() -> Void)?
+
+    private let titleLabel = UILabel()
+    private let radioButton = UIButton(type: .system)
+
+    override func addViews() {
+        addSubview(titleLabel)
+        addSubview(radioButton)
+    }
+
+    override func styleViews() {
+        titleLabel.font = .regular(size: 14)
+        titleLabel.textColor = .onSurfaceLv1
+
+        radioButton.addTarget(
+            self,
+            action: #selector(tapped),
+            for: .touchUpInside
+        )
+
+        let tap = UITapGestureRecognizer(
+            target: self,
+            action: #selector(tapped)
+        )
+        addGestureRecognizer(tap)
+    }
+
+    override func setupConstraints() {
+        titleLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview()
+        }
+
+        radioButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(24)
+        }
+    }
+
+    func configure(with viewModel: ThemeOptionViewModel) {
+        titleLabel.text = viewModel.title
+        let image =
+            viewModel.isSelected
+            ? UIImage(systemName: "record.circle")
+            : UIImage(systemName: "circle")
+        radioButton.setImage(image, for: .normal)
+        radioButton.tintColor =
+            viewModel.isSelected ? .primaryDefault : .onSurfaceLv2
+    }
+
+    @objc private func tapped() {
+        onTapped?()
+    }
+}

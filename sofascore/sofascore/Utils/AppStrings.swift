@@ -8,4 +8,8 @@ extension String {
     static let football = "Football"
     static let basketball = "Basketball"
     static let americanFootball = "Am. Football"
+    
+    static let theme = "Theme"
+    static let light = "Light"
+    static let dark = "Dark"
 }

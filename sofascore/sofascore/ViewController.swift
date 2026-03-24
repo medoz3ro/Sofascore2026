@@ -24,6 +24,7 @@ class ViewController: UIViewController, BaseViewProtocol {
     private var leagues: [Int: League] = [:]
     private var diffableDataSource:
         UICollectionViewDiffableDataSource<Section, Item>?
+    private var selectedTheme: Theme = .light
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +39,18 @@ class ViewController: UIViewController, BaseViewProtocol {
     func setupBinding() {
         sportSelectorView.onSportSelected = { index in
             // TODO: load data for selected sport
+        }
+
+        statusBarView.onSettingsTapped = { [weak self] in
+            guard let self else { return }
+            let settingsVC = SettingsViewController(
+                selectedTheme: self.selectedTheme
+            )
+            settingsVC.modalPresentationStyle = .fullScreen
+            settingsVC.onThemeChanged = { [weak self] theme in
+                self?.selectedTheme = theme
+            }
+            self.present(settingsVC, animated: true)
         }
     }
 
@@ -72,7 +85,6 @@ class ViewController: UIViewController, BaseViewProtocol {
             let items = grouped[leagueId]?.map { Item.match($0.id) } ?? []
             snapshot.appendItems(items, toSection: .league(leagueId))
         }
-
         diffableDataSource?.apply(snapshot)
     }
 
