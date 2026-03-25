@@ -25,6 +25,7 @@ class ViewController: UIViewController, BaseViewProtocol {
     private var diffableDataSource:
         UICollectionViewDiffableDataSource<Section, Item>?
     private var selectedTheme: Theme = .light
+    private var selectedSport: String = .football
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,8 +38,13 @@ class ViewController: UIViewController, BaseViewProtocol {
     }
 
     func setupBinding() {
-        sportSelectorView.onSportSelected = { index in
-            // TODO: load data for selected sport
+        sportSelectorView.onSportSelected = { [weak self] index in
+            switch index {
+            case 0: self?.selectedSport = .football
+            case 1: self?.selectedSport = .basketball
+            case 2: self?.selectedSport = .americanFootball
+            default: break
+            }
         }
 
         statusBarView.onSettingsTapped = { [weak self] in
@@ -146,7 +152,9 @@ class ViewController: UIViewController, BaseViewProtocol {
 
     private func loadLeagueViewModels() async {
         for (leagueId, league) in leagues {
-            let logo = await downloadImage(from: league.logoUrl ?? "")
+            let logo = await URLSession.shared.downloadImage(
+                from: league.logoUrl ?? ""
+            )
             leagueViewModels[leagueId] = LeagueViewModel(
                 league: league,
                 logo: logo
@@ -156,12 +164,13 @@ class ViewController: UIViewController, BaseViewProtocol {
 
     private func loadMatchViewModels(for events: [Event]) async {
         for event in events {
-            let homeImage = await downloadImage(
+            let homeImage = await URLSession.shared.downloadImage(
                 from: event.homeTeam.logoUrl ?? ""
             )
-            let awayImage = await downloadImage(
+            let awayImage = await URLSession.shared.downloadImage(
                 from: event.awayTeam.logoUrl ?? ""
             )
+
             matchViewModels[event.id] = MatchViewModel(
                 event: event,
                 homeTeamLogo: homeImage,
@@ -173,7 +182,8 @@ class ViewController: UIViewController, BaseViewProtocol {
     private func setupDataSource() {
         diffableDataSource = UICollectionViewDiffableDataSource<Section, Item>(
             collectionView: collectionView
-        ) { collectionView, indexPath, item in
+        ) { [weak self] collectionView, indexPath, item in
+            guard let self else { return UICollectionViewCell() }
             guard
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "MatchCell",
@@ -185,15 +195,25 @@ class ViewController: UIViewController, BaseViewProtocol {
             case .match(let id):
                 if let viewModel = self.matchViewModels[id] {
                     cell.configure(with: viewModel)
+                    cell.onTapped = { [weak self] in
+                        guard let self, let event = self.eventsById[id] else {
+                            return
+                        }
+                        let detailsVC = EventDetailsViewController(
+                            event: event,
+                            sport: self.selectedSport
+                        )
+                        detailsVC.modalPresentationStyle = .fullScreen
+                        self.present(detailsVC, animated: true)
+                    }
                 }
             }
             return cell
         }
 
         diffableDataSource?.supplementaryViewProvider = {
-            collectionView,
-            kind,
-            indexPath in
+            [weak self] collectionView, kind, indexPath in
+            guard let self else { return UICollectionReusableView() }
             guard
                 let header = collectionView.dequeueReusableSupplementaryView(
                     ofKind: kind,
@@ -211,12 +231,5 @@ class ViewController: UIViewController, BaseViewProtocol {
             }
             return header
         }
-    }
-
-    private func downloadImage(from urlString: String) async -> UIImage? {
-        guard let url = URL(string: urlString) else { return nil }
-        guard let (data, _) = try? await URLSession.shared.data(from: url)
-        else { return nil }
-        return UIImage(data: data)
     }
 }

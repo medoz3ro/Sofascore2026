@@ -26,7 +26,6 @@ struct MatchViewModel {
         time = Self.formatTime(from: event.startTimestamp)
         status = Self.formatStatus(for: event)
 
-        let statusColor = Self.resolveStatusColor(for: event)
         self.statusColor = Self.resolveStatusColor(for: event)
         self.startTimeColor = .onSurfaceLv2
         self.scoreColor = Self.resolveStatusColor(for: event)

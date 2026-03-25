@@ -4,6 +4,7 @@ extension String {
     static let notStarted = "-"
     static let halftime = "HT"
     static let finished = "FT"
+    static let fullTime = "Full Time"
 
     static let football = "Football"
     static let basketball = "Basketball"
