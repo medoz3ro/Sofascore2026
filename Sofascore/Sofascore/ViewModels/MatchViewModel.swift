@@ -21,8 +21,10 @@ struct MatchViewModel {
     let scoreColor: UIColor
     let startTimeColor: UIColor
     let statusColor: UIColor
+    let matchTapHandler: (() -> Void)?
 
-    init(event: Event, homeTeamLogo: UIImage?, awayTeamLogo: UIImage?) {
+    init(event: Event, homeTeamLogo: UIImage?, awayTeamLogo: UIImage?, matchTapHandler: (() -> Void)? = nil) {
+        self.matchTapHandler = matchTapHandler
         time = Self.formatTime(from: event.startTimestamp)
         status = Self.formatStatus(for: event)
 

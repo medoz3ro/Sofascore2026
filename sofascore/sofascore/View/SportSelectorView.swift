@@ -3,7 +3,7 @@ import SofaAcademic
 import UIKit
 
 class SportSelectorView: BaseView {
-    var onSportSelected: ((Int) -> Void)?
+    var onSportSelected: ((Sport) -> Void)?
     private var sportTabs: [SportTabView] = []
     private let stackView = UIStackView()
     private let selectionIndicator = UIView()
@@ -65,7 +65,7 @@ class SportSelectorView: BaseView {
         guard let tab = gesture.view as? SportTabView else { return }
         selectTab(tab)
         if let index = sportTabs.firstIndex(of: tab) {
-            onSportSelected?(index)
+            onSportSelected?(Sport.allCases[index])
         }
     }
 }

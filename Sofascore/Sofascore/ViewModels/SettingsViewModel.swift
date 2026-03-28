@@ -7,6 +7,6 @@ enum Theme {
 }
 
 struct SettingsViewModel {
-    let title: String
     let selectedTheme: Theme
+    let themeTapHandler: (Theme) -> Void
 }

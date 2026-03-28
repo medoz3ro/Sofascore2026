@@ -4,8 +4,8 @@ import UIKit
 
 class MatchCell: UICollectionViewCell, BaseViewProtocol {
     private let matchView = MatchView()
-    var onTapped: (() -> Void)?
-
+    private var model: MatchViewModel?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
@@ -25,6 +25,7 @@ class MatchCell: UICollectionViewCell, BaseViewProtocol {
     }
 
     func configure(with viewModel: MatchViewModel) {
+        model = viewModel
         matchView.configure(with: viewModel)
     }
 
@@ -37,6 +38,6 @@ class MatchCell: UICollectionViewCell, BaseViewProtocol {
     }
 
     @objc private func cellTapped() {
-        onTapped?()
+        model?.matchTapHandler?()
     }
 }

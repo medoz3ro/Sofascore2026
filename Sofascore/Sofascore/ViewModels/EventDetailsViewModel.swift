@@ -22,13 +22,13 @@ struct EventDetailsViewModel {
 
     init(
         event: Event,
-        sport: String,
+        sport: Sport,
         leagueLogo: UIImage?,
         homeTeamLogo: UIImage?,
         awayTeamLogo: UIImage?
     ) {
         let league = event.league
-        leagueName = [sport, league?.country?.name, league?.name]
+        leagueName = [sport.title, league?.country?.name, league?.name]
             .compactMap { $0 }
             .joined(separator: ", ")
         self.leagueLogo = leagueLogo
@@ -91,5 +91,26 @@ struct EventDetailsViewModel {
             statusColor = .onSurfaceLv2
             statusText = .fullTime
         }
+    }
+
+    var homeTeamViewModel: EventTeamViewModel {
+        EventTeamViewModel(name: homeTeamName, logo: homeTeamLogo)
+    }
+
+    var awayTeamViewModel: EventTeamViewModel {
+        EventTeamViewModel(name: awayTeamName, logo: awayTeamLogo)
+    }
+
+    var scoreViewModel: EventScoreViewModel? {
+        guard showScore else { return nil }
+        return EventScoreViewModel(
+            homeScore: homeScore.map { "\($0)" } ?? "0",
+            awayScore: awayScore.map { "\($0)" } ?? "0",
+            homeScoreColor: homeScoreColor,
+            awayScoreColor: awayScoreColor,
+            separatorColor: separatorColor,
+            statusText: statusText,
+            statusColor: statusColor
+        )
     }
 }

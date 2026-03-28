@@ -10,7 +10,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             .LaunchOptionsKey: Any]?
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = ViewController()
+        let raw = UserDefaults.standard.string(forKey: "selectedTheme") ?? "light"
+        let style: UIUserInterfaceStyle = raw == "dark" ? .dark : .light
+        window?.overrideUserInterfaceStyle = style
+        let navigationController = UINavigationController(rootViewController: ViewController())
+        navigationController.isNavigationBarHidden = true
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         return true
     }

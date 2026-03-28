@@ -3,8 +3,9 @@ import SofaAcademic
 import UIKit
 
 class SettingsView: BaseView {
-    var onThemeSelected: ((Theme) -> Void)?
     var onDismissTapped: (() -> Void)?
+
+    private var viewModel: SettingsViewModel?
 
     private let statusBarView = UIView()
     private let titleLabel = UILabel()
@@ -32,6 +33,7 @@ class SettingsView: BaseView {
         titleLabel.font = .bold(size: 20)
         titleLabel.textColor = .white
         titleLabel.textAlignment = .center
+        titleLabel.text = .settings
 
         backButton.setImage(UIImage(systemName: "arrow.left"), for: .normal)
         backButton.tintColor = .white
@@ -97,7 +99,7 @@ class SettingsView: BaseView {
     }
 
     func configure(with viewModel: SettingsViewModel) {
-        titleLabel.text = viewModel.title
+        self.viewModel = viewModel
         selectTheme(viewModel.selectedTheme)
     }
 
@@ -115,6 +117,6 @@ class SettingsView: BaseView {
         darkOptionView.configure(
             with: ThemeOptionViewModel(title: .dark, isSelected: theme == .dark)
         )
-        onThemeSelected?(theme)
+        viewModel?.themeTapHandler(theme)
     }
 }

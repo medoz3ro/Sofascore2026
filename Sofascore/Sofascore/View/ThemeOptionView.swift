@@ -17,11 +17,7 @@ class ThemeOptionView: BaseView {
         titleLabel.font = .regular(size: 14)
         titleLabel.textColor = .onSurfaceLv1
 
-        radioButton.addTarget(
-            self,
-            action: #selector(tapped),
-            for: .touchUpInside
-        )
+        radioButton.isUserInteractionEnabled = false
 
         let tap = UITapGestureRecognizer(
             target: self,

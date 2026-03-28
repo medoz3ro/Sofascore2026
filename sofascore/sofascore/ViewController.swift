@@ -24,9 +24,8 @@ class ViewController: UIViewController, BaseViewProtocol {
     private var leagues: [Int: League] = [:]
     private var diffableDataSource:
         UICollectionViewDiffableDataSource<Section, Item>?
-    private var selectedTheme: Theme = .light
-    private var selectedSport: String = .football
-
+    private var selectedSport: Sport = .football
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addViews()
@@ -38,24 +37,14 @@ class ViewController: UIViewController, BaseViewProtocol {
     }
 
     func setupBinding() {
-        sportSelectorView.onSportSelected = { [weak self] index in
-            switch index {
-            case 0: self?.selectedSport = .football
-            case 1: self?.selectedSport = .basketball
-            case 2: self?.selectedSport = .americanFootball
-            default: break
-            }
+        sportSelectorView.onSportSelected = { [weak self] sport in
+            self?.selectedSport = sport
         }
 
         statusBarView.onSettingsTapped = { [weak self] in
             guard let self else { return }
-            let settingsVC = SettingsViewController(
-                selectedTheme: self.selectedTheme
-            )
+            let settingsVC = SettingsViewController()
             settingsVC.modalPresentationStyle = .fullScreen
-            settingsVC.onThemeChanged = { [weak self] theme in
-                self?.selectedTheme = theme
-            }
             self.present(settingsVC, animated: true)
         }
     }
@@ -152,9 +141,8 @@ class ViewController: UIViewController, BaseViewProtocol {
 
     private func loadLeagueViewModels() async {
         for (leagueId, league) in leagues {
-            let logo = await URLSession.shared.downloadImage(
-                from: league.logoUrl ?? ""
-            )
+            guard let logoUrl = league.logoUrl else { continue }
+            let logo = await URLSession.shared.downloadImage(from: logoUrl)
             leagueViewModels[leagueId] = LeagueViewModel(
                 league: league,
                 logo: logo
@@ -164,17 +152,28 @@ class ViewController: UIViewController, BaseViewProtocol {
 
     private func loadMatchViewModels(for events: [Event]) async {
         for event in events {
-            let homeImage = await URLSession.shared.downloadImage(
-                from: event.homeTeam.logoUrl ?? ""
-            )
-            let awayImage = await URLSession.shared.downloadImage(
-                from: event.awayTeam.logoUrl ?? ""
-            )
+            let homeImage =
+                if let url = event.homeTeam.logoUrl {
+                    await URLSession.shared.downloadImage(from: url)
+                } else { nil as UIImage? }
+
+            let awayImage =
+                if let url = event.awayTeam.logoUrl {
+                    await URLSession.shared.downloadImage(from: url)
+                } else { nil as UIImage? }
 
             matchViewModels[event.id] = MatchViewModel(
                 event: event,
                 homeTeamLogo: homeImage,
-                awayTeamLogo: awayImage
+                awayTeamLogo: awayImage,
+                matchTapHandler: { [weak self] in
+                    guard let self, let event = self.eventsById[event.id] else { return }
+                    let detailsVC = EventDetailsViewController(
+                        event: event,
+                        sport: self.selectedSport
+                    )
+                    self.navigationController?.pushViewController(detailsVC, animated: true)
+                }
             )
         }
     }
@@ -195,17 +194,6 @@ class ViewController: UIViewController, BaseViewProtocol {
             case .match(let id):
                 if let viewModel = self.matchViewModels[id] {
                     cell.configure(with: viewModel)
-                    cell.onTapped = { [weak self] in
-                        guard let self, let event = self.eventsById[id] else {
-                            return
-                        }
-                        let detailsVC = EventDetailsViewController(
-                            event: event,
-                            sport: self.selectedSport
-                        )
-                        detailsVC.modalPresentationStyle = .fullScreen
-                        self.present(detailsVC, animated: true)
-                    }
                 }
             }
             return cell

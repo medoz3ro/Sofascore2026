@@ -6,9 +6,9 @@ class EventDetailsViewController: UIViewController, BaseViewProtocol {
     private let safeAreaBackgroundView = UIView()
     private let eventDetailsView = EventDetailsView()
     private let event: Event
-    private let sport: String
+    private let sport: Sport
 
-    init(event: Event, sport: String) {
+    init(event: Event, sport: Sport) {
         self.event = event
         self.sport = sport
         super.init(nibName: nil, bundle: nil)
@@ -33,6 +33,7 @@ class EventDetailsViewController: UIViewController, BaseViewProtocol {
     }
 
     func styleViews() {
+        view.backgroundColor = .systemBackground
         safeAreaBackgroundView.backgroundColor = .systemBackground
     }
 
@@ -50,22 +51,33 @@ class EventDetailsViewController: UIViewController, BaseViewProtocol {
 
     func setupBinding() {
         eventDetailsView.onBackTapped = { [weak self] in
-            self?.dismiss(animated: true)
+            self?.navigationController?.popViewController(animated: true)
         }
     }
 
     private func loadData() {
-        Task { [weak self] in
+        Task { @MainActor [weak self] in
             guard let self else { return }
-            let leagueLogo = await URLSession.shared.downloadImage(
-                from: event.league?.logoUrl ?? ""
-            )
-            let homeTeamLogo = await URLSession.shared.downloadImage(
-                from: event.homeTeam.logoUrl ?? ""
-            )
-            let awayTeamLogo = await URLSession.shared.downloadImage(
-                from: event.awayTeam.logoUrl ?? ""
-            )
+            let leagueLogo: UIImage?
+            if let url = event.league?.logoUrl {
+                leagueLogo = await URLSession.shared.downloadImage(from: url)
+            } else {
+                leagueLogo = nil
+            }
+
+            let homeTeamLogo: UIImage?
+            if let url = event.homeTeam.logoUrl {
+                homeTeamLogo = await URLSession.shared.downloadImage(from: url)
+            } else {
+                homeTeamLogo = nil
+            }
+
+            let awayTeamLogo: UIImage?
+            if let url = event.awayTeam.logoUrl {
+                awayTeamLogo = await URLSession.shared.downloadImage(from: url)
+            } else {
+                awayTeamLogo = nil
+            }
             let viewModel = EventDetailsViewModel(
                 event: event,
                 sport: sport,
@@ -73,7 +85,7 @@ class EventDetailsViewController: UIViewController, BaseViewProtocol {
                 homeTeamLogo: homeTeamLogo,
                 awayTeamLogo: awayTeamLogo
             )
-            eventDetailsView.configure(with: viewModel)
+            self.eventDetailsView.configure(with: viewModel)
         }
     }
 }
