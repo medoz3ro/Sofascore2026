@@ -9,11 +9,9 @@ class EventDetailsView: BaseView {
     private let backButton = UIButton(type: .system)
     private let leagueLogoImageView = UIImageView()
     private let leagueNameLabel = UILabel()
-
     private let homeTeamView = EventTeamView()
     private let awayTeamView = EventTeamView()
     private let scoreView = EventScoreView()
-
     private let dateLabel = UILabel()
     private let timeLabel = UILabel()
 
@@ -36,11 +34,6 @@ class EventDetailsView: BaseView {
 
         backButton.setImage(UIImage(systemName: "arrow.left"), for: .normal)
         backButton.tintColor = .onSurfaceLv1
-        backButton.addTarget(
-            self,
-            action: #selector(backTapped),
-            for: .touchUpInside
-        )
 
         leagueLogoImageView.contentMode = .scaleAspectFit
 
@@ -69,7 +62,7 @@ class EventDetailsView: BaseView {
         }
 
         leagueLogoImageView.snp.makeConstraints { make in
-            make.leading.equalTo(backButton.snp.trailing).offset(16)
+            make.leading.equalTo(backButton.snp.trailing).offset(24)
             make.top.bottom.equalToSuperview().inset(12)
             make.size.equalTo(16)
         }
@@ -78,6 +71,7 @@ class EventDetailsView: BaseView {
             make.leading.equalTo(leagueLogoImageView.snp.trailing).offset(8)
             make.centerY.equalToSuperview()
             make.trailing.lessThanOrEqualToSuperview().inset(16)
+            make.height.equalTo(16)
         }
 
         homeTeamView.snp.makeConstraints { make in
@@ -94,24 +88,25 @@ class EventDetailsView: BaseView {
 
         scoreView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.centerY.equalTo(homeTeamView)
+            make.top.equalTo(homeTeamView)
         }
 
         dateLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalTo(homeTeamView.snp.centerY)
+            make.height.equalTo(16)
         }
 
         timeLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(dateLabel.snp.bottom).offset(4)
+            make.height.equalTo(40)
         }
     }
 
     func configure(with viewModel: EventDetailsViewModel) {
         leagueNameLabel.text = viewModel.leagueName
         leagueLogoImageView.image = viewModel.leagueLogo
-
         homeTeamView.configure(with: viewModel.homeTeamViewModel)
         awayTeamView.configure(with: viewModel.awayTeamViewModel)
 
@@ -129,7 +124,15 @@ class EventDetailsView: BaseView {
         }
     }
 
-    @objc private func backTapped() {
+    override func setupGestureRecognizers() {
+        backButton.addTarget(
+            self,
+            action: #selector(backTapped),
+            for: .touchUpInside
+        )
+    }
+
+    @objc func backTapped() {
         onBackTapped?()
     }
 }

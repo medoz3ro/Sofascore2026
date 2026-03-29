@@ -25,7 +25,7 @@ class ViewController: UIViewController, BaseViewProtocol {
     private var diffableDataSource:
         UICollectionViewDiffableDataSource<Section, Item>?
     private var selectedSport: Sport = .football
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         addViews()
@@ -167,12 +167,17 @@ class ViewController: UIViewController, BaseViewProtocol {
                 homeTeamLogo: homeImage,
                 awayTeamLogo: awayImage,
                 matchTapHandler: { [weak self] in
-                    guard let self, let event = self.eventsById[event.id] else { return }
+                    guard let self, let event = self.eventsById[event.id] else {
+                        return
+                    }
                     let detailsVC = EventDetailsViewController(
                         event: event,
                         sport: self.selectedSport
                     )
-                    self.navigationController?.pushViewController(detailsVC, animated: true)
+                    self.navigationController?.pushViewController(
+                        detailsVC,
+                        animated: true
+                    )
                 }
             )
         }

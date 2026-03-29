@@ -3,10 +3,11 @@ import SofaAcademic
 import UIKit
 
 class StatusBarView: BaseView {
+    var onSettingsTapped: (() -> Void)?
+
     private let logoImageView = UIImageView()
     private let trophyImageView = UIImageView()
     private let settingsButton = UIButton(type: .system)
-    var onSettingsTapped: (() -> Void)?
 
     override func addViews() {
         addSubview(logoImageView)
@@ -24,11 +25,6 @@ class StatusBarView: BaseView {
 
         settingsButton.setImage(UIImage(resource: .settingsIcon), for: .normal)
         settingsButton.tintColor = .white
-        settingsButton.addTarget(
-            self,
-            action: #selector(settingsTapped),
-            for: .touchUpInside
-        )
     }
 
     override func setupConstraints() {
@@ -51,6 +47,14 @@ class StatusBarView: BaseView {
             make.centerY.equalToSuperview()
             make.size.equalTo(24)
         }
+    }
+
+    override func setupGestureRecognizers() {
+        settingsButton.addTarget(
+            self,
+            action: #selector(settingsTapped),
+            for: .touchUpInside
+        )
     }
 
     @objc private func settingsTapped() {

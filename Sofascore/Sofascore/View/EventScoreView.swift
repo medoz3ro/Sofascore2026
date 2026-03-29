@@ -1,6 +1,6 @@
 import SnapKit
-import UIKit
 import SofaAcademic
+import UIKit
 
 class EventScoreView: BaseView {
     private let homeScoreLabel = UILabel()
@@ -34,22 +34,26 @@ class EventScoreView: BaseView {
         separatorLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalToSuperview()
+            make.height.equalTo(40)
         }
 
         homeScoreLabel.snp.makeConstraints { make in
             make.centerY.equalTo(separatorLabel)
             make.trailing.equalTo(separatorLabel.snp.leading).offset(-8)
+            make.height.equalTo(40)
         }
 
         awayScoreLabel.snp.makeConstraints { make in
             make.centerY.equalTo(separatorLabel)
             make.leading.equalTo(separatorLabel.snp.trailing).offset(8)
+            make.height.equalTo(40)
         }
 
         statusLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(separatorLabel.snp.bottom).offset(4)
             make.bottom.equalToSuperview()
+            make.height.equalTo(16)
         }
     }
 

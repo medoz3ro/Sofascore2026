@@ -34,6 +34,10 @@ class SportTabView: BaseView {
         iconImageView.snp.makeConstraints { make in
             make.size.equalTo(16)
         }
+
+        titleLabel.snp.makeConstraints { make in
+            make.height.equalTo(16)
+        }
     }
 
     func configure(with viewModel: SportTabViewModel) {

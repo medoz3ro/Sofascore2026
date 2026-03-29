@@ -4,13 +4,11 @@ import UIKit
 
 class SettingsView: BaseView {
     var onDismissTapped: (() -> Void)?
-
+    
     private var viewModel: SettingsViewModel?
-
     private let statusBarView = UIView()
     private let titleLabel = UILabel()
     private let backButton = UIButton(type: .system)
-
     private let themeTitleLabel = UILabel()
     private let themeBottomDivider = UIView()
     private let lightOptionView = ThemeOptionView()
@@ -37,11 +35,6 @@ class SettingsView: BaseView {
 
         backButton.setImage(UIImage(systemName: "arrow.left"), for: .normal)
         backButton.tintColor = .white
-        backButton.addTarget(
-            self,
-            action: #selector(dismissTapped),
-            for: .touchUpInside
-        )
 
         themeTitleLabel.font = .bold(size: 12)
         themeTitleLabel.textColor = .primaryDefault
@@ -60,35 +53,34 @@ class SettingsView: BaseView {
     override func setupConstraints() {
         statusBarView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(48)
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(backButton.snp.trailing).offset(20)
+            make.leading.equalTo(backButton.snp.trailing).offset(32)
             make.centerY.equalTo(statusBarView)
+            make.height.equalTo(28)
         }
 
         backButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(20)
-            make.centerY.equalTo(statusBarView)
+            make.leading.equalToSuperview().inset(16)
+            make.top.bottom.equalTo(statusBarView).inset(12)
             make.size.equalTo(24)
         }
 
         themeTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(statusBarView.snp.bottom).offset(16)
             make.leading.equalToSuperview().inset(16)
+            make.height.equalTo(16)
         }
 
         lightOptionView.snp.makeConstraints { make in
             make.top.equalTo(themeTitleLabel.snp.bottom)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(56)
         }
 
         darkOptionView.snp.makeConstraints { make in
             make.top.equalTo(lightOptionView.snp.bottom)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(56)
         }
 
         themeBottomDivider.snp.makeConstraints { make in
@@ -96,6 +88,14 @@ class SettingsView: BaseView {
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(1)
         }
+    }
+
+    override func setupGestureRecognizers() {
+        backButton.addTarget(
+            self,
+            action: #selector(dismissTapped),
+            for: .touchUpInside
+        )
     }
 
     func configure(with viewModel: SettingsViewModel) {

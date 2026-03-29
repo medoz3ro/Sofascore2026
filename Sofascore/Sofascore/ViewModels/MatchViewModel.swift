@@ -18,19 +18,22 @@ struct MatchViewModel {
     let awayTeamViewModel: TeamViewModel
     let time: String
     let status: String
-    let scoreColor: UIColor
     let startTimeColor: UIColor
     let statusColor: UIColor
     let matchTapHandler: (() -> Void)?
 
-    init(event: Event, homeTeamLogo: UIImage?, awayTeamLogo: UIImage?, matchTapHandler: (() -> Void)? = nil) {
+    init(
+        event: Event,
+        homeTeamLogo: UIImage?,
+        awayTeamLogo: UIImage?,
+        matchTapHandler: (() -> Void)? = nil
+    ) {
         self.matchTapHandler = matchTapHandler
         time = Self.formatTime(from: event.startTimestamp)
         status = Self.formatStatus(for: event)
 
         self.statusColor = Self.resolveStatusColor(for: event)
         self.startTimeColor = .onSurfaceLv2
-        self.scoreColor = Self.resolveStatusColor(for: event)
         let colors = Self.resolveTeamColors(for: event)
 
         homeTeamViewModel = TeamViewModel(

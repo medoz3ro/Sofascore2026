@@ -1,6 +1,6 @@
 import SnapKit
-import UIKit
 import SofaAcademic
+import UIKit
 
 class EventTeamView: BaseView {
     private let logoImageView = UIImageView()
@@ -31,6 +31,7 @@ class EventTeamView: BaseView {
             make.top.equalTo(logoImageView.snp.bottom).offset(16)
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview()
+            make.height.equalTo(32)
         }
     }
 

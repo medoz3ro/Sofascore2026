@@ -18,23 +18,18 @@ class ThemeOptionView: BaseView {
         titleLabel.textColor = .onSurfaceLv1
 
         radioButton.isUserInteractionEnabled = false
-
-        let tap = UITapGestureRecognizer(
-            target: self,
-            action: #selector(tapped)
-        )
-        addGestureRecognizer(tap)
     }
 
     override func setupConstraints() {
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
+            make.height.equalTo(16)
         }
 
         radioButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
-            make.centerY.equalToSuperview()
+            make.top.bottom.equalToSuperview().inset(16)
             make.size.equalTo(24)
         }
     }
@@ -48,6 +43,14 @@ class ThemeOptionView: BaseView {
         radioButton.setImage(image, for: .normal)
         radioButton.tintColor =
             viewModel.isSelected ? .primaryDefault : .onSurfaceLv2
+    }
+
+    override func setupGestureRecognizers() {
+        let tap = UITapGestureRecognizer(
+            target: self,
+            action: #selector(tapped)
+        )
+        addGestureRecognizer(tap)
     }
 
     @objc private func tapped() {

@@ -1,5 +1,5 @@
-import UIKit
 import SofaAcademic
+import UIKit
 
 struct EventTeamViewModel {
     let name: String
