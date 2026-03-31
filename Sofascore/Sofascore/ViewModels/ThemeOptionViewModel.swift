@@ -1,7 +1,6 @@
 import UIKit
 
-struct SportTabViewModel {
+struct ThemeOptionViewModel {
     let title: String
-    let image: UIImage?
     let isSelected: Bool
 }

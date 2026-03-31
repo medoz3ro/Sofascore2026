@@ -9,12 +9,17 @@ class LeagueHeaderView: UICollectionReusableView, BaseViewProtocol {
         super.init(frame: frame)
         addViews()
         setupConstraints()
+        styleViews()
     }
 
     required init?(coder: NSCoder) { fatalError() }
 
     func addViews() {
         addSubview(leagueView)
+    }
+
+    func styleViews() {
+        leagueView.backgroundColor = .systemBackground
     }
 
     func setupConstraints() {
