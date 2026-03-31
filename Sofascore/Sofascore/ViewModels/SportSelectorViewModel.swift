@@ -7,7 +7,11 @@ struct SportSelectorViewModel {
     static func defaultSports() -> SportSelectorViewModel {
         SportSelectorViewModel(
             sports: Sport.allCases.enumerated().map { index, sport in
-                SportTabViewModel(sport: sport, isSelected: index == 0)
+                SportTabViewModel(
+                    title: sport.title,
+                    image: sport.image,
+                    isSelected: index == 0
+                )
             }
         )
     }

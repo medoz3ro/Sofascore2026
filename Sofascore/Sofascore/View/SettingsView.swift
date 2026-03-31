@@ -4,11 +4,11 @@ import UIKit
 
 class SettingsView: BaseView {
     var onDismissTapped: (() -> Void)?
-    
+
     private var viewModel: SettingsViewModel?
     private let statusBarView = UIView()
     private let titleLabel = UILabel()
-    private let backButton = UIButton(type: .system)
+    private let backButton = UIButton(type: .custom)
     private let themeTitleLabel = UILabel()
     private let themeBottomDivider = UIView()
     private let lightOptionView = ThemeOptionView()
@@ -33,7 +33,7 @@ class SettingsView: BaseView {
         titleLabel.textAlignment = .center
         titleLabel.text = .settings
 
-        backButton.setImage(UIImage(systemName: "arrow.left"), for: .normal)
+        backButton.setImage(UIImage(named: "arrow_back_icon"), for: .normal)
         backButton.tintColor = .white
 
         themeTitleLabel.font = .bold(size: 12)

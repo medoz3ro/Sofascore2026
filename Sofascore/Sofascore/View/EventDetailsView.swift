@@ -3,51 +3,22 @@ import SofaAcademic
 import UIKit
 
 class EventDetailsView: BaseView {
-    var onBackTapped: (() -> Void)?
-
-    private let headerView = UIView()
-    private let backButton = UIButton(type: .system)
-    private let leagueLogoImageView = UIImageView()
-    private let leagueNameLabel = UILabel()
+    private let headerView = EventHeaderView()
     private let homeTeamView = EventTeamView()
     private let awayTeamView = EventTeamView()
     private let scoreView = EventScoreView()
-    private let dateLabel = UILabel()
-    private let timeLabel = UILabel()
+    private let dateTimeView = EventDateTimeView()
 
     override func addViews() {
         addSubview(headerView)
-        headerView.addSubview(backButton)
-        headerView.addSubview(leagueLogoImageView)
-        headerView.addSubview(leagueNameLabel)
-
         addSubview(homeTeamView)
         addSubview(awayTeamView)
         addSubview(scoreView)
-        addSubview(dateLabel)
-        addSubview(timeLabel)
+        addSubview(dateTimeView)
     }
 
     override func styleViews() {
         backgroundColor = .systemBackground
-        headerView.backgroundColor = .systemBackground
-
-        backButton.setImage(UIImage(systemName: "arrow.left"), for: .normal)
-        backButton.tintColor = .onSurfaceLv1
-
-        leagueLogoImageView.contentMode = .scaleAspectFit
-
-        leagueNameLabel.font = .micro(size: 12)
-        leagueNameLabel.textColor = .onSurfaceLv2
-        leagueNameLabel.numberOfLines = 1
-
-        dateLabel.font = .regular(size: 12)
-        dateLabel.textColor = .onSurfaceLv1
-        dateLabel.textAlignment = .center
-
-        timeLabel.font = .regular(size: 12)
-        timeLabel.textColor = .onSurfaceLv1
-        timeLabel.textAlignment = .center
     }
 
     override func setupConstraints() {
@@ -55,84 +26,54 @@ class EventDetailsView: BaseView {
             make.top.leading.trailing.equalToSuperview()
         }
 
-        backButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(16)
-            make.top.bottom.equalToSuperview().inset(12)
-            make.size.equalTo(24)
-        }
-
-        leagueLogoImageView.snp.makeConstraints { make in
-            make.leading.equalTo(backButton.snp.trailing).offset(24)
-            make.top.bottom.equalToSuperview().inset(12)
-            make.size.equalTo(16)
-        }
-
-        leagueNameLabel.snp.makeConstraints { make in
-            make.leading.equalTo(leagueLogoImageView.snp.trailing).offset(8)
-            make.centerY.equalToSuperview()
-            make.trailing.lessThanOrEqualToSuperview().inset(16)
-            make.height.equalTo(16)
-        }
-
         homeTeamView.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom).offset(16)
-            make.leading.equalToSuperview().inset(44)
-            make.height.equalTo(112)
+            make.leading.equalToSuperview().inset(16)
         }
 
         awayTeamView.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom).offset(16)
-            make.trailing.equalToSuperview().inset(44)
-            make.height.equalTo(112)
+            make.trailing.equalToSuperview().inset(16)
         }
 
         scoreView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
+            make.leading.equalTo(homeTeamView.snp.trailing)
+            make.trailing.equalTo(awayTeamView.snp.leading)
             make.top.equalTo(homeTeamView)
         }
 
-        dateLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalTo(homeTeamView.snp.centerY)
-            make.height.equalTo(16)
-        }
-
-        timeLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(dateLabel.snp.bottom).offset(4)
-            make.height.equalTo(40)
+        dateTimeView.snp.makeConstraints { make in
+            make.leading.equalTo(homeTeamView.snp.trailing)
+            make.trailing.equalTo(awayTeamView.snp.leading)
+            make.top.equalTo(headerView.snp.bottom).offset(24)
         }
     }
 
     func configure(with viewModel: EventDetailsViewModel) {
-        leagueNameLabel.text = viewModel.leagueName
-        leagueLogoImageView.image = viewModel.leagueLogo
+        headerView.configure(
+            with: EventHeaderViewModel(
+                leagueName: viewModel.leagueName,
+                leagueLogo: viewModel.leagueLogo,
+                backTapHandler: viewModel.backTapHandler
+            )
+        )
+
         homeTeamView.configure(with: viewModel.homeTeamViewModel)
         awayTeamView.configure(with: viewModel.awayTeamViewModel)
 
         if let scoreViewModel = viewModel.scoreViewModel {
             scoreView.isHidden = false
-            dateLabel.isHidden = true
-            timeLabel.isHidden = true
+            dateTimeView.isHidden = true
             scoreView.configure(with: scoreViewModel)
         } else {
             scoreView.isHidden = true
-            dateLabel.isHidden = false
-            timeLabel.isHidden = false
-            dateLabel.text = viewModel.date
-            timeLabel.text = viewModel.time
+            dateTimeView.isHidden = false
+            dateTimeView.configure(
+                with: EventDateTimeViewModel(
+                    date: viewModel.date,
+                    time: viewModel.time
+                )
+            )
         }
-    }
-
-    override func setupGestureRecognizers() {
-        backButton.addTarget(
-            self,
-            action: #selector(backTapped),
-            for: .touchUpInside
-        )
-    }
-
-    @objc func backTapped() {
-        onBackTapped?()
     }
 }

@@ -41,7 +41,7 @@ class SportTabView: BaseView {
     }
 
     func configure(with viewModel: SportTabViewModel) {
-        iconImageView.image = viewModel.icon
+        iconImageView.image = viewModel.image
         titleLabel.text = viewModel.title
     }
 }

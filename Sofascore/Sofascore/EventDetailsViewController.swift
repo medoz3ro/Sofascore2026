@@ -23,7 +23,6 @@ class EventDetailsViewController: UIViewController, BaseViewProtocol {
         addViews()
         styleViews()
         setupConstraints()
-        setupBinding()
         loadData()
     }
 
@@ -35,6 +34,7 @@ class EventDetailsViewController: UIViewController, BaseViewProtocol {
     func styleViews() {
         view.backgroundColor = .systemBackground
         safeAreaBackgroundView.backgroundColor = .systemBackground
+        safeAreaBackgroundView.isUserInteractionEnabled = false
     }
 
     func setupConstraints() {
@@ -46,12 +46,6 @@ class EventDetailsViewController: UIViewController, BaseViewProtocol {
         eventDetailsView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.trailing.bottom.equalToSuperview()
-        }
-    }
-
-    func setupBinding() {
-        eventDetailsView.onBackTapped = { [weak self] in
-            self?.navigationController?.popViewController(animated: true)
         }
     }
 
@@ -77,7 +71,12 @@ class EventDetailsViewController: UIViewController, BaseViewProtocol {
                 sport: sport,
                 leagueLogo: leagueLogo,
                 homeTeamLogo: homeTeamLogo,
-                awayTeamLogo: awayTeamLogo
+                awayTeamLogo: awayTeamLogo,
+                backTapHandler: { [weak self] in
+                    self?.navigationController?.popViewController(
+                        animated: true
+                    )
+                }
             )
             self.eventDetailsView.configure(with: viewModel)
         }

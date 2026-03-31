@@ -23,13 +23,13 @@ class EventTeamView: BaseView {
     override func setupConstraints() {
         logoImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.centerX.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(28)
             make.size.equalTo(40)
         }
 
         nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(logoImageView.snp.bottom).offset(16)
-            make.centerX.equalToSuperview()
+            make.top.equalTo(logoImageView.snp.bottom).offset(8)
+            make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
             make.height.equalTo(32)
         }

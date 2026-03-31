@@ -17,14 +17,14 @@ class EventScoreView: BaseView {
 
     override func styleViews() {
         homeScoreLabel.font = .bold(size: 32)
-        homeScoreLabel.textAlignment = .center
+        homeScoreLabel.textAlignment = .right
 
         separatorLabel.font = .bold(size: 32)
         separatorLabel.textAlignment = .center
         separatorLabel.text = "-"
 
         awayScoreLabel.font = .bold(size: 32)
-        awayScoreLabel.textAlignment = .center
+        awayScoreLabel.textAlignment = .left
 
         statusLabel.font = .regular(size: 12)
         statusLabel.textAlignment = .center
@@ -38,20 +38,20 @@ class EventScoreView: BaseView {
         }
 
         homeScoreLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(separatorLabel)
-            make.trailing.equalTo(separatorLabel.snp.leading).offset(-8)
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(separatorLabel.snp.leading).offset(-4)
             make.height.equalTo(40)
         }
 
         awayScoreLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(separatorLabel)
-            make.leading.equalTo(separatorLabel.snp.trailing).offset(8)
+            make.trailing.equalToSuperview()
+            make.leading.equalTo(separatorLabel.snp.trailing).offset(4)
             make.height.equalTo(40)
         }
 
         statusLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(separatorLabel.snp.bottom).offset(4)
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(separatorLabel.snp.bottom)
             make.bottom.equalToSuperview()
             make.height.equalTo(16)
         }

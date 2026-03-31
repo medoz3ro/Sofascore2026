@@ -22,14 +22,18 @@ struct EventDetailsViewModel {
     let scoreColors: ScoreColors
     let statusText: String
     let showScore: Bool
+    let backTapHandler: () -> Void
 
     init(
         event: Event,
         sport: Sport,
         leagueLogo: UIImage?,
         homeTeamLogo: UIImage?,
-        awayTeamLogo: UIImage?
+        awayTeamLogo: UIImage?,
+        backTapHandler: @escaping () -> Void
     ) {
+        self.backTapHandler = backTapHandler
+
         let league = event.league
         leagueName = [sport.title, league?.country?.name, league?.name]
             .compactMap { $0 }

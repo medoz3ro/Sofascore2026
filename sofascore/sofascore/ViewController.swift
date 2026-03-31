@@ -141,8 +141,10 @@ class ViewController: UIViewController, BaseViewProtocol {
 
     private func loadLeagueViewModels() async {
         for (leagueId, league) in leagues {
-            guard let logoUrl = league.logoUrl else { continue }
-            let logo = await URLSession.shared.downloadImage(from: logoUrl)
+            let logo =
+                if let url = league.logoUrl {
+                    await URLSession.shared.downloadImage(from: url)
+                } else { nil as UIImage? }
             leagueViewModels[leagueId] = LeagueViewModel(
                 league: league,
                 logo: logo
@@ -167,7 +169,7 @@ class ViewController: UIViewController, BaseViewProtocol {
                 homeTeamLogo: homeImage,
                 awayTeamLogo: awayImage,
                 matchTapHandler: { [weak self] in
-                    guard let self, let event = self.eventsById[event.id] else {
+                    guard let self else {
                         return
                     }
                     let detailsVC = EventDetailsViewController(

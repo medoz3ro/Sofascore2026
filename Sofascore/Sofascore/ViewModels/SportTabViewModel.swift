@@ -1,10 +1,7 @@
-import SofaAcademic
 import UIKit
 
 struct SportTabViewModel {
-    let sport: Sport
+    let title: String
+    let image: UIImage?
     let isSelected: Bool
-
-    var icon: UIImage? { sport.image }
-    var title: String { sport.title }
 }
