@@ -29,11 +29,12 @@ class EventDetailsView: BaseView {
         homeTeamView.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom).offset(16)
             make.leading.equalToSuperview().inset(16)
+            make.bottom.equalToSuperview().inset(16)
         }
-
         awayTeamView.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom).offset(16)
             make.trailing.equalToSuperview().inset(16)
+            make.bottom.equalToSuperview().inset(16)
         }
 
         scoreView.snp.makeConstraints { make in
@@ -61,19 +62,14 @@ class EventDetailsView: BaseView {
         homeTeamView.configure(with: viewModel.homeTeamViewModel)
         awayTeamView.configure(with: viewModel.awayTeamViewModel)
 
-        if let scoreViewModel = viewModel.scoreViewModel {
-            scoreView.isHidden = false
-            dateTimeView.isHidden = true
-            scoreView.configure(with: scoreViewModel)
+        scoreView.isHidden = !viewModel.showScore
+        dateTimeView.isHidden = viewModel.showScore
+
+        if viewModel.showScore {
+            scoreView.configure(with: viewModel.scoreViewModel!)
         } else {
-            scoreView.isHidden = true
-            dateTimeView.isHidden = false
-            dateTimeView.configure(
-                with: EventDateTimeViewModel(
-                    date: viewModel.date,
-                    time: viewModel.time
-                )
-            )
+            dateTimeView.date(viewModel.date)
+            dateTimeView.time(viewModel.time)
         }
     }
 }

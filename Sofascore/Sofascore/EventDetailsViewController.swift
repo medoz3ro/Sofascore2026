@@ -45,7 +45,7 @@ class EventDetailsViewController: UIViewController, BaseViewProtocol {
 
         eventDetailsView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.leading.trailing.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
         }
     }
 

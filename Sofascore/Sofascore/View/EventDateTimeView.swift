@@ -28,15 +28,18 @@ class EventDateTimeView: BaseView {
         }
 
         timeLabel.snp.makeConstraints { make in
-            make.top.equalTo(dateLabel.snp.bottom)
+            make.top.equalTo(dateLabel.snp.bottom).offset(4)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.height.equalTo(40)
+            make.height.equalTo(16)
         }
     }
 
-    func configure(with viewModel: EventDateTimeViewModel) {
-        dateLabel.text = viewModel.date
-        timeLabel.text = viewModel.time
+    func date(_ text: String) {
+        dateLabel.text = text
+    }
+
+    func time(_ text: String) {
+        timeLabel.text = text
     }
 }
