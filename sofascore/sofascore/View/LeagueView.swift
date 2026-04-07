@@ -16,7 +16,6 @@ class LeagueView: BaseView {
     }
 
     override func styleViews() {
-        backgroundColor = .white
         countryLabel.textColor = .onSurfaceLv1
         countryLabel.font = .bold(size: 14)
 
@@ -39,6 +38,7 @@ class LeagueView: BaseView {
         countryLabel.snp.makeConstraints { make in
             make.leading.equalTo(logoImage.snp.trailing).offset(32)
             make.centerY.equalToSuperview()
+            make.height.equalTo(16)
         }
 
         pointerImage.snp.makeConstraints { make in
@@ -50,6 +50,7 @@ class LeagueView: BaseView {
         nameLabel.snp.makeConstraints { make in
             make.leading.equalTo(pointerImage.snp.trailing)
             make.centerY.equalToSuperview()
+            make.height.equalTo(16)
         }
     }
 

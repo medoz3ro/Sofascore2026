@@ -44,17 +44,17 @@ class MatchView: BaseView {
 
     override func setupConstraints() {
         startTimestampLabel.snp.makeConstraints { make in
-            make.height.equalTo(16)
             make.leading.equalToSuperview().inset(4)
             make.width.equalTo(56)
             make.centerY.equalTo(homeTeamLabel)
+            make.height.equalTo(16)
         }
 
         statusLabel.snp.makeConstraints { make in
-            make.height.equalTo(16)
             make.leading.equalToSuperview().inset(4)
             make.width.equalTo(56)
             make.centerY.equalTo(awayTeamLabel)
+            make.height.equalTo(16)
         }
 
         divider.snp.makeConstraints { make in
@@ -72,6 +72,7 @@ class MatchView: BaseView {
         homeTeamLabel.snp.makeConstraints { make in
             make.leading.equalTo(homeTeamLogo.snp.trailing).offset(8)
             make.top.equalToSuperview().offset(10)
+            make.height.equalTo(16)
         }
 
         awayTeamLogo.snp.makeConstraints { make in
@@ -84,16 +85,19 @@ class MatchView: BaseView {
             make.leading.equalTo(awayTeamLogo.snp.trailing).offset(8)
             make.top.equalTo(homeTeamLabel.snp.bottom).offset(4)
             make.bottom.equalToSuperview().inset(10)
+            make.height.equalTo(16)
         }
 
         homeScoreLabel.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
             make.centerY.equalTo(homeTeamLabel)
+            make.height.equalTo(16)
         }
 
         awayScoreLabel.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
             make.centerY.equalTo(awayTeamLabel)
+            make.height.equalTo(16)
         }
     }
 

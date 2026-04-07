@@ -3,14 +3,16 @@ import SofaAcademic
 import UIKit
 
 class StatusBarView: BaseView {
+    var onSettingsTapped: (() -> Void)?
+
     private let logoImageView = UIImageView()
     private let trophyImageView = UIImageView()
-    private let settingsImageView = UIImageView()
+    private let settingsButton = UIButton(type: .system)
 
     override func addViews() {
         addSubview(logoImageView)
         addSubview(trophyImageView)
-        addSubview(settingsImageView)
+        addSubview(settingsButton)
     }
 
     override func styleViews() {
@@ -21,8 +23,8 @@ class StatusBarView: BaseView {
         trophyImageView.image = UIImage(resource: .trophyIcon)
         trophyImageView.contentMode = .scaleAspectFit
 
-        settingsImageView.image = UIImage(resource: .settingsIcon)
-        settingsImageView.contentMode = .scaleAspectFit
+        settingsButton.setImage(UIImage(resource: .settingsIcon), for: .normal)
+        settingsButton.tintColor = .white
     }
 
     override func setupConstraints() {
@@ -33,17 +35,29 @@ class StatusBarView: BaseView {
             make.width.equalTo(132)
             make.trailing.lessThanOrEqualToSuperview()
         }
-        
-        settingsImageView.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(16)
+
+        trophyImageView.snp.makeConstraints { make in
+            make.trailing.equalTo(settingsButton.snp.leading).offset(-16)
             make.centerY.equalToSuperview()
             make.size.equalTo(24)
         }
 
-        trophyImageView.snp.makeConstraints { make in
-            make.trailing.equalTo(settingsImageView.snp.leading).offset(-16)
+        settingsButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
             make.size.equalTo(24)
         }
+    }
+
+    override func setupGestureRecognizers() {
+        settingsButton.addTarget(
+            self,
+            action: #selector(settingsTapped),
+            for: .touchUpInside
+        )
+    }
+
+    @objc private func settingsTapped() {
+        onSettingsTapped?()
     }
 }

@@ -24,6 +24,7 @@ class ViewController: UIViewController, BaseViewProtocol {
     private var leagues: [Int: League] = [:]
     private var diffableDataSource:
         UICollectionViewDiffableDataSource<Section, Item>?
+    private var selectedSport: Sport = .football
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,8 +37,15 @@ class ViewController: UIViewController, BaseViewProtocol {
     }
 
     func setupBinding() {
-        sportSelectorView.onSportSelected = { index in
-            // TODO: load data for selected sport
+        sportSelectorView.onSportSelected = { [weak self] sport in
+            self?.selectedSport = sport
+        }
+
+        statusBarView.onSettingsTapped = { [weak self] in
+            guard let self else { return }
+            let settingsVC = SettingsViewController()
+            settingsVC.modalPresentationStyle = .fullScreen
+            self.present(settingsVC, animated: true)
         }
     }
 
@@ -72,7 +80,6 @@ class ViewController: UIViewController, BaseViewProtocol {
             let items = grouped[leagueId]?.map { Item.match($0.id) } ?? []
             snapshot.appendItems(items, toSection: .league(leagueId))
         }
-
         diffableDataSource?.apply(snapshot)
     }
 
@@ -134,7 +141,10 @@ class ViewController: UIViewController, BaseViewProtocol {
 
     private func loadLeagueViewModels() async {
         for (leagueId, league) in leagues {
-            let logo = await downloadImage(from: league.logoUrl ?? "")
+            let logo =
+                if let url = league.logoUrl {
+                    await URLSession.shared.downloadImage(from: url)
+                } else { nil as UIImage? }
             leagueViewModels[leagueId] = LeagueViewModel(
                 league: league,
                 logo: logo
@@ -144,16 +154,33 @@ class ViewController: UIViewController, BaseViewProtocol {
 
     private func loadMatchViewModels(for events: [Event]) async {
         for event in events {
-            let homeImage = await downloadImage(
-                from: event.homeTeam.logoUrl ?? ""
-            )
-            let awayImage = await downloadImage(
-                from: event.awayTeam.logoUrl ?? ""
-            )
+            let homeImage =
+                if let url = event.homeTeam.logoUrl {
+                    await URLSession.shared.downloadImage(from: url)
+                } else { nil as UIImage? }
+
+            let awayImage =
+                if let url = event.awayTeam.logoUrl {
+                    await URLSession.shared.downloadImage(from: url)
+                } else { nil as UIImage? }
+
             matchViewModels[event.id] = MatchViewModel(
                 event: event,
                 homeTeamLogo: homeImage,
-                awayTeamLogo: awayImage
+                awayTeamLogo: awayImage,
+                matchTapHandler: { [weak self] in
+                    guard let self else {
+                        return
+                    }
+                    let detailsVC = EventDetailsViewController(
+                        event: event,
+                        sport: self.selectedSport
+                    )
+                    self.navigationController?.pushViewController(
+                        detailsVC,
+                        animated: true
+                    )
+                }
             )
         }
     }
@@ -161,7 +188,8 @@ class ViewController: UIViewController, BaseViewProtocol {
     private func setupDataSource() {
         diffableDataSource = UICollectionViewDiffableDataSource<Section, Item>(
             collectionView: collectionView
-        ) { collectionView, indexPath, item in
+        ) { [weak self] collectionView, indexPath, item in
+            guard let self else { return UICollectionViewCell() }
             guard
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "MatchCell",
@@ -179,9 +207,8 @@ class ViewController: UIViewController, BaseViewProtocol {
         }
 
         diffableDataSource?.supplementaryViewProvider = {
-            collectionView,
-            kind,
-            indexPath in
+            [weak self] collectionView, kind, indexPath in
+            guard let self else { return UICollectionReusableView() }
             guard
                 let header = collectionView.dequeueReusableSupplementaryView(
                     ofKind: kind,
@@ -199,12 +226,5 @@ class ViewController: UIViewController, BaseViewProtocol {
             }
             return header
         }
-    }
-
-    private func downloadImage(from urlString: String) async -> UIImage? {
-        guard let url = URL(string: urlString) else { return nil }
-        guard let (data, _) = try? await URLSession.shared.data(from: url)
-        else { return nil }
-        return UIImage(data: data)
     }
 }
