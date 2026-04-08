@@ -16,16 +16,16 @@ class LeagueView: BaseView {
     }
 
     override func styleViews() {
-        countryLabel.textColor = .onSurfaceLv1
+        countryLabel.textColor = .onSurface1
         countryLabel.font = .bold(size: 14)
 
-        nameLabel.textColor = .onSurfaceLv2
+        nameLabel.textColor = .onSurface2
         nameLabel.font = .regular(size: 14)
 
         pointerImage.image = UIImage(named: "pointer_right")?.withRenderingMode(
             .alwaysTemplate
         )
-        pointerImage.tintColor = .onSurfaceLv2
+        pointerImage.tintColor = .onSurface2
     }
 
     override func setupConstraints() {

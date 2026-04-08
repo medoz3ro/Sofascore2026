@@ -15,7 +15,7 @@ class ThemeOptionView: BaseView {
 
     override func styleViews() {
         titleLabel.font = .regular(size: 14)
-        titleLabel.textColor = .onSurfaceLv1
+        titleLabel.textColor = .onSurface1
 
         radioButton.isUserInteractionEnabled = false
     }
@@ -42,7 +42,7 @@ class ThemeOptionView: BaseView {
             : UIImage(systemName: "circle")
         radioButton.setImage(image, for: .normal)
         radioButton.tintColor =
-            viewModel.isSelected ? .primaryDefault : .onSurfaceLv2
+            viewModel.isSelected ? .primaryDefault : .onSurface2
     }
 
     override func setupGestureRecognizers() {

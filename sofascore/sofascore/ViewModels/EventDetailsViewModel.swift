@@ -47,9 +47,9 @@ struct EventDetailsViewModel {
         time = Self.formatTime(from: event.startTimestamp)
         homeScore = event.homeScore
         awayScore = event.awayScore
-        showScore = Self.resolveShowScore(for: event)
-        scoreColors = Self.resolveScoreColors(for: event)
-        statusText = Self.resolveStatusText(for: event)
+        showScore = Self.resoeShowScore(for: event)
+        scoreColors = Self.resoeScoreColors(for: event)
+        statusText = Self.resoeStatusText(for: event)
     }
 
     private static func formatDate(from timestamp: Int) -> String {
@@ -66,14 +66,14 @@ struct EventDetailsViewModel {
         return formatter.string(from: date)
     }
 
-    private static func resolveShowScore(for event: Event) -> Bool {
+    private static func resoeShowScore(for event: Event) -> Bool {
         switch event.status {
         case .notStarted: return false
         default: return true
         }
     }
 
-    private static func resolveStatusText(for event: Event) -> String {
+    private static func resoeStatusText(for event: Event) -> String {
         switch event.status {
         case .notStarted: return ""
         case .inProgress:
@@ -87,16 +87,16 @@ struct EventDetailsViewModel {
         }
     }
 
-    private static func resolveScoreColors(for event: Event) -> ScoreColors {
+    private static func resoeScoreColors(for event: Event) -> ScoreColors {
         let homeScoreVal = event.homeScore ?? 0
         let awayScoreVal = event.awayScore ?? 0
         switch event.status {
         case .notStarted:
             return ScoreColors(
-                homeScoreColor: .onSurfaceLv1,
-                awayScoreColor: .onSurfaceLv1,
-                separatorColor: .onSurfaceLv1,
-                statusColor: .onSurfaceLv2
+                homeScoreColor: .onSurface1,
+                awayScoreColor: .onSurface1,
+                separatorColor: .onSurface1,
+                statusColor: .onSurface2
             )
         case .inProgress, .halftime:
             return ScoreColors(
@@ -108,11 +108,11 @@ struct EventDetailsViewModel {
         case .finished:
             return ScoreColors(
                 homeScoreColor: homeScoreVal >= awayScoreVal
-                    ? .onSurfaceLv1 : .onSurfaceLv2,
+                    ? .onSurface1 : .onSurface2,
                 awayScoreColor: awayScoreVal >= homeScoreVal
-                    ? .onSurfaceLv1 : .onSurfaceLv2,
-                separatorColor: .onSurfaceLv2,
-                statusColor: .onSurfaceLv2
+                    ? .onSurface1 : .onSurface2,
+                separatorColor: .onSurface2,
+                statusColor: .onSurface2
             )
         }
     }

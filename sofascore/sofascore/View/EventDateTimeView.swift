@@ -13,11 +13,11 @@ class EventDateTimeView: BaseView {
 
     override func styleViews() {
         dateLabel.font = .regular(size: 12)
-        dateLabel.textColor = .onSurfaceLv1
+        dateLabel.textColor = .onSurface1
         dateLabel.textAlignment = .center
 
         timeLabel.font = .regular(size: 12)
-        timeLabel.textColor = .onSurfaceLv1
+        timeLabel.textColor = .onSurface1
         timeLabel.textAlignment = .center
     }
 

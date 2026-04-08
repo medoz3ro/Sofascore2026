@@ -40,7 +40,7 @@ class SettingsView: BaseView {
         themeTitleLabel.textColor = .primaryDefault
         themeTitleLabel.text = .theme
 
-        themeBottomDivider.backgroundColor = .onSurfaceLv4
+        themeBottomDivider.backgroundColor = .onSurface4
 
         lightOptionView.onTapped = { [weak self] in
             self?.selectTheme(.light)
