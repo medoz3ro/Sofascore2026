@@ -32,9 +32,9 @@ struct MatchViewModel {
         time = Self.formatTime(from: event.startTimestamp)
         status = Self.formatStatus(for: event)
 
-        self.statusColor = Self.resoeStatusColor(for: event)
+        self.statusColor = Self.resolveStatusColor(for: event)
         self.startTimeColor = .onSurface2
-        let colors = Self.resoeTeamColors(for: event)
+        let colors = Self.resolveTeamColors(for: event)
 
         homeTeamViewModel = TeamViewModel(
             name: event.homeTeam.name,
@@ -72,14 +72,14 @@ struct MatchViewModel {
         }
     }
 
-    private static func resoeStatusColor(for event: Event) -> UIColor {
+    private static func resolveStatusColor(for event: Event) -> UIColor {
         switch event.status {
         case .inProgress: return .liveRed
         default: return .onSurface2
         }
     }
 
-    private static func resoeTeamColors(for event: Event) -> (
+    private static func resolveTeamColors(for event: Event) -> (
         home: TeamColors, away: TeamColors
     ) {
         switch event.status {

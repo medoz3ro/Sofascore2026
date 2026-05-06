@@ -47,9 +47,9 @@ struct EventDetailsViewModel {
         time = Self.formatTime(from: event.startTimestamp)
         homeScore = event.homeScore
         awayScore = event.awayScore
-        showScore = Self.resoeShowScore(for: event)
-        scoreColors = Self.resoeScoreColors(for: event)
-        statusText = Self.resoeStatusText(for: event)
+        showScore = Self.resolveShowScore(for: event)
+        scoreColors = Self.resolveScoreColors(for: event)
+        statusText = Self.resolveStatusText(for: event)
     }
 
     private static func formatDate(from timestamp: Int) -> String {
@@ -66,14 +66,14 @@ struct EventDetailsViewModel {
         return formatter.string(from: date)
     }
 
-    private static func resoeShowScore(for event: Event) -> Bool {
+    private static func resolveShowScore(for event: Event) -> Bool {
         switch event.status {
         case .notStarted: return false
         default: return true
         }
     }
 
-    private static func resoeStatusText(for event: Event) -> String {
+    private static func resolveStatusText(for event: Event) -> String {
         switch event.status {
         case .notStarted: return ""
         case .inProgress:
@@ -87,7 +87,7 @@ struct EventDetailsViewModel {
         }
     }
 
-    private static func resoeScoreColors(for event: Event) -> ScoreColors {
+    private static func resolveScoreColors(for event: Event) -> ScoreColors {
         let homeScoreVal = event.homeScore ?? 0
         let awayScoreVal = event.awayScore ?? 0
         switch event.status {
