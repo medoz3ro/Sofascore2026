@@ -39,7 +39,7 @@ class MatchView: BaseView {
         homeScoreLabel.font = .regular(size: 14)
         awayScoreLabel.font = .regular(size: 14)
 
-        divider.backgroundColor = .onSurfaceLv4
+        divider.backgroundColor = .onSurface4
     }
 
     override func setupConstraints() {

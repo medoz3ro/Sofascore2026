@@ -16,12 +16,12 @@ class EventHeaderView: BaseView {
 
     override func styleViews() {
         backButton.setImage(UIImage(named: "arrow_back_icon"), for: .normal)
-        backButton.tintColor = .onSurfaceLv1
+        backButton.tintColor = .onSurface1
 
         leagueLogoImageView.contentMode = .scaleAspectFit
 
         leagueNameLabel.font = .micro(size: 12)
-        leagueNameLabel.textColor = .onSurfaceLv2
+        leagueNameLabel.textColor = .onSurface2
         leagueNameLabel.numberOfLines = 1
     }
 

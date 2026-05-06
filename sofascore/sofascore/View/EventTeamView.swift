@@ -15,7 +15,7 @@ class EventTeamView: BaseView {
         logoImageView.contentMode = .scaleAspectFit
 
         nameLabel.font = .bold(size: 12)
-        nameLabel.textColor = .onSurfaceLv1
+        nameLabel.textColor = .onSurface1
         nameLabel.textAlignment = .center
         nameLabel.numberOfLines = 2
     }

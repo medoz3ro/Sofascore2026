@@ -93,10 +93,10 @@ struct EventDetailsViewModel {
         switch event.status {
         case .notStarted:
             return ScoreColors(
-                homeScoreColor: .onSurfaceLv1,
-                awayScoreColor: .onSurfaceLv1,
-                separatorColor: .onSurfaceLv1,
-                statusColor: .onSurfaceLv2
+                homeScoreColor: .onSurface1,
+                awayScoreColor: .onSurface1,
+                separatorColor: .onSurface1,
+                statusColor: .onSurface2
             )
         case .inProgress, .halftime:
             return ScoreColors(
@@ -108,11 +108,11 @@ struct EventDetailsViewModel {
         case .finished:
             return ScoreColors(
                 homeScoreColor: homeScoreVal >= awayScoreVal
-                    ? .onSurfaceLv1 : .onSurfaceLv2,
+                    ? .onSurface1 : .onSurface2,
                 awayScoreColor: awayScoreVal >= homeScoreVal
-                    ? .onSurfaceLv1 : .onSurfaceLv2,
-                separatorColor: .onSurfaceLv2,
-                statusColor: .onSurfaceLv2
+                    ? .onSurface1 : .onSurface2,
+                separatorColor: .onSurface2,
+                statusColor: .onSurface2
             )
         }
     }

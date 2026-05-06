@@ -33,7 +33,7 @@ struct MatchViewModel {
         status = Self.formatStatus(for: event)
 
         self.statusColor = Self.resolveStatusColor(for: event)
-        self.startTimeColor = .onSurfaceLv2
+        self.startTimeColor = .onSurface2
         let colors = Self.resolveTeamColors(for: event)
 
         homeTeamViewModel = TeamViewModel(
@@ -75,7 +75,7 @@ struct MatchViewModel {
     private static func resolveStatusColor(for event: Event) -> UIColor {
         switch event.status {
         case .inProgress: return .liveRed
-        default: return .onSurfaceLv2
+        default: return .onSurface2
         }
     }
 
@@ -86,55 +86,55 @@ struct MatchViewModel {
         case .inProgress:
             return (
                 home: TeamColors(
-                    nameColor: .onSurfaceLv1,
+                    nameColor: .onSurface1,
                     scoreColor: .liveRed
                 ),
-                away: TeamColors(nameColor: .onSurfaceLv1, scoreColor: .liveRed)
+                away: TeamColors(nameColor: .onSurface1, scoreColor: .liveRed)
             )
         case .finished:
             if (event.homeScore ?? 0) < (event.awayScore ?? 0) {
                 return (
                     home: TeamColors(
-                        nameColor: .onSurfaceLv2,
-                        scoreColor: .onSurfaceLv2
+                        nameColor: .onSurface2,
+                        scoreColor: .onSurface2
                     ),
                     away: TeamColors(
-                        nameColor: .onSurfaceLv1,
-                        scoreColor: .onSurfaceLv1
+                        nameColor: .onSurface1,
+                        scoreColor: .onSurface1
                     )
                 )
             } else if (event.homeScore ?? 0) > (event.awayScore ?? 0) {
                 return (
                     home: TeamColors(
-                        nameColor: .onSurfaceLv1,
-                        scoreColor: .onSurfaceLv1
+                        nameColor: .onSurface1,
+                        scoreColor: .onSurface1
                     ),
                     away: TeamColors(
-                        nameColor: .onSurfaceLv2,
-                        scoreColor: .onSurfaceLv2
+                        nameColor: .onSurface2,
+                        scoreColor: .onSurface2
                     )
                 )
             } else {
                 return (
                     home: TeamColors(
-                        nameColor: .onSurfaceLv1,
-                        scoreColor: .onSurfaceLv1
+                        nameColor: .onSurface1,
+                        scoreColor: .onSurface1
                     ),
                     away: TeamColors(
-                        nameColor: .onSurfaceLv1,
-                        scoreColor: .onSurfaceLv1
+                        nameColor: .onSurface1,
+                        scoreColor: .onSurface1
                     )
                 )
             }
         default:
             return (
                 home: TeamColors(
-                    nameColor: .onSurfaceLv1,
-                    scoreColor: .onSurfaceLv1
+                    nameColor: .onSurface1,
+                    scoreColor: .onSurface1
                 ),
                 away: TeamColors(
-                    nameColor: .onSurfaceLv1,
-                    scoreColor: .onSurfaceLv1
+                    nameColor: .onSurface1,
+                    scoreColor: .onSurface1
                 )
             )
         }
