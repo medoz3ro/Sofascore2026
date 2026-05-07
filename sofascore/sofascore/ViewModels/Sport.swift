@@ -20,4 +20,11 @@ enum Sport: CaseIterable {
         case .americanFootball: return UIImage(named: "americanFootball_icon")
         }
     }
+    var slug: String {
+        switch self {
+        case .football: return "football"
+        case .basketball: return "basketball"
+        case .americanFootball: return "am-football"
+        }
+    }
 }

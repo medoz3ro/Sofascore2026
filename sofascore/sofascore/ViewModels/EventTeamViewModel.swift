@@ -1,4 +1,3 @@
-import SofaAcademic
 import UIKit
 
 struct EventTeamViewModel {

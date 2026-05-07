@@ -39,6 +39,7 @@ class ViewController: UIViewController, BaseViewProtocol {
     func setupBinding() {
         sportSelectorView.onSportSelected = { [weak self] sport in
             self?.selectedSport = sport
+            self?.loadEvents(for: sport)
         }
 
         statusBarView.onSettingsTapped = { [weak self] in
@@ -51,24 +52,40 @@ class ViewController: UIViewController, BaseViewProtocol {
 
     func loadData() {
         sportSelectorView.configure(with: .defaultSports())
-        let dataSource = Homework3DataSource()
+        loadEvents(for: selectedSport)
+    }
 
-        let events = dataSource.events().filter { $0.league != nil }
-        events.forEach { eventsById[$0.id] = $0 }
-
-        let grouped = Dictionary(grouping: events, by: { $0.league?.id ?? 0 })
-
-        grouped.forEach { leagueId, leagueEvents in
-            if let league = leagueEvents.first?.league {
-                leagues[leagueId] = league
-            }
-        }
-
-        Task { [weak self] in
+    private func loadEvents(for sport: Sport) {
+        Task { @MainActor [weak self] in
             guard let self else { return }
-            await self.loadLeagueViewModels()
-            await self.loadMatchViewModels(for: events)
-            self.applySnapshot(grouped: grouped)
+            self.leagueViewModels = [:]
+            self.matchViewModels = [:]
+            self.eventsById = [:]
+            self.leagues = [:]
+            do {
+                let events = try await APIClient.shared.fetchEvents(
+                    sport: sport
+                )
+
+                events.forEach { self.eventsById[$0.id] = $0 }
+
+                let grouped = Dictionary(
+                    grouping: events,
+                    by: { $0.league?.id ?? 0 }
+                )
+
+                grouped.forEach { leagueId, leagueEvents in
+                    if let league = leagueEvents.first?.league {
+                        self.leagues[leagueId] = league
+                    }
+                }
+
+                await self.loadLeagueViewModels()
+                await self.loadMatchViewModels(for: events)
+                self.applySnapshot(grouped: grouped)
+            } catch {
+                print("Error fetching events: \(error)")
+            }
         }
     }
 
