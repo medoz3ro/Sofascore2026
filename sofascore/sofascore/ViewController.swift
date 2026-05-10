@@ -20,11 +20,11 @@ class ViewController: UIViewController, BaseViewProtocol {
     )
     private var leagueViewModels: [Int: LeagueViewModel] = [:]
     private var matchViewModels: [Int: MatchViewModel] = [:]
-    private var eventsById: [Int: Event] = [:]
     private var leagues: [Int: League] = [:]
     private var diffableDataSource:
         UICollectionViewDiffableDataSource<Section, Item>?
-    private var selectedSport: Sport = .football
+
+    private var currentLoadTask: Task<Void, Never>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +38,6 @@ class ViewController: UIViewController, BaseViewProtocol {
 
     func setupBinding() {
         sportSelectorView.onSportSelected = { [weak self] sport in
-            self?.selectedSport = sport
             self?.loadEvents(for: sport)
         }
 
@@ -52,23 +51,18 @@ class ViewController: UIViewController, BaseViewProtocol {
 
     func loadData() {
         sportSelectorView.configure(with: .defaultSports())
-        loadEvents(for: selectedSport)
+        loadEvents(for: .football)
     }
 
     private func loadEvents(for sport: Sport) {
-        Task { @MainActor [weak self] in
+        currentLoadTask?.cancel()
+        currentLoadTask = Task { @MainActor [weak self] in
             guard let self else { return }
             self.leagueViewModels = [:]
             self.matchViewModels = [:]
-            self.eventsById = [:]
             self.leagues = [:]
             do {
-                let events = try await APIClient.shared.fetchEvents(
-                    sport: sport
-                )
-
-                events.forEach { self.eventsById[$0.id] = $0 }
-
+                let events = try await APIClient.fetchEvents(sport: sport)
                 let grouped = Dictionary(
                     grouping: events,
                     by: { $0.league?.id ?? 0 }
@@ -81,8 +75,10 @@ class ViewController: UIViewController, BaseViewProtocol {
                 }
 
                 await self.loadLeagueViewModels()
-                await self.loadMatchViewModels(for: events)
+                await self.loadMatchViewModels(for: events, sport: sport)
+                guard !Task.isCancelled else { return }
                 self.applySnapshot(grouped: grouped)
+            } catch is CancellationError {
             } catch {
                 print("Error fetching events: \(error)")
             }
@@ -169,7 +165,7 @@ class ViewController: UIViewController, BaseViewProtocol {
         }
     }
 
-    private func loadMatchViewModels(for events: [Event]) async {
+    private func loadMatchViewModels(for events: [Event], sport: Sport) async {
         for event in events {
             let homeImage =
                 if let url = event.homeTeam.logoUrl {
@@ -191,7 +187,7 @@ class ViewController: UIViewController, BaseViewProtocol {
                     }
                     let detailsVC = EventDetailsViewController(
                         event: event,
-                        sport: self.selectedSport
+                        sport: sport,
                     )
                     self.navigationController?.pushViewController(
                         detailsVC,
