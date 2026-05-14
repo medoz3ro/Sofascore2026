@@ -9,11 +9,11 @@ struct EventDetailsViewModel {
     }
 
     let leagueName: String
-    let leagueLogo: UIImage?
+    let leagueLogo: String?
     let homeTeamName: String
-    let homeTeamLogo: UIImage?
+    let homeTeamLogo: String?
     let awayTeamName: String
-    let awayTeamLogo: UIImage?
+    let awayTeamLogo: String?
     let date: String
     let time: String
     let homeScore: Int?
@@ -26,9 +26,6 @@ struct EventDetailsViewModel {
     init(
         event: Event,
         sport: Sport,
-        leagueLogo: UIImage?,
-        homeTeamLogo: UIImage?,
-        awayTeamLogo: UIImage?,
         backTapHandler: @escaping () -> Void
     ) {
         self.backTapHandler = backTapHandler
@@ -37,11 +34,11 @@ struct EventDetailsViewModel {
         leagueName = [sport.title, league?.country?.name, league?.name]
             .compactMap { $0 }
             .joined(separator: ", ")
-        self.leagueLogo = leagueLogo
+        self.leagueLogo = league?.logoUrl
         homeTeamName = event.homeTeam.name
-        self.homeTeamLogo = homeTeamLogo
+        self.homeTeamLogo = event.homeTeam.logoUrl
         awayTeamName = event.awayTeam.name
-        self.awayTeamLogo = awayTeamLogo
+        self.awayTeamLogo = event.awayTeam.logoUrl
         date = Self.formatDate(from: event.startTimestamp)
         time = Self.formatTime(from: event.startTimestamp)
         homeScore = event.homeScore

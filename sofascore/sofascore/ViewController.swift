@@ -63,26 +63,47 @@ class ViewController: UIViewController, BaseViewProtocol {
             self.leagues = [:]
             do {
                 let events = try await APIClient.fetchEvents(sport: sport)
-                let grouped = Dictionary(
-                    grouping: events,
-                    by: { $0.league?.id ?? 0 }
-                )
-
-                grouped.forEach { leagueId, leagueEvents in
-                    if let league = leagueEvents.first?.league {
-                        self.leagues[leagueId] = league
-                    }
-                }
-
-                await self.loadLeagueViewModels()
-                await self.loadMatchViewModels(for: events, sport: sport)
                 guard !Task.isCancelled else { return }
-                self.applySnapshot(grouped: grouped)
+                await self.onEventsLoaded(events, sport: sport)
             } catch is CancellationError {
             } catch {
                 print("Error fetching events: \(error)")
             }
         }
+    }
+
+    private func onEventsLoaded(_ events: [Event], sport: Sport) async {
+        let grouped = Dictionary(
+            grouping: events,
+            by: { $0.league?.id ?? 0 }
+        )
+
+        grouped.forEach { leagueId, leagueEvents in
+            if let league = leagueEvents.first?.league {
+                leagues[leagueId] = league
+                leagueViewModels[leagueId] = LeagueViewModel(league: league)
+            }
+        }
+
+        events.forEach { event in
+            matchViewModels[event.id] = MatchViewModel(
+                event: event,
+                matchTapHandler: { [weak self] in
+                    guard let self else { return }
+                    let detailsVC = EventDetailsViewController(
+                        event: event,
+                        sport: sport
+                    )
+                    self.navigationController?.pushViewController(
+                        detailsVC,
+                        animated: true
+                    )
+                }
+            )
+        }
+
+        guard !Task.isCancelled else { return }
+        applySnapshot(grouped: grouped)
     }
 
     private func applySnapshot(grouped: [Int: [Event]]) {
@@ -149,52 +170,6 @@ class ViewController: UIViewController, BaseViewProtocol {
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(sportSelectorView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
-        }
-    }
-
-    private func loadLeagueViewModels() async {
-        for (leagueId, league) in leagues {
-            let logo =
-                if let url = league.logoUrl {
-                    await URLSession.shared.downloadImage(from: url)
-                } else { nil as UIImage? }
-            leagueViewModels[leagueId] = LeagueViewModel(
-                league: league,
-                logo: logo
-            )
-        }
-    }
-
-    private func loadMatchViewModels(for events: [Event], sport: Sport) async {
-        for event in events {
-            let homeImage =
-                if let url = event.homeTeam.logoUrl {
-                    await URLSession.shared.downloadImage(from: url)
-                } else { nil as UIImage? }
-
-            let awayImage =
-                if let url = event.awayTeam.logoUrl {
-                    await URLSession.shared.downloadImage(from: url)
-                } else { nil as UIImage? }
-
-            matchViewModels[event.id] = MatchViewModel(
-                event: event,
-                homeTeamLogo: homeImage,
-                awayTeamLogo: awayImage,
-                matchTapHandler: { [weak self] in
-                    guard let self else {
-                        return
-                    }
-                    let detailsVC = EventDetailsViewController(
-                        event: event,
-                        sport: sport,
-                    )
-                    self.navigationController?.pushViewController(
-                        detailsVC,
-                        animated: true
-                    )
-                }
-            )
         }
     }
 

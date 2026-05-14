@@ -2,6 +2,6 @@ import UIKit
 
 struct EventHeaderViewModel {
     let leagueName: String
-    let leagueLogo: UIImage?
+    let leagueLogo: String?
     let backTapHandler: () -> Void
 }

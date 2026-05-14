@@ -1,3 +1,4 @@
+import Kingfisher
 import SnapKit
 import SofaAcademic
 import UIKit
@@ -57,6 +58,6 @@ class LeagueView: BaseView {
     func configure(with viewModel: LeagueViewModel) {
         nameLabel.text = viewModel.name
         countryLabel.text = viewModel.country
-        logoImage.image = viewModel.logo
+        logoImage.kf.setImage(with: URL(string: viewModel.logoUrl ?? ""))
     }
 }

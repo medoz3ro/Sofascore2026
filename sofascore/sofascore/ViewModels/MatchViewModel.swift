@@ -2,7 +2,7 @@ import UIKit
 
 struct TeamViewModel {
     let name: String
-    let logo: UIImage?
+    let logoUrl: String?
     let score: String
     let colors: TeamColors
 }
@@ -23,8 +23,6 @@ struct MatchViewModel {
 
     init(
         event: Event,
-        homeTeamLogo: UIImage?,
-        awayTeamLogo: UIImage?,
         matchTapHandler: (() -> Void)? = nil
     ) {
         self.matchTapHandler = matchTapHandler
@@ -37,14 +35,14 @@ struct MatchViewModel {
 
         homeTeamViewModel = TeamViewModel(
             name: event.homeTeam.name,
-            logo: homeTeamLogo,
+            logoUrl: event.homeTeam.logoUrl,
             score: event.homeScore.map { "\($0)" } ?? "",
             colors: colors.home
         )
 
         awayTeamViewModel = TeamViewModel(
             name: event.awayTeam.name,
-            logo: awayTeamLogo,
+            logoUrl: event.awayTeam.logoUrl,
             score: event.awayScore.map { "\($0)" } ?? "",
             colors: colors.away
         )

@@ -1,13 +1,13 @@
-import UIKit
+import Foundation
 
 struct LeagueViewModel {
     let name: String
     let country: String
-    let logo: UIImage?
+    let logoUrl: String?
 
-    init(league: League, logo: UIImage?) {
+    init(league: League) {
         name = league.name
         country = league.country?.name ?? ""
-        self.logo = logo
+        logoUrl = league.logoUrl
     }
 }

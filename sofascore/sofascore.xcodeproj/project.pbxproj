@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		870CB2032FB5C10A00F444E9 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 870CB2022FB5C10A00F444E9 /* Kingfisher */; };
 		878E1D062F60A184009229E9 /* SofaAcademic in Frameworks */ = {isa = PBXBuildFile; productRef = 878E1D052F60A184009229E9 /* SofaAcademic */; };
 		879C60E02F5A37B500BD2FD7 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 879C60DF2F5A37B500BD2FD7 /* SnapKit */; };
 /* End PBXBuildFile section */
@@ -41,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				870CB2032FB5C10A00F444E9 /* Kingfisher in Frameworks */,
 				878E1D062F60A184009229E9 /* SofaAcademic in Frameworks */,
 				879C60E02F5A37B500BD2FD7 /* SnapKit in Frameworks */,
 			);
@@ -87,6 +89,7 @@
 			packageProductDependencies = (
 				879C60DF2F5A37B500BD2FD7 /* SnapKit */,
 				878E1D052F60A184009229E9 /* SofaAcademic */,
+				870CB2022FB5C10A00F444E9 /* Kingfisher */,
 			);
 			productName = Sofascore;
 			productReference = 879C60C62F5A375700BD2FD7 /* Sofascore.app */;
@@ -119,6 +122,7 @@
 			packageReferences = (
 				879C60DE2F5A37B500BD2FD7 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				878E1D042F60A184009229E9 /* XCRemoteSwiftPackageReference "academy" */,
+				870CB2012FB5C10A00F444E9 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 879C60C72F5A375700BD2FD7 /* Products */;
@@ -354,6 +358,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		870CB2012FB5C10A00F444E9 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.9.0;
+			};
+		};
 		878E1D042F60A184009229E9 /* XCRemoteSwiftPackageReference "academy" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sofascore/academy/";
@@ -373,6 +385,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		870CB2022FB5C10A00F444E9 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 870CB2012FB5C10A00F444E9 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		878E1D052F60A184009229E9 /* SofaAcademic */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 878E1D042F60A184009229E9 /* XCRemoteSwiftPackageReference "academy" */;

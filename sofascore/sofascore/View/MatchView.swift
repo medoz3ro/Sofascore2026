@@ -1,3 +1,4 @@
+import Kingfisher
 import SnapKit
 import SofaAcademic
 import UIKit
@@ -114,7 +115,11 @@ class MatchView: BaseView {
         awayScoreLabel.textColor = viewModel.awayTeamViewModel.colors.scoreColor
         startTimestampLabel.textColor = viewModel.startTimeColor
         statusLabel.textColor = viewModel.statusColor
-        homeTeamLogo.image = viewModel.homeTeamViewModel.logo
-        awayTeamLogo.image = viewModel.awayTeamViewModel.logo
+        homeTeamLogo.kf.setImage(
+            with: URL(string: viewModel.homeTeamViewModel.logoUrl ?? "")
+        )
+        awayTeamLogo.kf.setImage(
+            with: URL(string: viewModel.awayTeamViewModel.logoUrl ?? "")
+        )
     }
 }

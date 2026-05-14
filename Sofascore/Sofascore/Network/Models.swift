@@ -16,6 +16,7 @@ struct League: Codable {
     let name: String
     let country: Country?
     let logoUrl: String?
+    let seasonId: Int?
 }
 
 enum EventStatus: String, Codable {
