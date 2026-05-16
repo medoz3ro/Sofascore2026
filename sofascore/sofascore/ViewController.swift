@@ -64,7 +64,7 @@ class ViewController: UIViewController, BaseViewProtocol {
             do {
                 let events = try await APIClient.fetchEvents(sport: sport)
                 guard !Task.isCancelled else { return }
-                await self.onEventsLoaded(events, sport: sport)
+                self.onEventsLoaded(events, sport: sport)
             } catch is CancellationError {
             } catch {
                 print("Error fetching events: \(error)")
@@ -72,7 +72,7 @@ class ViewController: UIViewController, BaseViewProtocol {
         }
     }
 
-    private func onEventsLoaded(_ events: [Event], sport: Sport) async {
+    private func onEventsLoaded(_ events: [Event], sport: Sport) {
         let grouped = Dictionary(
             grouping: events,
             by: { $0.league?.id ?? 0 }
