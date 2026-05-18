@@ -1,3 +1,4 @@
+import Kingfisher
 import SnapKit
 import SofaAcademic
 import UIKit
@@ -57,7 +58,9 @@ class EventHeaderView: BaseView {
     func configure(with viewModel: EventHeaderViewModel) {
         self.viewModel = viewModel
         leagueNameLabel.text = viewModel.leagueName
-        leagueLogoImageView.image = viewModel.leagueLogo
+        leagueLogoImageView.kf.setImage(
+            with: URL(string: viewModel.leagueLogo ?? "")
+        )
     }
 
     @objc private func backTapped() {

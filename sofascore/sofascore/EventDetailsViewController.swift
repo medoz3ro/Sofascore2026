@@ -50,35 +50,13 @@ class EventDetailsViewController: UIViewController, BaseViewProtocol {
     }
 
     private func loadData() {
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            let leagueLogo =
-                if let url = event.league?.logoUrl {
-                    await URLSession.shared.downloadImage(from: url)
-                } else { nil as UIImage? }
-
-            let homeTeamLogo =
-                if let url = event.homeTeam.logoUrl {
-                    await URLSession.shared.downloadImage(from: url)
-                } else { nil as UIImage? }
-
-            let awayTeamLogo =
-                if let url = event.awayTeam.logoUrl {
-                    await URLSession.shared.downloadImage(from: url)
-                } else { nil as UIImage? }
-            let viewModel = EventDetailsViewModel(
-                event: event,
-                sport: sport,
-                leagueLogo: leagueLogo,
-                homeTeamLogo: homeTeamLogo,
-                awayTeamLogo: awayTeamLogo,
-                backTapHandler: { [weak self] in
-                    self?.navigationController?.popViewController(
-                        animated: true
-                    )
-                }
-            )
-            self.eventDetailsView.configure(with: viewModel)
-        }
+        let viewModel = EventDetailsViewModel(
+            event: event,
+            sport: sport,
+            backTapHandler: { [weak self] in
+                self?.navigationController?.popViewController(animated: true)
+            }
+        )
+        eventDetailsView.configure(with: viewModel)
     }
 }

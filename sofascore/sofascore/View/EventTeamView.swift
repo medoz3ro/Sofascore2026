@@ -1,3 +1,4 @@
+import Kingfisher
 import SnapKit
 import SofaAcademic
 import UIKit
@@ -36,7 +37,7 @@ class EventTeamView: BaseView {
     }
 
     func configure(with viewModel: EventTeamViewModel) {
-        logoImageView.image = viewModel.logo
+        logoImageView.kf.setImage(with: URL(string: viewModel.logo ?? ""))
         nameLabel.text = viewModel.name
     }
 }
