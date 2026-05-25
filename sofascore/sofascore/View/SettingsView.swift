@@ -14,6 +14,10 @@ class SettingsView: BaseView {
     private let themeBottomDivider = UIView()
     private let lightOptionView = ThemeOptionView()
     private let darkOptionView = ThemeOptionView()
+    private let databaseTitleLabel = UILabel()
+    private let eventCountLabel = UILabel()
+    private let leagueCountLabel = UILabel()
+    private let databaseDivider = UIView()
     private let accountTitleLabel = UILabel()
     private let userNameLabel = UILabel()
     private let accountDivider = UIView()
@@ -27,6 +31,10 @@ class SettingsView: BaseView {
         addSubview(lightOptionView)
         addSubview(darkOptionView)
         addSubview(themeBottomDivider)
+        addSubview(databaseTitleLabel)
+        addSubview(eventCountLabel)
+        addSubview(leagueCountLabel)
+        addSubview(databaseDivider)
         addSubview(accountTitleLabel)
         addSubview(userNameLabel)
         addSubview(accountDivider)
@@ -57,6 +65,20 @@ class SettingsView: BaseView {
         darkOptionView.onTapped = { [weak self] in
             self?.selectTheme(.dark)
         }
+
+        databaseTitleLabel.font = .bold(size: 12)
+        databaseTitleLabel.textColor = .primaryDefault
+        databaseTitleLabel.text = .databaseTitle
+
+        eventCountLabel.font = .regular(size: 14)
+        eventCountLabel.textColor = .onSurface1
+        eventCountLabel.numberOfLines = 1
+
+        leagueCountLabel.font = .regular(size: 14)
+        leagueCountLabel.textColor = .onSurface1
+        leagueCountLabel.numberOfLines = 1
+
+        databaseDivider.backgroundColor = .onSurface4
 
         accountTitleLabel.font = .bold(size: 12)
         accountTitleLabel.textColor = .primaryDefault
@@ -113,8 +135,32 @@ class SettingsView: BaseView {
             make.height.equalTo(1)
         }
 
-        accountTitleLabel.snp.makeConstraints { make in
+        databaseTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(themeBottomDivider.snp.bottom).offset(16)
+            make.leading.equalToSuperview().inset(16)
+            make.height.equalTo(16)
+        }
+
+        eventCountLabel.snp.makeConstraints { make in
+            make.top.equalTo(databaseTitleLabel.snp.bottom).offset(16)
+            make.leading.equalToSuperview().inset(16)
+            make.height.equalTo(20)
+        }
+
+        leagueCountLabel.snp.makeConstraints { make in
+            make.top.equalTo(eventCountLabel.snp.bottom).offset(8)
+            make.leading.equalToSuperview().inset(16)
+            make.height.equalTo(20)
+        }
+
+        databaseDivider.snp.makeConstraints { make in
+            make.top.equalTo(leagueCountLabel.snp.bottom).offset(16)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(1)
+        }
+
+        accountTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(databaseDivider.snp.bottom).offset(16)
             make.leading.equalToSuperview().inset(16)
             make.height.equalTo(16)
         }
@@ -154,6 +200,8 @@ class SettingsView: BaseView {
 
     func configure(with viewModel: SettingsViewModel) {
         self.viewModel = viewModel
+        eventCountLabel.text = viewModel.eventCountText
+        leagueCountLabel.text = viewModel.leagueCountText
         userNameLabel.text = viewModel.userName
         selectTheme(viewModel.selectedTheme)
     }

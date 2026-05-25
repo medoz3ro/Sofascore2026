@@ -11,11 +11,14 @@ extension String {
     static let dark = "Dark"
 
     static let settings = "Settings"
+    static let eventsRowCount = "Events"
+    static let leaguesRowCount = "Leagues"
+    static let databaseTitle = "Database"
 
     static let football = "Football"
     static let basketball = "Basketball"
     static let americanFootball = "Am. Football"
-    
+
     static let login = "Login"
     static let loginButton = "Log In"
     static let usernamePlaceholder = "Username"

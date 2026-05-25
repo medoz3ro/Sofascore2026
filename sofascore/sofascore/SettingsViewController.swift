@@ -64,6 +64,7 @@ class SettingsViewController: UIViewController, BaseViewProtocol {
 
         settingsView.onLogoutTapped = { [weak self] in
             UserSession.shared.clear()
+            DatabaseManager.shared.deleteAll()
             self?.switchToLogin()
         }
     }
@@ -87,6 +88,10 @@ class SettingsViewController: UIViewController, BaseViewProtocol {
             with: SettingsViewModel(
                 userName: UserSession.shared.name ?? "",
                 selectedTheme: selectedTheme,
+                eventCountText:
+                    "\(String.eventsRowCount): \(DatabaseManager.shared.eventCount())",
+                leagueCountText:
+                    "\(String.leaguesRowCount): \(DatabaseManager.shared.leagueCount())",
                 themeTapHandler: { [weak self] theme in
                     self?.selectedTheme = theme
                     self?.applyTheme(theme)
