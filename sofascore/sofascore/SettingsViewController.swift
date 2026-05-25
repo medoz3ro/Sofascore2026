@@ -20,9 +20,8 @@ class SettingsViewController: UIViewController, BaseViewProtocol {
         }
     }
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-    {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    init() {
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -62,12 +61,31 @@ class SettingsViewController: UIViewController, BaseViewProtocol {
         settingsView.onDismissTapped = { [weak self] in
             self?.dismiss(animated: true)
         }
+
+        settingsView.onLogoutTapped = { [weak self] in
+            UserSession.shared.clear()
+            self?.switchToLogin()
+        }
+    }
+
+    private func switchToLogin() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        else { return }
+        let loginVC = LoginViewController()
+        loginVC.onLoginSuccess = { [weak appDelegate] response in
+            UserSession.shared.save(response: response)
+            appDelegate?.switchToEvents()
+        }
+        let nav = UINavigationController(rootViewController: loginVC)
+        nav.isNavigationBarHidden = true
+        appDelegate.window?.rootViewController = nav
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         settingsView.configure(
             with: SettingsViewModel(
+                userName: UserSession.shared.name ?? "",
                 selectedTheme: selectedTheme,
                 themeTapHandler: { [weak self] theme in
                     self?.selectedTheme = theme

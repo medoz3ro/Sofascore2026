@@ -15,4 +15,11 @@ extension String {
     static let football = "Football"
     static let basketball = "Basketball"
     static let americanFootball = "Am. Football"
+    
+    static let login = "Login"
+    static let loginButton = "Log In"
+    static let usernamePlaceholder = "Username"
+    static let passwordPlaceholder = "Password"
+    static let logout = "Logout"
+    static let account = "Account"
 }

@@ -20,7 +20,6 @@ class ViewController: UIViewController, BaseViewProtocol {
     )
     private var leagueViewModels: [Int: LeagueViewModel] = [:]
     private var matchViewModels: [Int: MatchViewModel] = [:]
-    private var leagues: [Int: League] = [:]
     private var diffableDataSource:
         UICollectionViewDiffableDataSource<Section, Item>?
 
@@ -60,9 +59,8 @@ class ViewController: UIViewController, BaseViewProtocol {
             guard let self else { return }
             self.leagueViewModels = [:]
             self.matchViewModels = [:]
-            self.leagues = [:]
             do {
-                let events = try await APIClient.fetchEvents(sport: sport)
+                let events = try await APIClient.fetchSecureEvents(sport: sport)
                 guard !Task.isCancelled else { return }
                 self.onEventsLoaded(events, sport: sport)
             } catch is CancellationError {
@@ -80,7 +78,6 @@ class ViewController: UIViewController, BaseViewProtocol {
 
         grouped.forEach { leagueId, leagueEvents in
             if let league = leagueEvents.first?.league {
-                leagues[leagueId] = league
                 leagueViewModels[leagueId] = LeagueViewModel(league: league)
             }
         }

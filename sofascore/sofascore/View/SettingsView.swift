@@ -4,6 +4,7 @@ import UIKit
 
 class SettingsView: BaseView {
     var onDismissTapped: (() -> Void)?
+    var onLogoutTapped: (() -> Void)?
 
     private var viewModel: SettingsViewModel?
     private let statusBarView = UIView()
@@ -13,6 +14,10 @@ class SettingsView: BaseView {
     private let themeBottomDivider = UIView()
     private let lightOptionView = ThemeOptionView()
     private let darkOptionView = ThemeOptionView()
+    private let accountTitleLabel = UILabel()
+    private let userNameLabel = UILabel()
+    private let accountDivider = UIView()
+    private let logoutButton = UIButton(type: .system)
 
     override func addViews() {
         addSubview(statusBarView)
@@ -22,6 +27,10 @@ class SettingsView: BaseView {
         addSubview(lightOptionView)
         addSubview(darkOptionView)
         addSubview(themeBottomDivider)
+        addSubview(accountTitleLabel)
+        addSubview(userNameLabel)
+        addSubview(accountDivider)
+        addSubview(logoutButton)
     }
 
     override func styleViews() {
@@ -48,6 +57,21 @@ class SettingsView: BaseView {
         darkOptionView.onTapped = { [weak self] in
             self?.selectTheme(.dark)
         }
+
+        accountTitleLabel.font = .bold(size: 12)
+        accountTitleLabel.textColor = .primaryDefault
+        accountTitleLabel.text = .account
+
+        userNameLabel.font = .regular(size: 14)
+        userNameLabel.textColor = .onSurface1
+        userNameLabel.numberOfLines = 1
+
+        accountDivider.backgroundColor = .onSurface4
+
+        logoutButton.setTitle(.logout, for: .normal)
+        logoutButton.titleLabel?.font = .bold(size: 14)
+        logoutButton.setTitleColor(.liveRed, for: .normal)
+        logoutButton.contentHorizontalAlignment = .left
     }
 
     override func setupConstraints() {
@@ -88,6 +112,31 @@ class SettingsView: BaseView {
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(1)
         }
+
+        accountTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(themeBottomDivider.snp.bottom).offset(16)
+            make.leading.equalToSuperview().inset(16)
+            make.height.equalTo(16)
+        }
+
+        userNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(accountTitleLabel.snp.bottom).offset(16)
+            make.leading.equalToSuperview().inset(16)
+            make.trailing.equalToSuperview().inset(16)
+            make.height.equalTo(20)
+        }
+
+        logoutButton.snp.makeConstraints { make in
+            make.top.equalTo(userNameLabel.snp.bottom).offset(8)
+            make.leading.equalToSuperview().inset(16)
+            make.height.equalTo(48)
+        }
+
+        accountDivider.snp.makeConstraints { make in
+            make.top.equalTo(logoutButton.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(1)
+        }
     }
 
     override func setupGestureRecognizers() {
@@ -96,15 +145,25 @@ class SettingsView: BaseView {
             action: #selector(dismissTapped),
             for: .touchUpInside
         )
+        logoutButton.addTarget(
+            self,
+            action: #selector(logoutTapped),
+            for: .touchUpInside
+        )
     }
 
     func configure(with viewModel: SettingsViewModel) {
         self.viewModel = viewModel
+        userNameLabel.text = viewModel.userName
         selectTheme(viewModel.selectedTheme)
     }
 
     @objc private func dismissTapped() {
         onDismissTapped?()
+    }
+
+    @objc private func logoutTapped() {
+        onLogoutTapped?()
     }
 
     private func selectTheme(_ theme: Theme) {

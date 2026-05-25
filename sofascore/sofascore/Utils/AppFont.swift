@@ -2,7 +2,7 @@ import UIKit
 
 extension UIFont {
     static func regular(size: CGFloat) -> UIFont {
-        UIFont(name: "Roboto", size: size) ?? .systemFont(ofSize: size)
+        UIFont(name: "Roboto-Regular", size: size) ?? .systemFont(ofSize: size)
     }
 
     static func bold(size: CGFloat) -> UIFont {
