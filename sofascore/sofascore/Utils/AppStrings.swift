@@ -25,4 +25,7 @@ extension String {
     static let passwordPlaceholder = "Password"
     static let logout = "Logout"
     static let account = "Account"
+    
+    static let loginError = "Login failed. Check your credentials."
+    static let emptyFieldsError = "Please enter username and password."
 }

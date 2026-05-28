@@ -26,24 +26,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    private func makeEventsNavigationController() -> UINavigationController {
-        let nav = UINavigationController(rootViewController: ViewController())
-        nav.isNavigationBarHidden = true
-        return nav
-    }
-
-    private func makeLoginNavigationController() -> UINavigationController {
-        let loginVC = LoginViewController()
-        loginVC.onLoginSuccess = { [weak self] response in
-            UserSession.shared.save(response: response)
-            self?.switchToEvents()
-        }
-        let nav = UINavigationController(rootViewController: loginVC)
-        nav.isNavigationBarHidden = true
-        return nav
+    func switchToLogin() {
+        window?.rootViewController = makeLoginNavigationController()
     }
 
     func switchToEvents() {
         window?.rootViewController = makeEventsNavigationController()
+    }
+
+    private func makeLoginNavigationController() -> UINavigationController {
+        let nav = UINavigationController(
+            rootViewController: LoginViewController()
+        )
+        nav.isNavigationBarHidden = true
+        return nav
+    }
+
+    private func makeEventsNavigationController() -> UINavigationController {
+        let nav = UINavigationController(rootViewController: ViewController())
+        nav.isNavigationBarHidden = true
+        return nav
     }
 }

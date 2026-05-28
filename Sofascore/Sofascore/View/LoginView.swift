@@ -25,6 +25,7 @@ class LoginView: BaseView {
         backgroundColor = .systemBackground
 
         logoImageView.image = UIImage(resource: .sofascoreLockup)
+            .withRenderingMode(.alwaysTemplate)
         logoImageView.contentMode = .scaleAspectFit
         logoImageView.tintColor = .primaryDefault
 
@@ -96,13 +97,9 @@ class LoginView: BaseView {
         )
     }
 
-    func showError(_ message: String) {
-        errorLabel.text = message
-        errorLabel.isHidden = false
-    }
-
-    func hideError() {
-        errorLabel.isHidden = true
+    func errorMessage(_ text: String?) {
+        errorLabel.text = text
+        errorLabel.isHidden = text == nil
     }
 
     @objc private func loginTapped() {

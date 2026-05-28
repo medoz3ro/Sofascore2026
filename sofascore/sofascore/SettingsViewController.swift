@@ -62,24 +62,11 @@ class SettingsViewController: UIViewController, BaseViewProtocol {
             self?.dismiss(animated: true)
         }
 
-        settingsView.onLogoutTapped = { [weak self] in
+        settingsView.onLogoutTapped = {
             UserSession.shared.clear()
             DatabaseManager.shared.deleteAll()
-            self?.switchToLogin()
+            (UIApplication.shared.delegate as? AppDelegate)?.switchToLogin()
         }
-    }
-
-    private func switchToLogin() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate
-        else { return }
-        let loginVC = LoginViewController()
-        loginVC.onLoginSuccess = { [weak appDelegate] response in
-            UserSession.shared.save(response: response)
-            appDelegate?.switchToEvents()
-        }
-        let nav = UINavigationController(rootViewController: loginVC)
-        nav.isNavigationBarHidden = true
-        appDelegate.window?.rootViewController = nav
     }
 
     override func viewWillAppear(_ animated: Bool) {

@@ -43,7 +43,7 @@ struct LeagueRecord: Codable, FetchableRecord, PersistableRecord {
 
 final class DatabaseManager {
     static let shared = DatabaseManager()
-    private var dbQueue: DatabaseQueue!
+    private var dbQueue: DatabaseQueue?
 
     private init() {
         do {
@@ -63,8 +63,11 @@ final class DatabaseManager {
     }
 
     private func setupTables() throws {
-        try dbQueue.write { db in
-            try db.create(table: "event", ifNotExists: true) { t in
+        try dbQueue?.write { db in
+            try db.create(
+                table: EventRecord.databaseTableName,
+                ifNotExists: true
+            ) { t in
                 t.column("id", .integer).primaryKey()
                 t.column("homeTeamName", .text).notNull()
                 t.column("awayTeamName", .text).notNull()
@@ -75,7 +78,10 @@ final class DatabaseManager {
                 t.column("leagueId", .integer)
             }
 
-            try db.create(table: "league", ifNotExists: true) { t in
+            try db.create(
+                table: LeagueRecord.databaseTableName,
+                ifNotExists: true
+            ) { t in
                 t.column("id", .integer).primaryKey()
                 t.column("name", .text).notNull()
                 t.column("country", .text)
@@ -86,7 +92,7 @@ final class DatabaseManager {
 
     func saveEvents(_ events: [Event]) {
         do {
-            try dbQueue.write { db in
+            try dbQueue?.write { db in
                 for event in events {
                     try EventRecord(event: event).save(db)
                     if let league = event.league {
@@ -100,20 +106,20 @@ final class DatabaseManager {
     }
 
     func eventCount() -> Int {
-        (try? dbQueue.read { db in
+        (try? dbQueue?.read { db in
             try EventRecord.fetchCount(db)
         }) ?? 0
     }
 
     func leagueCount() -> Int {
-        (try? dbQueue.read { db in
+        (try? dbQueue?.read { db in
             try LeagueRecord.fetchCount(db)
         }) ?? 0
     }
 
     func deleteAll() {
         do {
-            try dbQueue.write { db in
+            try dbQueue?.write { db in
                 try EventRecord.deleteAll(db)
                 try LeagueRecord.deleteAll(db)
             }

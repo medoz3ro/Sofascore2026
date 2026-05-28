@@ -6,8 +6,6 @@ class LoginViewController: UIViewController, BaseViewProtocol {
     private let safeAreaBackgroundView = UIView()
     private let loginView = LoginView()
 
-    var onLoginSuccess: ((LoginResponse) -> Void)?
-
     override func viewDidLoad() {
         super.viewDidLoad()
         addViews()
@@ -41,17 +39,32 @@ class LoginViewController: UIViewController, BaseViewProtocol {
     private func setupBinding() {
         loginView.onLoginTapped = { [weak self] username, password in
             guard let self else { return }
-            self.loginView.hideError()
+            self.loginView.errorMessage(nil)
+            self.login(username: username, password: password)
+        }
+    }
 
-            let viewModel = LoginViewModel(
-                onLoginSuccess: { [weak self] response in
-                    self?.onLoginSuccess?(response)
-                },
-                onLoginFailure: { [weak self] message in
-                    self?.loginView.showError(message)
-                }
-            )
-            viewModel.login(username: username, password: password)
+    private func login(username: String, password: String) {
+        guard !username.isEmpty, !password.isEmpty else {
+            loginView.errorMessage(.emptyFieldsError)
+            return
+        }
+
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let response = try await APIClient.login(
+                    request: LoginRequest(
+                        username: username,
+                        password: password
+                    )
+                )
+                UserSession.shared.save(response: response)
+                (UIApplication.shared.delegate as? AppDelegate)?
+                    .switchToEvents()
+            } catch {
+                self.loginView.errorMessage(.loginError)
+            }
         }
     }
 }
