@@ -20,7 +20,6 @@ class ViewController: UIViewController, BaseViewProtocol {
     )
     private var leagueViewModels: [Int: LeagueViewModel] = [:]
     private var matchViewModels: [Int: MatchViewModel] = [:]
-    private var leagues: [Int: League] = [:]
     private var diffableDataSource:
         UICollectionViewDiffableDataSource<Section, Item>?
 
@@ -36,87 +35,6 @@ class ViewController: UIViewController, BaseViewProtocol {
         loadData()
     }
 
-    func setupBinding() {
-        sportSelectorView.onSportSelected = { [weak self] sport in
-            self?.loadEvents(for: sport)
-        }
-
-        statusBarView.onSettingsTapped = { [weak self] in
-            guard let self else { return }
-            let settingsVC = SettingsViewController()
-            settingsVC.modalPresentationStyle = .fullScreen
-            self.present(settingsVC, animated: true)
-        }
-    }
-
-    func loadData() {
-        sportSelectorView.configure(with: .defaultSports())
-        loadEvents(for: .football)
-    }
-
-    private func loadEvents(for sport: Sport) {
-        currentLoadTask?.cancel()
-        currentLoadTask = Task { @MainActor [weak self] in
-            guard let self else { return }
-            self.leagueViewModels = [:]
-            self.matchViewModels = [:]
-            self.leagues = [:]
-            do {
-                let events = try await APIClient.fetchEvents(sport: sport)
-                guard !Task.isCancelled else { return }
-                self.onEventsLoaded(events, sport: sport)
-            } catch is CancellationError {
-            } catch {
-                print("Error fetching events: \(error)")
-            }
-        }
-    }
-
-    private func onEventsLoaded(_ events: [Event], sport: Sport) {
-        let grouped = Dictionary(
-            grouping: events,
-            by: { $0.league?.id ?? 0 }
-        )
-
-        grouped.forEach { leagueId, leagueEvents in
-            if let league = leagueEvents.first?.league {
-                leagues[leagueId] = league
-                leagueViewModels[leagueId] = LeagueViewModel(league: league)
-            }
-        }
-
-        events.forEach { event in
-            matchViewModels[event.id] = MatchViewModel(
-                event: event,
-                matchTapHandler: { [weak self] in
-                    guard let self else { return }
-                    let detailsVC = EventDetailsViewController(
-                        event: event,
-                        sport: sport
-                    )
-                    self.navigationController?.pushViewController(
-                        detailsVC,
-                        animated: true
-                    )
-                }
-            )
-        }
-
-        guard !Task.isCancelled else { return }
-        applySnapshot(grouped: grouped)
-    }
-
-    private func applySnapshot(grouped: [Int: [Event]]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
-
-        grouped.keys.sorted().forEach { leagueId in
-            snapshot.appendSections([.league(leagueId)])
-            let items = grouped[leagueId]?.map { Item.match($0.id) } ?? []
-            snapshot.appendItems(items, toSection: .league(leagueId))
-        }
-        diffableDataSource?.apply(snapshot)
-    }
-
     func addViews() {
         view.addSubview(safeAreaBackgroundView)
         view.addSubview(statusBarView)
@@ -126,7 +44,6 @@ class ViewController: UIViewController, BaseViewProtocol {
 
     func styleViews() {
         view.backgroundColor = .systemBackground
-
         safeAreaBackgroundView.backgroundColor = .primaryDefault
 
         collectionView.register(
@@ -214,5 +131,86 @@ class ViewController: UIViewController, BaseViewProtocol {
             }
             return header
         }
+    }
+
+    func setupBinding() {
+        sportSelectorView.onSportSelected = { [weak self] sport in
+            self?.loadEvents(for: sport)
+        }
+
+        statusBarView.onSettingsTapped = { [weak self] in
+            guard let self else { return }
+            let settingsVC = SettingsViewController()
+            settingsVC.modalPresentationStyle = .fullScreen
+            self.present(settingsVC, animated: true)
+        }
+    }
+
+    func loadData() {
+        sportSelectorView.configure(with: .defaultSports())
+        loadEvents(for: .football)
+    }
+
+    private func loadEvents(for sport: Sport) {
+        currentLoadTask?.cancel()
+        currentLoadTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            self.leagueViewModels = [:]
+            self.matchViewModels = [:]
+            do {
+                let events = try await APIClient.fetchSecureEvents(sport: sport)
+                guard !Task.isCancelled else { return }
+                self.onEventsLoaded(events, sport: sport)
+            } catch is CancellationError {
+            } catch {
+                print("Error fetching events: \(error)")
+            }
+        }
+    }
+
+    private func onEventsLoaded(_ events: [Event], sport: Sport) {
+        DatabaseManager.shared.saveEvents(events)
+
+        let grouped = Dictionary(
+            grouping: events,
+            by: { $0.league?.id ?? 0 }
+        )
+
+        grouped.forEach { leagueId, leagueEvents in
+            if let league = leagueEvents.first?.league {
+                leagueViewModels[leagueId] = LeagueViewModel(league: league)
+            }
+        }
+
+        events.forEach { event in
+            matchViewModels[event.id] = MatchViewModel(
+                event: event,
+                matchTapHandler: { [weak self] in
+                    guard let self else { return }
+                    let detailsVC = EventDetailsViewController(
+                        event: event,
+                        sport: sport
+                    )
+                    self.navigationController?.pushViewController(
+                        detailsVC,
+                        animated: true
+                    )
+                }
+            )
+        }
+
+        guard !Task.isCancelled else { return }
+        applySnapshot(grouped: grouped)
+    }
+
+    private func applySnapshot(grouped: [Int: [Event]]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+
+        grouped.keys.sorted().forEach { leagueId in
+            snapshot.appendSections([.league(leagueId)])
+            let items = grouped[leagueId]?.map { Item.match($0.id) } ?? []
+            snapshot.appendItems(items, toSection: .league(leagueId))
+        }
+        diffableDataSource?.apply(snapshot)
     }
 }

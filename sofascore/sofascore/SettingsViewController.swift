@@ -20,9 +20,8 @@ class SettingsViewController: UIViewController, BaseViewProtocol {
         }
     }
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-    {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    init() {
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -62,13 +61,24 @@ class SettingsViewController: UIViewController, BaseViewProtocol {
         settingsView.onDismissTapped = { [weak self] in
             self?.dismiss(animated: true)
         }
+
+        settingsView.onLogoutTapped = {
+            UserSession.shared.clear()
+            DatabaseManager.shared.deleteAll()
+            (UIApplication.shared.delegate as? AppDelegate)?.switchToLogin()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         settingsView.configure(
             with: SettingsViewModel(
+                userName: UserSession.shared.name ?? "",
                 selectedTheme: selectedTheme,
+                eventCountText:
+                    "\(String.eventsRowCount): \(DatabaseManager.shared.eventCount())",
+                leagueCountText:
+                    "\(String.leaguesRowCount): \(DatabaseManager.shared.leagueCount())",
                 themeTapHandler: { [weak self] theme in
                     self?.selectedTheme = theme
                     self?.applyTheme(theme)

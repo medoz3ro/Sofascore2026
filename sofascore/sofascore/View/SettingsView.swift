@@ -4,24 +4,23 @@ import UIKit
 
 class SettingsView: BaseView {
     var onDismissTapped: (() -> Void)?
+    var onLogoutTapped: (() -> Void)?
 
     private var viewModel: SettingsViewModel?
     private let statusBarView = UIView()
     private let titleLabel = UILabel()
     private let backButton = UIButton(type: .custom)
-    private let themeTitleLabel = UILabel()
-    private let themeBottomDivider = UIView()
-    private let lightOptionView = ThemeOptionView()
-    private let darkOptionView = ThemeOptionView()
+    private let themeSettingsView = ThemeSettingsView()
+    private let databaseInfoView = DatabaseInfoView()
+    private let accountView = AccountView()
 
     override func addViews() {
         addSubview(statusBarView)
         statusBarView.addSubview(backButton)
         statusBarView.addSubview(titleLabel)
-        addSubview(themeTitleLabel)
-        addSubview(lightOptionView)
-        addSubview(darkOptionView)
-        addSubview(themeBottomDivider)
+        addSubview(themeSettingsView)
+        addSubview(databaseInfoView)
+        addSubview(accountView)
     }
 
     override func styleViews() {
@@ -36,17 +35,12 @@ class SettingsView: BaseView {
         backButton.setImage(UIImage(named: "arrow_back_icon"), for: .normal)
         backButton.tintColor = .white
 
-        themeTitleLabel.font = .bold(size: 12)
-        themeTitleLabel.textColor = .primaryDefault
-        themeTitleLabel.text = .theme
-
-        themeBottomDivider.backgroundColor = .onSurface4
-
-        lightOptionView.onTapped = { [weak self] in
-            self?.selectTheme(.light)
+        themeSettingsView.onThemeSelected = { [weak self] theme in
+            self?.viewModel?.themeTapHandler(theme)
         }
-        darkOptionView.onTapped = { [weak self] in
-            self?.selectTheme(.dark)
+
+        accountView.onLogoutTapped = { [weak self] in
+            self?.onLogoutTapped?()
         }
     }
 
@@ -67,26 +61,19 @@ class SettingsView: BaseView {
             make.size.equalTo(24)
         }
 
-        themeTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(statusBarView.snp.bottom).offset(16)
-            make.leading.equalToSuperview().inset(16)
-            make.height.equalTo(16)
-        }
-
-        lightOptionView.snp.makeConstraints { make in
-            make.top.equalTo(themeTitleLabel.snp.bottom)
+        themeSettingsView.snp.makeConstraints { make in
+            make.top.equalTo(statusBarView.snp.bottom)
             make.leading.trailing.equalToSuperview()
         }
 
-        darkOptionView.snp.makeConstraints { make in
-            make.top.equalTo(lightOptionView.snp.bottom)
+        databaseInfoView.snp.makeConstraints { make in
+            make.top.equalTo(themeSettingsView.snp.bottom)
             make.leading.trailing.equalToSuperview()
         }
 
-        themeBottomDivider.snp.makeConstraints { make in
-            make.top.equalTo(darkOptionView.snp.bottom)
+        accountView.snp.makeConstraints { make in
+            make.top.equalTo(databaseInfoView.snp.bottom)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(1)
         }
     }
 
@@ -100,23 +87,15 @@ class SettingsView: BaseView {
 
     func configure(with viewModel: SettingsViewModel) {
         self.viewModel = viewModel
-        selectTheme(viewModel.selectedTheme)
+        themeSettingsView.configure(with: viewModel.selectedTheme)
+        databaseInfoView.configure(
+            eventCountText: viewModel.eventCountText,
+            leagueCountText: viewModel.leagueCountText
+        )
+        accountView.configure(userName: viewModel.userName)
     }
 
     @objc private func dismissTapped() {
         onDismissTapped?()
-    }
-
-    private func selectTheme(_ theme: Theme) {
-        lightOptionView.configure(
-            with: ThemeOptionViewModel(
-                title: .light,
-                isSelected: theme == .light
-            )
-        )
-        darkOptionView.configure(
-            with: ThemeOptionViewModel(title: .dark, isSelected: theme == .dark)
-        )
-        viewModel?.themeTapHandler(theme)
     }
 }

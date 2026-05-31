@@ -4,39 +4,40 @@ enum APIClient {
     private static let baseURL =
         "https://sofascore-ios-academy-be-c63faa1a2212.herokuapp.com"
 
-    static func fetchEvents(sport: Sport) async throws -> [Event] {
+    static func fetchSecureEvents(sport: Sport) async throws -> [Event] {
         guard let url = URL(string: "\(baseURL)/events?sport=\(sport.slug)")
         else {
             throw URLError(.badURL)
         }
-        let (data, _) = try await URLSession.shared.data(from: url)
+
+        guard let token = UserSession.shared.token else {
+            throw URLError(.userAuthenticationRequired)
+        }
+
+        var urlRequest = URLRequest(url: url)
+        urlRequest.setValue(
+            "Bearer \(token)",
+            forHTTPHeaderField: "Authorization"
+        )
+
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
         return try JSONDecoder().decode([Event].self, from: data)
     }
 
-    static func fetchEvents(
-        sport: Sport,
-        completion: @escaping (Result<[Event], Error>) -> Void
-    ) {
-        guard let url = URL(string: "\(baseURL)/events?sport=\(sport.slug)")
-        else {
-            completion(.failure(URLError(.badURL)))
-            return
+    static func login(request: LoginRequest) async throws -> LoginResponse {
+        guard let url = URL(string: "\(baseURL)/login") else {
+            throw URLError(.badURL)
         }
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            guard let data = data else {
-                completion(.failure(URLError(.badServerResponse)))
-                return
-            }
-            do {
-                let events = try JSONDecoder().decode([Event].self, from: data)
-                completion(.success(events))
-            } catch {
-                completion(.failure(error))
-            }
-        }.resume()
+
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue(
+            "application/json",
+            forHTTPHeaderField: "Content-Type"
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(request)
+
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
+        return try JSONDecoder().decode(LoginResponse.self, from: data)
     }
 }

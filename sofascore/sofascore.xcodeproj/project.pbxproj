@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		870CB2032FB5C10A00F444E9 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 870CB2022FB5C10A00F444E9 /* Kingfisher */; };
+		871DF0802FC4C7F20010C79C /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 871DF07F2FC4C7F20010C79C /* GRDB */; };
 		878E1D062F60A184009229E9 /* SofaAcademic in Frameworks */ = {isa = PBXBuildFile; productRef = 878E1D052F60A184009229E9 /* SofaAcademic */; };
 		879C60E02F5A37B500BD2FD7 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 879C60DF2F5A37B500BD2FD7 /* SnapKit */; };
 /* End PBXBuildFile section */
@@ -45,6 +46,7 @@
 				870CB2032FB5C10A00F444E9 /* Kingfisher in Frameworks */,
 				878E1D062F60A184009229E9 /* SofaAcademic in Frameworks */,
 				879C60E02F5A37B500BD2FD7 /* SnapKit in Frameworks */,
+				871DF0802FC4C7F20010C79C /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,6 +92,7 @@
 				879C60DF2F5A37B500BD2FD7 /* SnapKit */,
 				878E1D052F60A184009229E9 /* SofaAcademic */,
 				870CB2022FB5C10A00F444E9 /* Kingfisher */,
+				871DF07F2FC4C7F20010C79C /* GRDB */,
 			);
 			productName = Sofascore;
 			productReference = 879C60C62F5A375700BD2FD7 /* Sofascore.app */;
@@ -123,6 +126,7 @@
 				879C60DE2F5A37B500BD2FD7 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				878E1D042F60A184009229E9 /* XCRemoteSwiftPackageReference "academy" */,
 				870CB2012FB5C10A00F444E9 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				871DF07E2FC4C7F20010C79C /* XCRemoteSwiftPackageReference "GRDB" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 879C60C72F5A375700BD2FD7 /* Products */;
@@ -366,6 +370,14 @@
 				minimumVersion = 8.9.0;
 			};
 		};
+		871DF07E2FC4C7F20010C79C /* XCRemoteSwiftPackageReference "GRDB" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		878E1D042F60A184009229E9 /* XCRemoteSwiftPackageReference "academy" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sofascore/academy/";
@@ -389,6 +401,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 870CB2012FB5C10A00F444E9 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		871DF07F2FC4C7F20010C79C /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 871DF07E2FC4C7F20010C79C /* XCRemoteSwiftPackageReference "GRDB" */;
+			productName = GRDB;
 		};
 		878E1D052F60A184009229E9 /* SofaAcademic */ = {
 			isa = XCSwiftPackageProductDependency;
