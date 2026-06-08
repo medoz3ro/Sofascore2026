@@ -28,4 +28,8 @@ extension String {
     
     static let loginError = "Login failed. Check your credentials."
     static let emptyFieldsError = "Please enter username and password."
+    
+    static let yellowCard = "Yellow Card"
+    static let redCard = "Red Card"
+    static let foul = "Foul"
 }
