@@ -39,6 +39,27 @@ enum APIClient {
         return try JSONDecoder().decode(LoginResponse.self, from: data)
     }
 
+    static func fetchLeagueMatches(leagueId: Int) async throws -> [Event] {
+        guard let url = URL(string: "\(baseURL)/leagues/\(leagueId)/matches")
+        else {
+            throw URLError(.badURL)
+        }
+        let urlRequest = try authorizedRequest(url: url)
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
+        return try JSONDecoder().decode([Event].self, from: data)
+    }
+
+    static func fetchLeagueStandings(leagueId: Int) async throws -> [Standings]
+    {
+        guard let url = URL(string: "\(baseURL)/leagues/\(leagueId)/standings")
+        else {
+            throw URLError(.badURL)
+        }
+        let urlRequest = try authorizedRequest(url: url)
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
+        return try JSONDecoder().decode([Standings].self, from: data)
+    }
+
     private static func authorizedRequest(url: URL) throws -> URLRequest {
         guard let token = UserSession.shared.token else {
             throw URLError(.userAuthenticationRequired)
@@ -46,5 +67,24 @@ enum APIClient {
         var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
+    }
+
+    static func fetchCountryFlag(countryName: String) async throws -> String? {
+        if let override = CountryFlagOverride.flagUrl(for: countryName) {
+            return override
+        }
+        guard
+            let encoded = countryName.addingPercentEncoding(
+                withAllowedCharacters: .urlPathAllowed
+            ),
+            let url = URL(
+                string: "https://restcountries.com/v3.1/name/\(encoded)"
+            )
+        else {
+            throw URLError(.badURL)
+        }
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let countries = try JSONDecoder().decode([CountryInfo].self, from: data)
+        return countries.first?.flags.png
     }
 }

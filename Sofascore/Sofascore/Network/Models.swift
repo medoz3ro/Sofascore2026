@@ -41,6 +41,21 @@ struct Event: Codable {
     let league: League?
     let homeScore: Int?
     let awayScore: Int?
+    let round: Int?
+}
+
+struct Standings: Decodable {
+    let team: Team
+    let position: Int
+    let matches: Int
+    let wins: Int
+    let losses: Int
+    let draws: Int
+    let points: Int
+    let percentage: Double
+    let scoreFor: Int
+    let scoreAgainst: Int
+    let scoreFormatted: String
 }
 
 struct LoginRequest: Encodable {

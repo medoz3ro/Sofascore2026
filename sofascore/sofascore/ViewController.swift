@@ -20,9 +20,10 @@ class ViewController: UIViewController, BaseViewProtocol {
     )
     private var leagueViewModels: [Int: LeagueViewModel] = [:]
     private var matchViewModels: [Int: MatchViewModel] = [:]
+    private var leagues: [Int: League] = [:]
+    private var currentSport: Sport = .football
     private var diffableDataSource:
         UICollectionViewDiffableDataSource<Section, Item>?
-
     private var currentLoadTask: Task<Void, Never>?
 
     override func viewDidLoad() {
@@ -128,6 +129,19 @@ class ViewController: UIViewController, BaseViewProtocol {
                 let viewModel = self.leagueViewModels[leagueId]
             {
                 header.configure(with: viewModel)
+                header.onTapped = { [weak self] in
+                    guard let self, let league = self.leagues[leagueId] else {
+                        return
+                    }
+                    let leagueDetailsVC = LeagueDetailsViewController(
+                        league: league,
+                        sport: self.currentSport
+                    )
+                    self.navigationController?.pushViewController(
+                        leagueDetailsVC,
+                        animated: false
+                    )
+                }
             }
             return header
         }
@@ -155,8 +169,10 @@ class ViewController: UIViewController, BaseViewProtocol {
         currentLoadTask?.cancel()
         currentLoadTask = Task { @MainActor [weak self] in
             guard let self else { return }
+            self.currentSport = sport
             self.leagueViewModels = [:]
             self.matchViewModels = [:]
+            self.leagues = [:]
             do {
                 let events = try await APIClient.fetchSecureEvents(sport: sport)
                 guard !Task.isCancelled else { return }
@@ -171,13 +187,11 @@ class ViewController: UIViewController, BaseViewProtocol {
     private func onEventsLoaded(_ events: [Event], sport: Sport) {
         DatabaseManager.shared.saveEvents(events)
 
-        let grouped = Dictionary(
-            grouping: events,
-            by: { $0.league?.id ?? 0 }
-        )
+        let grouped = Dictionary(grouping: events, by: { $0.league?.id ?? 0 })
 
         grouped.forEach { leagueId, leagueEvents in
             if let league = leagueEvents.first?.league {
+                leagues[leagueId] = league
                 leagueViewModels[leagueId] = LeagueViewModel(league: league)
             }
         }

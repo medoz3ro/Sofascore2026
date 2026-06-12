@@ -32,4 +32,7 @@ extension String {
     static let yellowCard = "Yellow Card"
     static let redCard = "Red Card"
     static let foul = "Foul"
+    
+    static let matches = "Matches"
+    static let standings = "Standings"
 }
