@@ -5,10 +5,11 @@ import UIKit
 class MatchCell: UICollectionViewCell, BaseViewProtocol {
     private let matchView = MatchView()
     private var model: MatchViewModel?
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
+        styleViews()
         setupConstraints()
         setupGestureRecognizers()
     }
@@ -16,6 +17,10 @@ class MatchCell: UICollectionViewCell, BaseViewProtocol {
 
     func addViews() {
         contentView.addSubview(matchView)
+    }
+
+    func styleViews() {
+        contentView.backgroundColor = .systemBackground
     }
 
     func setupConstraints() {

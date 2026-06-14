@@ -52,7 +52,7 @@ struct Standings: Decodable {
     let losses: Int
     let draws: Int
     let points: Int
-    let percentage: Double
+    let percentage: Double?
     let scoreFor: Int
     let scoreAgainst: Int
     let scoreFormatted: String

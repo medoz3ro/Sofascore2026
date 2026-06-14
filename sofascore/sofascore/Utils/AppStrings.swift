@@ -35,4 +35,8 @@ extension String {
     
     static let matches = "Matches"
     static let standings = "Standings"
+    static let round = "Round"
+    
+    static let standingsPosition = "#"
+    static let standingsTeam = "Team"
 }
