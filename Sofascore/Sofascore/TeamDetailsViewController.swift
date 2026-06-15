@@ -7,11 +7,18 @@ class TeamDetailsViewController: UIViewController, BaseViewProtocol {
     private let headerView = DetailHeaderView()
     private let teamSelectorView = TeamSelectorView()
     private let teamInfoView = TeamInfoView()
-    private let playersView = UIView()
+    private let playersCollectionView = UICollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    )
 
     private let teamId: Int
     private var selectedTab: TeamTab = .details
     private let sport: Sport
+
+    private var playerViewModels: [PlayerViewModel] = []
+    private var playersDiffableDataSource:
+        UICollectionViewDiffableDataSource<Int, Int>?
 
     init(teamId: Int, sport: Sport) {
         self.teamId = teamId
@@ -26,6 +33,7 @@ class TeamDetailsViewController: UIViewController, BaseViewProtocol {
         addViews()
         styleViews()
         setupConstraints()
+        setupDataSource()
         setupBinding()
         loadData()
         selectTab(.details)
@@ -35,13 +43,24 @@ class TeamDetailsViewController: UIViewController, BaseViewProtocol {
         view.addSubview(safeAreaBackgroundView)
         view.addSubview(headerView)
         view.addSubview(teamSelectorView)
-        view.addSubview(playersView)
+        view.addSubview(playersCollectionView)
         view.addSubview(teamInfoView)
     }
 
     func styleViews() {
         view.backgroundColor = .onSurface0
         safeAreaBackgroundView.backgroundColor = .primaryDefault
+
+        playersCollectionView.backgroundColor = .onSurface0
+        playersCollectionView.register(
+            PlayerCell.self,
+            forCellWithReuseIdentifier: "PlayerCell"
+        )
+        let playersLayout = UICollectionViewFlowLayout()
+        playersLayout.scrollDirection = .vertical
+        playersLayout.itemSize = CGSize(width: view.bounds.width, height: 56)
+        playersLayout.minimumLineSpacing = 0
+        playersCollectionView.collectionViewLayout = playersLayout
     }
 
     func setupConstraints() {
@@ -60,10 +79,11 @@ class TeamDetailsViewController: UIViewController, BaseViewProtocol {
             make.leading.trailing.equalToSuperview()
         }
 
-        playersView.snp.makeConstraints { make in
+        playersCollectionView.snp.makeConstraints { make in
             make.top.equalTo(teamSelectorView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
         }
+
         teamInfoView.snp.makeConstraints { make in
             make.top.equalTo(teamSelectorView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
@@ -105,14 +125,39 @@ class TeamDetailsViewController: UIViewController, BaseViewProtocol {
                     players: players,
                     tournaments: tournaments
                 )
-                
                 infoViewModel.managerFlagUrl = CountryFlagOverride.flagUrl(
                     for: teamInfo.manager?.country?.name ?? ""
                 )
                 self.teamInfoView.configure(with: infoViewModel)
+
+                self.playerViewModels = players.map {
+                    PlayerViewModel(player: $0)
+                }
+                var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
+                snapshot.appendSections([0])
+                snapshot.appendItems(Array(self.playerViewModels.indices))
+                await self.playersDiffableDataSource?.apply(snapshot)
             } catch {
                 print("Error fetching team info: \(error)")
             }
+        }
+    }
+
+    private func setupDataSource() {
+        playersDiffableDataSource = UICollectionViewDiffableDataSource<
+            Int, Int
+        >(
+            collectionView: playersCollectionView
+        ) { [weak self] collectionView, indexPath, index in
+            guard let self else { return UICollectionViewCell() }
+            guard
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "PlayerCell",
+                    for: indexPath
+                ) as? PlayerCell
+            else { return UICollectionViewCell() }
+            cell.configure(with: self.playerViewModels[index])
+            return cell
         }
     }
 
@@ -120,6 +165,6 @@ class TeamDetailsViewController: UIViewController, BaseViewProtocol {
         selectedTab = tab
         teamSelectorView.selectTab(tab)
         teamInfoView.isHidden = tab != .details
-        playersView.isHidden = tab != .players
+        playersCollectionView.isHidden = tab != .players
     }
 }
