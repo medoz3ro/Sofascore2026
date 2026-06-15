@@ -3,13 +3,13 @@ import SnapKit
 import SofaAcademic
 import UIKit
 
-class LeagueHeaderDetailView: BaseView {
+class DetailHeaderView: BaseView {
     private let backButton = UIButton(type: .system)
     private let logoContainerView = UIView()
     private let logoImageView = UIImageView()
-    private let leagueNameLabel = UILabel()
-    private let countryFlagImageView = UIImageView()
-    private let countryNameLabel = UILabel()
+    private let titleLabel = UILabel()
+    private let flagImageView = UIImageView()
+    private let subtitleLabel = UILabel()
 
     var onBackTapped: (() -> Void)?
 
@@ -17,9 +17,9 @@ class LeagueHeaderDetailView: BaseView {
         addSubview(backButton)
         addSubview(logoContainerView)
         logoContainerView.addSubview(logoImageView)
-        addSubview(leagueNameLabel)
-        addSubview(countryFlagImageView)
-        addSubview(countryNameLabel)
+        addSubview(titleLabel)
+        addSubview(flagImageView)
+        addSubview(subtitleLabel)
     }
 
     override func styleViews() {
@@ -33,21 +33,20 @@ class LeagueHeaderDetailView: BaseView {
 
         logoImageView.contentMode = .scaleAspectFit
 
-        leagueNameLabel.font = .bold(size: 20)
-        leagueNameLabel.textColor = .white
-        leagueNameLabel.numberOfLines = 1
+        titleLabel.font = .bold(size: 20)
+        titleLabel.textColor = .white
+        titleLabel.numberOfLines = 1
 
-        countryFlagImageView.contentMode = .scaleAspectFit
+        flagImageView.contentMode = .scaleAspectFit
 
-        countryNameLabel.font = .bold(size: 14)
-        countryNameLabel.textColor = .white
-        countryNameLabel.numberOfLines = 1
+        subtitleLabel.font = .bold(size: 14)
+        subtitleLabel.textColor = .white
+        subtitleLabel.numberOfLines = 1
     }
 
     override func setupConstraints() {
         backButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.top.equalToSuperview()
+            make.leading.top.equalToSuperview()
             make.size.equalTo(48)
         }
 
@@ -63,22 +62,22 @@ class LeagueHeaderDetailView: BaseView {
             make.size.equalTo(40)
         }
 
-        leagueNameLabel.snp.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(logoContainerView.snp.trailing).offset(16)
             make.top.equalTo(logoContainerView)
             make.trailing.equalToSuperview().inset(16)
             make.height.equalTo(24)
         }
 
-        countryFlagImageView.snp.makeConstraints { make in
-            make.leading.equalTo(leagueNameLabel)
-            make.top.equalTo(leagueNameLabel.snp.bottom).offset(4)
+        flagImageView.snp.makeConstraints { make in
+            make.leading.equalTo(titleLabel)
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
             make.size.equalTo(16)
         }
 
-        countryNameLabel.snp.makeConstraints { make in
-            make.leading.equalTo(countryFlagImageView.snp.trailing).offset(4)
-            make.centerY.equalTo(countryFlagImageView)
+        subtitleLabel.snp.makeConstraints { make in
+            make.leading.equalTo(flagImageView.snp.trailing).offset(4)
+            make.centerY.equalTo(flagImageView)
             make.trailing.equalToSuperview().inset(16)
         }
     }
@@ -91,13 +90,11 @@ class LeagueHeaderDetailView: BaseView {
         )
     }
 
-    func configure(with viewModel: LeagueHeaderDetailViewModel) {
-        leagueNameLabel.text = viewModel.leagueName
-        countryNameLabel.text = viewModel.countryName
+    func configure(with viewModel: DetailHeaderViewModel) {
+        titleLabel.text = viewModel.title
+        subtitleLabel.text = viewModel.subtitle
         logoImageView.kf.setImage(with: URL(string: viewModel.logoUrl ?? ""))
-        countryFlagImageView.kf.setImage(
-            with: URL(string: viewModel.flagUrl ?? "")
-        )
+        flagImageView.kf.setImage(with: URL(string: viewModel.flagUrl ?? ""))
     }
 
     @objc private func backTapped() {

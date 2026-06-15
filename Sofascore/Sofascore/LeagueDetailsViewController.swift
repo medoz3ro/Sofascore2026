@@ -12,7 +12,7 @@ nonisolated enum LeagueMatchItem: Hashable, Sendable {
 
 class LeagueDetailsViewController: UIViewController, BaseViewProtocol {
     private let safeAreaBackgroundView = UIView()
-    private let headerView = LeagueHeaderDetailView()
+    private let headerView = DetailHeaderView()
     private let leagueSelectorView = LeagueSelectorView()
     private let matchesCollectionView = UICollectionView(
         frame: .zero,
@@ -205,7 +205,10 @@ class LeagueDetailsViewController: UIViewController, BaseViewProtocol {
 
             cell.onTeamTapped = { [weak self] teamId in
                 guard let self else { return }
-                let teamDetailsVC = TeamDetailsViewController(teamId: teamId)
+                let teamDetailsVC = TeamDetailsViewController(
+                    teamId: teamId,
+                    sport: sport
+                )
                 self.navigationController?.pushViewController(
                     teamDetailsVC,
                     animated: true
@@ -235,17 +238,11 @@ class LeagueDetailsViewController: UIViewController, BaseViewProtocol {
             league: league,
             sport: sport
         )
-        headerView.configure(with: LeagueHeaderDetailViewModel(league: league))
+        headerView.configure(with: detailsViewModel.fetchHeaderViewModel())
 
         let standingsHeaderViewModel = StandingsHeaderViewModel.make(for: sport)
         standingsHeaderView.configure(with: standingsHeaderViewModel)
         standingsColumns = standingsHeaderViewModel.columns
-
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            let headerViewModel = await detailsViewModel.fetchHeaderViewModel()
-            self.headerView.configure(with: headerViewModel)
-        }
 
         Task { @MainActor [weak self] in
             guard let self else { return }

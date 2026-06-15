@@ -4,16 +4,18 @@ import UIKit
 
 class TeamDetailsViewController: UIViewController, BaseViewProtocol {
     private let safeAreaBackgroundView = UIView()
-    private let headerView = TeamHeaderView()
+    private let headerView = DetailHeaderView()
     private let teamSelectorView = TeamSelectorView()
-    private let detailsView = UIView()
+    private let teamInfoView = TeamInfoView()
     private let playersView = UIView()
 
     private let teamId: Int
     private var selectedTab: TeamTab = .details
+    private let sport: Sport
 
-    init(teamId: Int) {
+    init(teamId: Int, sport: Sport) {
         self.teamId = teamId
+        self.sport = sport
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -33,8 +35,8 @@ class TeamDetailsViewController: UIViewController, BaseViewProtocol {
         view.addSubview(safeAreaBackgroundView)
         view.addSubview(headerView)
         view.addSubview(teamSelectorView)
-        view.addSubview(detailsView)
         view.addSubview(playersView)
+        view.addSubview(teamInfoView)
     }
 
     func styleViews() {
@@ -58,12 +60,11 @@ class TeamDetailsViewController: UIViewController, BaseViewProtocol {
             make.leading.trailing.equalToSuperview()
         }
 
-        detailsView.snp.makeConstraints { make in
+        playersView.snp.makeConstraints { make in
             make.top.equalTo(teamSelectorView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
         }
-
-        playersView.snp.makeConstraints { make in
+        teamInfoView.snp.makeConstraints { make in
             make.top.equalTo(teamSelectorView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
         }
@@ -86,25 +87,29 @@ class TeamDetailsViewController: UIViewController, BaseViewProtocol {
             guard let self else { return }
             do {
                 let teamInfo = try await viewModel.fetchTeamInfo()
-                self.headerView.configure(
-                    with: TeamHeaderViewModel(teamInfo: teamInfo)
-                )
-            } catch {
-                print("Error fetching team info: \(error)")
-            }
-        }
+                let players = try await viewModel.fetchPlayers()
+                let tournaments = try await viewModel.fetchTournaments()
 
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            do {
-                let teamInfo = try await viewModel.fetchTeamInfo()
-                var headerViewModel = TeamHeaderViewModel(teamInfo: teamInfo)
-                self.headerView.configure(with: headerViewModel)
-                let flagUrl = try await APIClient.fetchCountryFlag(
-                    countryName: teamInfo.team.country?.name ?? ""
+                var headerViewModel = DetailHeaderViewModel(
+                    title: teamInfo.team.name,
+                    subtitle: teamInfo.team.country?.name ?? "",
+                    logoUrl: teamInfo.team.logoUrl
                 )
-                headerViewModel.flagUrl = flagUrl
+                headerViewModel.flagUrl = CountryFlagOverride.flagUrl(
+                    for: teamInfo.team.country?.name ?? ""
+                )
                 self.headerView.configure(with: headerViewModel)
+
+                var infoViewModel = TeamInfoViewModel(
+                    teamInfo: teamInfo,
+                    players: players,
+                    tournaments: tournaments
+                )
+                
+                infoViewModel.managerFlagUrl = CountryFlagOverride.flagUrl(
+                    for: teamInfo.manager?.country?.name ?? ""
+                )
+                self.teamInfoView.configure(with: infoViewModel)
             } catch {
                 print("Error fetching team info: \(error)")
             }
@@ -114,7 +119,7 @@ class TeamDetailsViewController: UIViewController, BaseViewProtocol {
     private func selectTab(_ tab: TeamTab) {
         selectedTab = tab
         teamSelectorView.selectTab(tab)
-        detailsView.isHidden = tab != .details
+        teamInfoView.isHidden = tab != .details
         playersView.isHidden = tab != .players
     }
 }

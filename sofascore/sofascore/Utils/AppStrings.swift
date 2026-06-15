@@ -42,4 +42,12 @@ extension String {
     
     static let details = "Details"
     static let players = "Players"
+    
+    static let teamInfo = "Team Info"
+    static let totalPlayers = "Total Players"
+    static let foreignPlayers = "Foreign Players"
+    static let venue = "Venue"
+    static let stadium = "Stadium"
+    
+    static let tournaments = "Tournaments"
 }
