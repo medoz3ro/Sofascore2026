@@ -202,6 +202,16 @@ class LeagueDetailsViewController: UIViewController, BaseViewProtocol {
                     for: indexPath
                 ) as? StandingsCell
             else { return UICollectionViewCell() }
+
+            cell.onTeamTapped = { [weak self] teamId in
+                guard let self else { return }
+                let teamDetailsVC = TeamDetailsViewController(teamId: teamId)
+                self.navigationController?.pushViewController(
+                    teamDetailsVC,
+                    animated: true
+                )
+            }
+
             cell.configure(
                 with: self.standingsViewModels[index],
                 columns: self.standingsColumns

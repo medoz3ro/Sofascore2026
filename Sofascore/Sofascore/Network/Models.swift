@@ -67,3 +67,37 @@ struct LoginResponse: Decodable {
     let token: String
     let name: String
 }
+
+struct TeamManager: Decodable {
+    let id: Int
+    let name: String
+    let country: Country?
+    let imageUrl: String?
+}
+
+struct TeamVenue: Decodable {
+    let name: String
+    let capacity: Int
+    let city: TeamVenueCity?
+}
+
+struct TeamVenueCity: Decodable {
+    let name: String
+}
+
+struct TeamInfo: Decodable {
+    let team: Team
+    let manager: TeamManager?
+    let venue: TeamVenue?
+}
+
+struct Player: Decodable {
+    let id: Int
+    let name: String
+    let shortName: String
+    let position: String
+    let jerseyNumber: String?
+    let country: Country?
+    let imageUrl: String?
+    let isForeign: Bool
+}

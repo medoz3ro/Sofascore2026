@@ -9,6 +9,9 @@ class StandingsView: BaseView {
     private let teamNameLabel = UILabel()
     private let colStackView = UIStackView()
     private var columnLabels: [UILabel] = []
+    private var teamId: Int = 0
+
+    var onTeamTapped: ((Int) -> Void)?
 
     override func addViews() {
         addSubview(positionLabel)
@@ -33,6 +36,10 @@ class StandingsView: BaseView {
         teamNameLabel.font = .regular(size: 14)
         teamNameLabel.textColor = .onSurface1
         teamNameLabel.numberOfLines = 1
+        teamNameLabel.isUserInteractionEnabled = true
+        teamNameLabel.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(teamTapped))
+        )
     }
 
     override func setupConstraints() {
@@ -64,6 +71,7 @@ class StandingsView: BaseView {
         with viewModel: StandingsViewModel,
         columns: [StandingsColumn]
     ) {
+        teamId = viewModel.teamId
         positionLabel.text = viewModel.position
         teamNameLabel.text = viewModel.teamName
         logoImageView.kf.setImage(
@@ -84,5 +92,9 @@ class StandingsView: BaseView {
             }
             columnLabels.append(label)
         }
+    }
+
+    @objc private func teamTapped() {
+        onTeamTapped?(teamId)
     }
 }

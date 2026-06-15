@@ -4,12 +4,14 @@ struct StandingsViewModel {
     let position: String
     let teamName: String
     let teamLogoUrl: String?
+    let teamId: Int
     let columns: [String]
 
     init(standings: Standings, sport: Sport) {
         position = "\(standings.position)"
         teamName = standings.team.name
         teamLogoUrl = standings.team.logoUrl
+        teamId = standings.team.id
 
         switch sport {
         case .football:

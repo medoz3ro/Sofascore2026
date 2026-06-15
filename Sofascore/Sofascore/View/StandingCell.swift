@@ -5,6 +5,8 @@ import UIKit
 class StandingsCell: UICollectionViewCell, BaseViewProtocol {
     private let standingsView = StandingsView()
 
+    var onTeamTapped: ((Int) -> Void)?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
@@ -30,10 +32,8 @@ class StandingsCell: UICollectionViewCell, BaseViewProtocol {
 
     func setupGestureRecognizers() {}
 
-    func configure(
-        with viewModel: StandingsViewModel,
-        columns: [StandingsColumn]
-    ) {
+    func configure(with viewModel: StandingsViewModel, columns: [StandingsColumn]) {
+        standingsView.onTeamTapped = onTeamTapped
         standingsView.configure(with: viewModel, columns: columns)
     }
 }

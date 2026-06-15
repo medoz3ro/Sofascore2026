@@ -69,6 +69,24 @@ enum APIClient {
         return request
     }
 
+    static func fetchTeamInfo(teamId: Int) async throws -> TeamInfo {
+        guard let url = URL(string: "\(baseURL)/teams/\(teamId)") else {
+            throw URLError(.badURL)
+        }
+        let urlRequest = try authorizedRequest(url: url)
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
+        return try JSONDecoder().decode(TeamInfo.self, from: data)
+    }
+
+    static func fetchTeamPlayers(teamId: Int) async throws -> [Player] {
+        guard let url = URL(string: "\(baseURL)/teams/\(teamId)/players") else {
+            throw URLError(.badURL)
+        }
+        let urlRequest = try authorizedRequest(url: url)
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
+        return try JSONDecoder().decode([Player].self, from: data)
+    }
+
     static func fetchCountryFlag(countryName: String) async throws -> String? {
         if let override = CountryFlagOverride.flagUrl(for: countryName) {
             return override

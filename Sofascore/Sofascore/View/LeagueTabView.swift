@@ -27,4 +27,11 @@ class LeagueTabView: BaseView {
         case .standings: titleLabel.text = .standings
         }
     }
+    
+    func configure(with tab: TeamTab) {
+        switch tab {
+        case .details: titleLabel.text = .details
+        case .players: titleLabel.text = .players
+        }
+    }
 }

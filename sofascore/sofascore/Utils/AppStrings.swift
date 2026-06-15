@@ -39,4 +39,7 @@ extension String {
     
     static let standingsPosition = "#"
     static let standingsTeam = "Team"
+    
+    static let details = "Details"
+    static let players = "Players"
 }
