@@ -1,22 +1,40 @@
 import Foundation
 
+struct StandingsColumn {
+    let title: String
+    let width: CGFloat
+}
+
 struct StandingsHeaderViewModel {
-    let col1: String
-    let col2: String
-    let col3: String
-    let col4: String
-    let col5: String
-    let lastCol: String
-    let showLastCol: Bool
+    let columns: [StandingsColumn]
 
     static func make(for sport: Sport) -> StandingsHeaderViewModel {
         switch sport {
         case .football:
-            return StandingsHeaderViewModel(col1: "W", col2: "D", col3: "L", col4: "Goals", col5: "P", lastCol: "PTS", showLastCol: true)
+            return StandingsHeaderViewModel(columns: [
+                StandingsColumn(title: "P", width: 24),
+                StandingsColumn(title: "W", width: 24),
+                StandingsColumn(title: "D", width: 24),
+                StandingsColumn(title: "L", width: 24),
+                StandingsColumn(title: "Goals", width: 40),
+                StandingsColumn(title: "PTS", width: 28),
+            ])
         case .americanFootball:
-            return StandingsHeaderViewModel(col1: "W", col2: "D", col3: "L", col4: "PCT", col5: "P", lastCol: "", showLastCol: false)
+            return StandingsHeaderViewModel(columns: [
+                StandingsColumn(title: "P", width: 24),
+                StandingsColumn(title: "W", width: 24),
+                StandingsColumn(title: "D", width: 24),
+                StandingsColumn(title: "L", width: 24),
+                StandingsColumn(title: "PCT", width: 40),
+            ])
         case .basketball:
-            return StandingsHeaderViewModel(col1: "W", col2: "L", col3: "GB", col4: "PCT", col5: "P", lastCol: "", showLastCol: false)
+            return StandingsHeaderViewModel(columns: [
+                StandingsColumn(title: "P", width: 24),
+                StandingsColumn(title: "W", width: 24),
+                StandingsColumn(title: "L", width: 24),
+                StandingsColumn(title: "DIFF", width: 32),
+                StandingsColumn(title: "PCT", width: 40),
+            ])
         }
     }
 }

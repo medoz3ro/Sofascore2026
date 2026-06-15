@@ -34,6 +34,7 @@ class LeagueDetailsViewController: UIViewController, BaseViewProtocol {
     private var standingsDiffableDataSource:
         UICollectionViewDiffableDataSource<Int, Int>?
     private let standingsHeaderView = StandingsHeaderView()
+    private var standingsColumns: [StandingsColumn] = []
 
     init(league: League, sport: Sport) {
         self.league = league
@@ -201,7 +202,10 @@ class LeagueDetailsViewController: UIViewController, BaseViewProtocol {
                     for: indexPath
                 ) as? StandingsCell
             else { return UICollectionViewCell() }
-            cell.configure(with: self.standingsViewModels[index])
+            cell.configure(
+                with: self.standingsViewModels[index],
+                columns: self.standingsColumns
+            )
             return cell
         }
     }
@@ -221,8 +225,11 @@ class LeagueDetailsViewController: UIViewController, BaseViewProtocol {
             league: league,
             sport: sport
         )
-
         headerView.configure(with: LeagueHeaderDetailViewModel(league: league))
+
+        let standingsHeaderViewModel = StandingsHeaderViewModel.make(for: sport)
+        standingsHeaderView.configure(with: standingsHeaderViewModel)
+        standingsColumns = standingsHeaderViewModel.columns
 
         Task { @MainActor [weak self] in
             guard let self else { return }
@@ -248,20 +255,21 @@ class LeagueDetailsViewController: UIViewController, BaseViewProtocol {
                 let standings = try await APIClient.fetchLeagueStandings(
                     leagueId: league.id
                 )
-                self.standingsViewModels = standings.map {
-                    StandingsViewModel(standings: $0)
-                }
-                var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-                snapshot.appendSections([0])
-                snapshot.appendItems(Array(self.standingsViewModels.indices))
-                await self.standingsDiffableDataSource?.apply(snapshot)
+                self.onStandingsLoaded(standings)
             } catch {
                 print("Error fetching standings: \(error)")
             }
         }
-        standingsHeaderView.configure(
-            with: StandingsHeaderViewModel.make(for: sport)
-        )
+    }
+
+    private func onStandingsLoaded(_ standings: [Standings]) {
+        standingsViewModels = standings.map {
+            StandingsViewModel(standings: $0, sport: sport)
+        }
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(Array(standingsViewModels.indices))
+        standingsDiffableDataSource?.apply(snapshot)
     }
 
     private func onMatchesLoaded(_ events: [Event]) {

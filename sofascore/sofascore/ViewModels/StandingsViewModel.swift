@@ -1,23 +1,42 @@
+import Foundation
+
 struct StandingsViewModel {
     let position: String
     let teamName: String
     let teamLogoUrl: String?
-    let matches: String
-    let wins: String
-    let losses: String
-    let draws: String
-    let goals: String
-    let points: String
+    let columns: [String]
 
-    init(standings: Standings) {
+    init(standings: Standings, sport: Sport) {
         position = "\(standings.position)"
         teamName = standings.team.name
         teamLogoUrl = standings.team.logoUrl
-        matches = "\(standings.matches)"
-        wins = "\(standings.wins)"
-        losses = "\(standings.losses)"
-        draws = "\(standings.draws)"
-        goals = "\(standings.scoreFor):\(standings.scoreAgainst)"
-        points = "\(standings.points)"
+
+        switch sport {
+        case .football:
+            columns = [
+                "\(standings.matches)",
+                "\(standings.wins)",
+                "\(standings.draws)",
+                "\(standings.losses)",
+                "\(standings.scoreFor):\(standings.scoreAgainst)",
+                "\(standings.points ?? 0)",
+            ]
+        case .americanFootball:
+            columns = [
+                "\(standings.matches)",
+                "\(standings.wins)",
+                "\(standings.draws)",
+                "\(standings.losses)",
+                String(format: "%.3f", standings.percentage ?? 0),
+            ]
+        case .basketball:
+            columns = [
+                "\(standings.matches)",
+                "\(standings.wins)",
+                "\(standings.losses)",
+                standings.scoreFormatted,
+                String(format: "%.3f", standings.percentage ?? 0),
+            ]
+        }
     }
 }
