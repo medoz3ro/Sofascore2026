@@ -19,6 +19,7 @@ class TeamDetailsViewController: UIViewController, BaseViewProtocol {
     private var playerViewModels: [PlayerViewModel] = []
     private var playersDiffableDataSource:
         UICollectionViewDiffableDataSource<Int, Int>?
+    private var teamInfo: TeamInfo?
 
     init(teamId: Int, sport: Sport) {
         self.teamId = teamId
@@ -106,27 +107,28 @@ class TeamDetailsViewController: UIViewController, BaseViewProtocol {
         Task { @MainActor [weak self] in
             guard let self else { return }
             do {
-                let teamInfo = try await viewModel.fetchTeamInfo()
+                let fetchedTeamInfo = try await viewModel.fetchTeamInfo()
+                self.teamInfo = fetchedTeamInfo
                 let players = try await viewModel.fetchPlayers()
                 let tournaments = try await viewModel.fetchTournaments()
 
                 var headerViewModel = DetailHeaderViewModel(
-                    title: teamInfo.team.name,
-                    subtitle: teamInfo.team.country?.name ?? "",
-                    logoUrl: teamInfo.team.logoUrl
+                    title: fetchedTeamInfo.team.name,
+                    subtitle: fetchedTeamInfo.team.country?.name ?? "",
+                    logoUrl: fetchedTeamInfo.team.logoUrl
                 )
                 headerViewModel.flagUrl = CountryFlagOverride.flagUrl(
-                    for: teamInfo.team.country?.name ?? ""
+                    for: fetchedTeamInfo.team.country?.name ?? ""
                 )
                 self.headerView.configure(with: headerViewModel)
 
                 var infoViewModel = TeamInfoViewModel(
-                    teamInfo: teamInfo,
+                    teamInfo: fetchedTeamInfo,
                     players: players,
                     tournaments: tournaments
                 )
                 infoViewModel.managerFlagUrl = CountryFlagOverride.flagUrl(
-                    for: teamInfo.manager?.country?.name ?? ""
+                    for: fetchedTeamInfo.manager?.country?.name ?? ""
                 )
                 self.teamInfoView.configure(with: infoViewModel)
 
@@ -156,6 +158,21 @@ class TeamDetailsViewController: UIViewController, BaseViewProtocol {
                     for: indexPath
                 ) as? PlayerCell
             else { return UICollectionViewCell() }
+            cell.onPlayerTapped = { [weak self] in
+                guard let self, let teamInfo = self.teamInfo else { return }
+                let player = self.playerViewModels[index]
+                let playerViewModel = PlayerDetailsViewModel(
+                    player: player,
+                    teamInfo: teamInfo
+                )
+                let playerDetailsVC = PlayerDetailsViewController(
+                    viewModel: playerViewModel
+                )
+                self.navigationController?.pushViewController(
+                    playerDetailsVC,
+                    animated: true
+                )
+            }
             cell.configure(with: self.playerViewModels[index])
             return cell
         }

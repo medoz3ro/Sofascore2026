@@ -5,6 +5,8 @@ import UIKit
 class PlayerCell: UICollectionViewCell, BaseViewProtocol {
     private let playerView = PlayerView()
 
+    var onPlayerTapped: (() -> Void)?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
@@ -31,6 +33,7 @@ class PlayerCell: UICollectionViewCell, BaseViewProtocol {
     func setupGestureRecognizers() {}
 
     func configure(with viewModel: PlayerViewModel) {
+        playerView.onTapped = onPlayerTapped
         playerView.configure(with: viewModel)
     }
 }

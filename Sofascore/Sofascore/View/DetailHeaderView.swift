@@ -95,6 +95,24 @@ class DetailHeaderView: BaseView {
         subtitleLabel.text = viewModel.subtitle
         logoImageView.kf.setImage(with: URL(string: viewModel.logoUrl ?? ""))
         flagImageView.kf.setImage(with: URL(string: viewModel.flagUrl ?? ""))
+
+        if viewModel.subtitle.isEmpty {
+            titleLabel.snp.remakeConstraints { make in
+                make.leading.equalTo(logoContainerView.snp.trailing).offset(16)
+                make.centerY.equalTo(logoContainerView)
+                make.trailing.equalToSuperview().inset(16)
+            }
+            subtitleLabel.isHidden = true
+            flagImageView.isHidden = true
+        } else {
+            titleLabel.snp.remakeConstraints { make in
+                make.leading.equalTo(logoContainerView.snp.trailing).offset(16)
+                make.top.equalTo(logoContainerView)
+                make.trailing.equalToSuperview().inset(16)
+                make.height.equalTo(24)
+            }
+            subtitleLabel.isHidden = false
+        }
     }
 
     @objc private func backTapped() {

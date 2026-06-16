@@ -9,6 +9,8 @@ class PlayerView: BaseView {
     private let countryFlagImageView = UIImageView()
     private let countryNameLabel = UILabel()
 
+    var onTapped: (() -> Void)?
+
     override func addViews() {
         addSubview(playerImageView)
         addSubview(nameLabel)
@@ -32,6 +34,11 @@ class PlayerView: BaseView {
         countryNameLabel.font = .regular(size: 12)
         countryNameLabel.textColor = .onSurface2
         countryNameLabel.numberOfLines = 1
+
+        isUserInteractionEnabled = true
+        addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        )
     }
 
     override func setupConstraints() {
@@ -66,5 +73,9 @@ class PlayerView: BaseView {
         countryFlagImageView.kf.setImage(
             with: URL(string: viewModel.flagUrl ?? "")
         )
+    }
+
+    @objc private func handleTap() {
+        onTapped?()
     }
 }
