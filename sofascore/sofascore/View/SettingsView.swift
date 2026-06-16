@@ -5,22 +5,27 @@ import UIKit
 class SettingsView: BaseView {
     var onDismissTapped: (() -> Void)?
     var onLogoutTapped: (() -> Void)?
+    var onLanguageSelected: ((String) -> Void)?
 
     private var viewModel: SettingsViewModel?
     private let statusBarView = UIView()
     private let titleLabel = UILabel()
     private let backButton = UIButton(type: .custom)
+    private let languageSettingsView = LanguageSettingsView()
     private let themeSettingsView = ThemeSettingsView()
     private let databaseInfoView = DatabaseInfoView()
     private let accountView = AccountView()
+    private let aboutView = AboutView()
 
     override func addViews() {
         addSubview(statusBarView)
         statusBarView.addSubview(backButton)
         statusBarView.addSubview(titleLabel)
+        addSubview(languageSettingsView)
         addSubview(themeSettingsView)
         addSubview(databaseInfoView)
         addSubview(accountView)
+        addSubview(aboutView)
     }
 
     override func styleViews() {
@@ -34,6 +39,10 @@ class SettingsView: BaseView {
 
         backButton.setImage(UIImage(named: "arrow_back_icon"), for: .normal)
         backButton.tintColor = .white
+
+        languageSettingsView.onLanguageSelected = { [weak self] language in
+            self?.onLanguageSelected?(language)
+        }
 
         themeSettingsView.onThemeSelected = { [weak self] theme in
             self?.viewModel?.themeTapHandler(theme)
@@ -61,8 +70,13 @@ class SettingsView: BaseView {
             make.size.equalTo(24)
         }
 
-        themeSettingsView.snp.makeConstraints { make in
+        languageSettingsView.snp.makeConstraints { make in
             make.top.equalTo(statusBarView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+        }
+
+        themeSettingsView.snp.makeConstraints { make in
+            make.top.equalTo(languageSettingsView.snp.bottom)
             make.leading.trailing.equalToSuperview()
         }
 
@@ -73,6 +87,11 @@ class SettingsView: BaseView {
 
         accountView.snp.makeConstraints { make in
             make.top.equalTo(databaseInfoView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+        }
+
+        aboutView.snp.makeConstraints { make in
+            make.top.equalTo(accountView.snp.bottom)
             make.leading.trailing.equalToSuperview()
         }
     }
