@@ -54,10 +54,6 @@ class ThemeSettingsView: BaseView {
     }
 
     func configure(with theme: Theme) {
-        selectTheme(theme)
-    }
-
-    private func selectTheme(_ theme: Theme) {
         lightOptionView.configure(
             with: ThemeOptionViewModel(
                 title: .light,
@@ -67,6 +63,10 @@ class ThemeSettingsView: BaseView {
         darkOptionView.configure(
             with: ThemeOptionViewModel(title: .dark, isSelected: theme == .dark)
         )
+    }
+
+    private func selectTheme(_ theme: Theme) {
+        configure(with: theme)
         onThemeSelected?(theme)
     }
 }

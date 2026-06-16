@@ -62,11 +62,8 @@ class EventDetailsView: BaseView {
         homeTeamView.configure(with: viewModel.homeTeamViewModel)
         awayTeamView.configure(with: viewModel.awayTeamViewModel)
 
-        scoreView.isHidden = !viewModel.showScore
-        dateTimeView.isHidden = viewModel.showScore
-
-        if viewModel.showScore {
-            scoreView.configure(with: viewModel.scoreViewModel!)
+        if let scoreViewModel = viewModel.scoreViewModel {
+            scoreView.configure(with: scoreViewModel)
         } else {
             dateTimeView.date(viewModel.date)
             dateTimeView.time(viewModel.time)

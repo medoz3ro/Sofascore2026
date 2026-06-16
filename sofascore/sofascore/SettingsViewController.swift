@@ -67,6 +67,19 @@ class SettingsViewController: UIViewController, BaseViewProtocol {
             DatabaseManager.shared.deleteAll()
             (UIApplication.shared.delegate as? AppDelegate)?.switchToLogin()
         }
+
+        settingsView.onLanguageSelected = { [weak self] language in
+            UserDefaults.standard.set([language], forKey: "AppleLanguages")
+            UserDefaults.standard.synchronize()
+
+            let alert = UIAlertController(
+                title: .languageChangedTitle,
+                message: .languageChangedMessage,
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self?.present(alert, animated: true)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
