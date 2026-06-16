@@ -21,13 +21,23 @@ struct EventDetailsViewModel {
     let scoreColors: ScoreColors
     let statusText: String
     let showScore: Bool
+    let homeTeamId: Int
+    let awayTeamId: Int
     let backTapHandler: () -> Void
+    let onHomeTapped: (() -> Void)?
+    let onAwayTapped: (() -> Void)?
 
     init(
         event: Event,
         sport: Sport,
-        backTapHandler: @escaping () -> Void
+        backTapHandler: @escaping () -> Void,
+        onHomeTapped: (() -> Void)? = nil,
+        onAwayTapped: (() -> Void)? = nil
     ) {
+        homeTeamId = event.homeTeam.id
+        awayTeamId = event.awayTeam.id
+        self.onHomeTapped = onHomeTapped
+        self.onAwayTapped = onAwayTapped
         self.backTapHandler = backTapHandler
 
         let league = event.league
@@ -114,11 +124,21 @@ struct EventDetailsViewModel {
     }
 
     var homeTeamViewModel: EventTeamViewModel {
-        EventTeamViewModel(name: homeTeamName, logo: homeTeamLogo)
+        EventTeamViewModel(
+            name: homeTeamName,
+            logo: homeTeamLogo,
+            teamId: homeTeamId,
+            onTapped: onHomeTapped
+        )
     }
 
     var awayTeamViewModel: EventTeamViewModel {
-        EventTeamViewModel(name: awayTeamName, logo: awayTeamLogo)
+        EventTeamViewModel(
+            name: awayTeamName,
+            logo: awayTeamLogo,
+            teamId: awayTeamId,
+            onTapped: onAwayTapped
+        )
     }
 
     var scoreViewModel: EventScoreViewModel? {

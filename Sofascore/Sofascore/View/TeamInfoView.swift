@@ -282,9 +282,7 @@ class TeamInfoView: BaseView {
         foreignValueLabel.text = viewModel.foreignPlayers
         venueNameLabel.text = viewModel.venueName
 
-        let total = Double(viewModel.totalPlayers) ?? 1
-        let foreign = Double(viewModel.foreignPlayers) ?? 0
-        progressView.setProgress(foreign / total)
+        progressView.setProgress(viewModel.foreignPlayersRatio)
 
         tournamentsStackView.arrangedSubviews.forEach {
             $0.removeFromSuperview()
@@ -303,7 +301,7 @@ class TeamInfoView: BaseView {
                 tournamentsStackView.addArrangedSubview(rowStack!)
             }
             let item = TournamentItemView()
-            item.configure(with: league)
+            item.configure(with: LeagueViewModel(league: league))
             rowStack?.addArrangedSubview(item)
         }
     }

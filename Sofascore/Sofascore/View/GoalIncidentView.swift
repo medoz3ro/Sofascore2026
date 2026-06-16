@@ -42,12 +42,7 @@ class GoalIncidentView: BaseView {
         scoreLabel.text = viewModel.score
         playerNameLabel.text = viewModel.playerName
         iconImageView.image = viewModel.icon
-
-        if viewModel.isHomeTeam {
-            setupHomeLayout()
-        } else {
-            setupAwayLayout()
-        }
+        viewModel.isHomeTeam ? setupHomeLayout() : setupAwayLayout()
     }
 
     private func setupHomeLayout() {

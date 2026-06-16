@@ -96,14 +96,15 @@ class DetailHeaderView: BaseView {
         logoImageView.kf.setImage(with: URL(string: viewModel.logoUrl ?? ""))
         flagImageView.kf.setImage(with: URL(string: viewModel.flagUrl ?? ""))
 
-        if viewModel.subtitle.isEmpty {
+        subtitleLabel.isHidden = viewModel.isSubtitleHidden
+        flagImageView.isHidden = viewModel.isSubtitleHidden
+
+        if viewModel.isSubtitleHidden {
             titleLabel.snp.remakeConstraints { make in
                 make.leading.equalTo(logoContainerView.snp.trailing).offset(16)
                 make.centerY.equalTo(logoContainerView)
                 make.trailing.equalToSuperview().inset(16)
             }
-            subtitleLabel.isHidden = true
-            flagImageView.isHidden = true
         } else {
             titleLabel.snp.remakeConstraints { make in
                 make.leading.equalTo(logoContainerView.snp.trailing).offset(16)
@@ -111,7 +112,6 @@ class DetailHeaderView: BaseView {
                 make.trailing.equalToSuperview().inset(16)
                 make.height.equalTo(24)
             }
-            subtitleLabel.isHidden = false
         }
     }
 

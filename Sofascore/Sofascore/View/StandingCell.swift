@@ -32,7 +32,10 @@ class StandingsCell: UICollectionViewCell, BaseViewProtocol {
 
     func setupGestureRecognizers() {}
 
-    func configure(with viewModel: StandingsViewModel, columns: [StandingsColumn]) {
+    func configure(
+        with viewModel: StandingsViewModel,
+        columns: [StandingsColumn]
+    ) {
         standingsView.onTeamTapped = onTeamTapped
         standingsView.configure(with: viewModel, columns: columns)
     }

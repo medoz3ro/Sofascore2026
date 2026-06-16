@@ -159,18 +159,9 @@ class TeamDetailsViewController: UIViewController, BaseViewProtocol {
                 ) as? PlayerCell
             else { return UICollectionViewCell() }
             cell.onPlayerTapped = { [weak self] in
-                guard let self, let teamInfo = self.teamInfo else { return }
-                let player = self.playerViewModels[index]
-                let playerViewModel = PlayerDetailsViewModel(
-                    player: player,
-                    teamInfo: teamInfo
-                )
-                let playerDetailsVC = PlayerDetailsViewController(
-                    viewModel: playerViewModel
-                )
-                self.navigationController?.pushViewController(
-                    playerDetailsVC,
-                    animated: true
+                guard let self else { return }
+                self.navigateToPlayerDetails(
+                    player: self.playerViewModels[index]
                 )
             }
             cell.configure(with: self.playerViewModels[index])
@@ -183,5 +174,20 @@ class TeamDetailsViewController: UIViewController, BaseViewProtocol {
         teamSelectorView.selectTab(tab)
         teamInfoView.isHidden = tab != .details
         playersCollectionView.isHidden = tab != .players
+    }
+
+    private func navigateToPlayerDetails(player: PlayerViewModel) {
+        guard let teamInfo else { return }
+        let playerViewModel = PlayerDetailsViewModel(
+            player: player,
+            teamInfo: teamInfo
+        )
+        let playerDetailsVC = PlayerDetailsViewController(
+            viewModel: playerViewModel
+        )
+        navigationController?.pushViewController(
+            playerDetailsVC,
+            animated: true
+        )
     }
 }

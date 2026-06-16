@@ -133,14 +133,7 @@ class ViewController: UIViewController, BaseViewProtocol {
                     guard let self, let league = self.leagues[leagueId] else {
                         return
                     }
-                    let leagueDetailsVC = LeagueDetailsViewController(
-                        league: league,
-                        sport: self.currentSport
-                    )
-                    self.navigationController?.pushViewController(
-                        leagueDetailsVC,
-                        animated: false
-                    )
+                    self.navigateToLeagueDetails(league: league)
                 }
             }
             return header
@@ -226,5 +219,16 @@ class ViewController: UIViewController, BaseViewProtocol {
             snapshot.appendItems(items, toSection: .league(leagueId))
         }
         diffableDataSource?.apply(snapshot)
+    }
+
+    private func navigateToLeagueDetails(league: League) {
+        let leagueDetailsVC = LeagueDetailsViewController(
+            league: league,
+            sport: currentSport
+        )
+        navigationController?.pushViewController(
+            leagueDetailsVC,
+            animated: false
+        )
     }
 }

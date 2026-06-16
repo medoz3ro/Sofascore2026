@@ -21,7 +21,7 @@ class EventScoreView: BaseView {
 
         separatorLabel.font = .bold(size: 32)
         separatorLabel.textAlignment = .center
-        separatorLabel.text = .seperator
+        separatorLabel.text = .separator
 
         awayScoreLabel.font = .bold(size: 32)
         awayScoreLabel.textAlignment = .left

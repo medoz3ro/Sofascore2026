@@ -12,7 +12,7 @@ extension String {
     static let football = "Football"
     static let basketball = "Basketball"
     static let americanFootball = "Am. Football"
-    static let seperator = "-"
+    static let separator = "-"
 
     // MARK: - Settings
     static let language = NSLocalizedString("language", comment: "")
@@ -26,7 +26,8 @@ extension String {
     static let leaguesRowCount = "Leagues"
     static let databaseTitle = "Database"
     static let languageChangedTitle = "Language Changed"
-    static let languageChangedMessage = "Please restart the app to apply the language change."
+    static let languageChangedMessage =
+        "Please restart the app to apply the language change."
 
     // MARK: - Auth
     static let login = "Login"
@@ -64,7 +65,7 @@ extension String {
     static let nationality = NSLocalizedString("nationality", comment: "")
     static let position = NSLocalizedString("position", comment: "")
     static let jersey = NSLocalizedString("jersey", comment: "")
-    
+
     // MARK: - About
     static let about = "About"
     static let aboutClass = "Class 2026"

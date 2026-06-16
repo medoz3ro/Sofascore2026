@@ -25,18 +25,10 @@ class LanguageSettingsView: BaseView {
         titleLabel.textColor = .primaryDefault
         titleLabel.text = .language
 
-        let currentLanguage =
-            UserDefaults.standard.stringArray(forKey: "AppleLanguages")?.first
-            ?? "en"
-        currentLanguageLabel.text =
-            currentLanguage.hasPrefix("hr") ? String.croatian : String.english
         currentLanguageLabel.font = .regular(size: 14)
         currentLanguageLabel.textColor = .onSurface1
 
-        dropdownButton.setImage(
-            UIImage(systemName: "chevron.down"),
-            for: .normal
-        )
+        dropdownButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         dropdownButton.tintColor = .onSurface1
 
         let english = UIAction(title: String.english) { [weak self] _ in
@@ -45,14 +37,18 @@ class LanguageSettingsView: BaseView {
         let croatian = UIAction(title: String.croatian) { [weak self] _ in
             self?.selectLanguage("hr")
         }
+        let currentLanguage = UserDefaults.standard.stringArray(forKey: "AppleLanguages")?.first ?? "en"
+        let displayName = currentLanguage.hasPrefix("hr") ? String.croatian : String.english
+        configure(currentLanguage: displayName)
         dropdownButton.menu = UIMenu(children: [english, croatian])
         dropdownButton.showsMenuAsPrimaryAction = true
 
-        let tap = UITapGestureRecognizer(
-            target: self,
-            action: #selector(containerTapped)
-        )
+        let tap = UITapGestureRecognizer(target: self, action: #selector(containerTapped))
         containerView.addGestureRecognizer(tap)
+    }
+
+    func configure(currentLanguage: String) {
+        currentLanguageLabel.text = currentLanguage
     }
 
     override func setupConstraints() {
@@ -80,10 +76,8 @@ class LanguageSettingsView: BaseView {
     }
 
     private func selectLanguage(_ code: String) {
-        UserDefaults.standard.set([code], forKey: "AppleLanguages")
-        UserDefaults.standard.synchronize()
-        currentLanguageLabel.text =
-            code == "hr" ? String.croatian : String.english
+        let displayName = code.hasPrefix("hr") ? String.croatian : String.english
+        configure(currentLanguage: displayName)
         onLanguageSelected?(code)
     }
 

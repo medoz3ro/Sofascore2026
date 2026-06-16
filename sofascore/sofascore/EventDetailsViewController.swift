@@ -121,10 +121,28 @@ class EventDetailsViewController: UIViewController, BaseViewProtocol {
             sport: sport,
             backTapHandler: { [weak self] in
                 self?.navigationController?.popViewController(animated: true)
+            },
+            onHomeTapped: { [weak self] in
+                self?.navigateToTeamDetails(
+                    teamId: self?.event.homeTeam.id ?? 0
+                )
+            },
+            onAwayTapped: { [weak self] in
+                self?.navigateToTeamDetails(
+                    teamId: self?.event.awayTeam.id ?? 0
+                )
             }
         )
         eventDetailsView.configure(with: viewModel)
         loadIncidents()
+    }
+
+    private func navigateToTeamDetails(teamId: Int) {
+        let teamDetailsVC = TeamDetailsViewController(
+            teamId: teamId,
+            sport: sport
+        )
+        navigationController?.pushViewController(teamDetailsVC, animated: true)
     }
 
     private func loadIncidents() {

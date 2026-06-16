@@ -54,6 +54,13 @@ enum CountryFlagOverride {
             "Peru": "https://flagcdn.com/w40/pe.png",
             "Venezuela": "https://flagcdn.com/w40/ve.png",
             "Canada": "https://flagcdn.com/w40/ca.png",
+            "Kosovo": "https://flagcdn.com/w40/xk.png",
+            "Equatorial Guinea": "https://flagcdn.com/w40/gq.png",
+            "Cote d'Ivoire": "https://flagcdn.com/w40/ci.png",
+            "Cape Verde": "https://flagcdn.com/w40/cv.png",
+            "Andorra": "https://flagcdn.com/w40/ad.png",
+            "Cameroon": "https://flagcdn.com/w40/cm.png",
+            "Northern Ireland": "https://flagcdn.com/w40/gb-nir.png",
         ]
         return flags[countryName]
     }

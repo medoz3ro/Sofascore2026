@@ -29,7 +29,7 @@ class PlayerDetailsViewController: UIViewController, BaseViewProtocol {
         styleViews()
         setupConstraints()
         setupBinding()
-        configure()
+        loadData()
     }
 
     func addViews() {
@@ -101,7 +101,7 @@ class PlayerDetailsViewController: UIViewController, BaseViewProtocol {
         }
     }
 
-    private func configure() {
+    private func loadData() {
         let headerViewModel = DetailHeaderViewModel(
             title: viewModel.name,
             subtitle: "",

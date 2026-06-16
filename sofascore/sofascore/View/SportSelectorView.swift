@@ -4,7 +4,7 @@ import UIKit
 
 class SportSelectorView: BaseView {
     var onSportSelected: ((Sport) -> Void)?
-    
+
     private var sportTabs: [SportTabView] = []
     private let stackView = UIStackView()
     private let selectionIndicator = UIView()

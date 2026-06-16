@@ -4,6 +4,7 @@ import SofaAcademic
 import UIKit
 
 class EventTeamView: BaseView {
+    private var viewModel: EventTeamViewModel?
     private let logoImageView = UIImageView()
     private let nameLabel = UILabel()
 
@@ -37,7 +38,21 @@ class EventTeamView: BaseView {
     }
 
     func configure(with viewModel: EventTeamViewModel) {
+        self.viewModel = viewModel
         logoImageView.kf.setImage(with: URL(string: viewModel.logo ?? ""))
         nameLabel.text = viewModel.name
+    }
+
+    override func setupGestureRecognizers() {
+        let tap = UITapGestureRecognizer(
+            target: self,
+            action: #selector(teamTapped)
+        )
+        addGestureRecognizer(tap)
+        isUserInteractionEnabled = true
+    }
+
+    @objc private func teamTapped() {
+        viewModel?.onTapped?()
     }
 }

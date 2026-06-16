@@ -37,8 +37,8 @@ class TournamentItemView: BaseView {
         }
     }
 
-    func configure(with league: League) {
-        nameLabel.text = league.name
-        logoImageView.kf.setImage(with: URL(string: league.logoUrl ?? ""))
+    func configure(with viewModel: LeagueViewModel) {
+        nameLabel.text = viewModel.name
+        logoImageView.kf.setImage(with: URL(string: viewModel.logoUrl ?? ""))
     }
 }

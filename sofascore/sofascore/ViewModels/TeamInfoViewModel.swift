@@ -20,4 +20,10 @@ struct TeamInfoViewModel {
         venueName = teamInfo.venue?.name ?? ""
         self.tournaments = tournaments
     }
+    
+    var foreignPlayersRatio: Double {
+        let total = Double(totalPlayers) ?? 1
+        let foreign = Double(foreignPlayers) ?? 0
+        return foreign / total
+    }
 }

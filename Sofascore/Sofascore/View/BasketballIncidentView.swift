@@ -30,12 +30,7 @@ class BasketballIncidentView: BaseView {
     func configure(with viewModel: IncidentViewModel) {
         minuteLabel.text = viewModel.minute
         iconImageView.image = viewModel.icon
-
-        if viewModel.isHomeTeam {
-            setupHomeLayout()
-        } else {
-            setupAwayLayout()
-        }
+        viewModel.isHomeTeam ? setupHomeLayout() : setupAwayLayout()
     }
 
     private func setupHomeLayout() {

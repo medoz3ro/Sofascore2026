@@ -86,9 +86,10 @@ enum APIClient {
         let (data, _) = try await URLSession.shared.data(for: urlRequest)
         return try JSONDecoder().decode([Player].self, from: data)
     }
-    
+
     static func fetchTeamTournaments(teamId: Int) async throws -> [League] {
-        guard let url = URL(string: "\(baseURL)/teams/\(teamId)/tournaments") else {
+        guard let url = URL(string: "\(baseURL)/teams/\(teamId)/tournaments")
+        else {
             throw URLError(.badURL)
         }
         let urlRequest = try authorizedRequest(url: url)

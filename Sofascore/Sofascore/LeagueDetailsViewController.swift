@@ -204,15 +204,7 @@ class LeagueDetailsViewController: UIViewController, BaseViewProtocol {
             else { return UICollectionViewCell() }
 
             cell.onTeamTapped = { [weak self] teamId in
-                guard let self else { return }
-                let teamDetailsVC = TeamDetailsViewController(
-                    teamId: teamId,
-                    sport: sport
-                )
-                self.navigationController?.pushViewController(
-                    teamDetailsVC,
-                    animated: true
-                )
+                self?.navigateToTeamDetails(teamId: teamId)
             }
 
             cell.configure(
@@ -227,10 +219,17 @@ class LeagueDetailsViewController: UIViewController, BaseViewProtocol {
         leagueSelectorView.onTabSelected = { [weak self] tab in
             self?.selectTab(tab)
         }
-
         headerView.onBackTapped = { [weak self] in
             self?.navigationController?.popViewController(animated: false)
         }
+    }
+
+    private func navigateToTeamDetails(teamId: Int) {
+        let teamDetailsVC = TeamDetailsViewController(
+            teamId: teamId,
+            sport: sport
+        )
+        navigationController?.pushViewController(teamDetailsVC, animated: true)
     }
 
     private func loadData() {
@@ -247,24 +246,19 @@ class LeagueDetailsViewController: UIViewController, BaseViewProtocol {
         Task { @MainActor [weak self] in
             guard let self else { return }
             do {
-                let events = try await APIClient.fetchLeagueMatches(
+                async let events = APIClient.fetchLeagueMatches(
                     leagueId: league.id
                 )
-                self.onMatchesLoaded(events)
-            } catch {
-                print("Error fetching matches: \(error)")
-            }
-        }
-
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            do {
-                let standings = try await APIClient.fetchLeagueStandings(
+                async let standings = APIClient.fetchLeagueStandings(
                     leagueId: league.id
                 )
-                self.onStandingsLoaded(standings)
+                let (loadedEvents, loadedStandings) = try await (
+                    events, standings
+                )
+                self.onMatchesLoaded(loadedEvents)
+                self.onStandingsLoaded(loadedStandings)
             } catch {
-                print("Error fetching standings: \(error)")
+                print("Error fetching data: \(error)")
             }
         }
     }
@@ -284,7 +278,13 @@ class LeagueDetailsViewController: UIViewController, BaseViewProtocol {
 
         grouped.forEach { _, roundEvents in
             roundEvents.forEach { event in
-                matchViewModels[event.id] = MatchViewModel(event: event)
+                matchViewModels[event.id] = MatchViewModel(
+                    event: event,
+                    matchTapHandler: { [weak self] in
+                        guard let self else { return }
+                        self.navigateToEventDetails(event: event)
+                    }
+                )
             }
         }
 
@@ -298,6 +298,14 @@ class LeagueDetailsViewController: UIViewController, BaseViewProtocol {
             snapshot.appendItems(items, toSection: .round(round))
         }
         matchesDiffableDataSource?.apply(snapshot)
+    }
+
+    private func navigateToEventDetails(event: Event) {
+        let eventDetailsVC = EventDetailsViewController(
+            event: event,
+            sport: sport
+        )
+        navigationController?.pushViewController(eventDetailsVC, animated: true)
     }
 
     private func selectTab(_ tab: LeagueTab) {
